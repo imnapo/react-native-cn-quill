@@ -1,7 +1,7 @@
-import React from "react";
-import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
-import type { ToggleData, ToolbarTheme } from "../../types";
-import { useToolbar } from "./toolbar-context";
+import React from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import type { ToggleData, ToolbarTheme } from '../../types';
+import { useToolbar } from './toolbar-context';
 
 interface Props {
   name: string;
@@ -48,8 +48,8 @@ const makeStyles = (theme: ToolbarTheme) =>
     },
     tool: {
       borderRadius: 3,
-      alignItems: "center",
-      justifyContent: "center",
+      alignItems: 'center',
+      justifyContent: 'center',
       padding: 2,
       marginRight: 4,
       marginLeft: 4,
@@ -62,6 +62,6 @@ const makeStyles = (theme: ToolbarTheme) =>
     },
     text: {
       color: theme.color,
-      fontWeight: "bold",
+      fontWeight: 'bold',
     },
   });

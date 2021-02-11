@@ -1,4 +1,4 @@
-import type { formatType, formatValueType } from "./constants/formats";
+import type { formatType, formatValueType } from './constants/formats';
 
 export interface format {
   name: string;

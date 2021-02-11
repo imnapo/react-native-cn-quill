@@ -1,7 +1,7 @@
-import React from "react";
-import { View, StyleSheet } from "react-native";
+import React from 'react';
+import { View, StyleSheet } from 'react-native';
 
-const defaultColor = "#737373";
+const defaultColor = '#737373';
 
 interface Props {
   color: string;

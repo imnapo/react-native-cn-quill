@@ -1,7 +1,7 @@
-import React from "react";
-import { TouchableWithoutFeedback, View, StyleSheet } from "react-native";
-import type { ToolbarTheme } from "../../types";
-import { useToolbar } from "./toolbar-context";
+import React from 'react';
+import { TouchableWithoutFeedback, View, StyleSheet } from 'react-native';
+import type { ToolbarTheme } from '../../types';
+import { useToolbar } from './toolbar-context';
 
 interface Props {
   valueOn: any;
@@ -45,8 +45,8 @@ const makeStyles = (theme: ToolbarTheme) =>
     },
     tool: {
       borderRadius: 3,
-      alignItems: "center",
-      justifyContent: "center",
+      alignItems: 'center',
+      justifyContent: 'center',
       marginRight: 4,
       marginLeft: 4,
       height: Math.round(theme.size - 2),
@@ -56,8 +56,8 @@ const makeStyles = (theme: ToolbarTheme) =>
       borderTopWidth: 1,
       backgroundColor: theme.overlay,
       borderColor: theme.color,
-      width: "100%",
-      transform: [{ rotate: "45deg" }],
+      width: '100%',
+      transform: [{ rotate: '45deg' }],
     },
   });
 

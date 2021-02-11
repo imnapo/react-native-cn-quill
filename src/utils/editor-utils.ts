@@ -4,7 +4,7 @@ import {
   editor_js,
   quill_css,
   quill_js,
-} from "../constants/editor";
+} from '../constants/editor';
 
 export const createHtml = () => {
   return `

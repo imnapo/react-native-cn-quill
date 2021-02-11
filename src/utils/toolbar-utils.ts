@@ -1,6 +1,6 @@
-import { formats, formatType, formatValueType } from "../constants/formats";
-import type { ColorListData, TextListData, ToggleData } from "../types";
-import { icons } from "../constants/icons";
+import { formats, formatType, formatValueType } from '../constants/formats';
+import type { ColorListData, TextListData, ToggleData } from '../types';
+import { icons } from '../constants/icons';
 
 export const getToolbarData = (
   options: Array<Array<string | object> | string | object>
@@ -18,7 +18,7 @@ export const getToolbarData = (
         const set = createToolSet(opt);
         iconSet.push(set);
       } else
-        console.log(opt, "is not an array, you should pass it as an array");
+        console.log(opt, 'is not an array, you should pass it as an array');
     }
   }
 
@@ -32,7 +32,7 @@ const createToolSet = (
   for (let i = 0; i < tools.length; i++) {
     const opt = tools[i];
 
-    if (typeof opt === "string") {
+    if (typeof opt === 'string') {
       const format = formats.find((f) => f.name === opt);
       if (format && format.type === formatType.toggle) {
         const formatIcon = icons[format.name];
@@ -53,7 +53,7 @@ const createToolSet = (
           } as ToggleData);
         }
       }
-    } else if (typeof opt === "object" && opt !== null) {
+    } else if (typeof opt === 'object' && opt !== null) {
       const keys = Object.keys(opt);
       const values = Object.values(opt);
       for (let j = 0; j < keys.length; j++) {
@@ -61,7 +61,7 @@ const createToolSet = (
         const value = values[j];
         const format = formats.find((f) => f.name === key);
         if (format) {
-          if (typeof value === "string" || typeof value === "number") {
+          if (typeof value === 'string' || typeof value === 'number') {
             const formatIcon = icons[format.name][value];
             if (formatIcon) {
               ic.push({
@@ -94,8 +94,8 @@ const createToolSet = (
                     let icon =
                       x.type === formatValueType.icon
                         ? x.value === false
-                          ? icons[format.name][""]
-                          : typeof x.value === "string"
+                          ? icons[format.name]['']
+                          : typeof x.value === 'string'
                           ? icons[format.name][x.value]
                           : undefined
                         : undefined;

@@ -1,19 +1,22 @@
-import * as React from "react";
-import { WebView } from "react-native-webview";
-import { View, Text, StyleSheet } from "react-native";
-import { createHtml } from "../utils/editor-utils";
-import type { EditorMessage, EditorResponse } from "../types";
-import { EditorEventType } from "../constants/editor-event";
+import * as React from 'react';
+import { WebView } from 'react-native-webview';
+import { View, Text, StyleSheet } from 'react-native';
+import { createHtml } from '../utils/editor-utils';
+import type { EditorMessage, EditorResponse } from '../types';
+import { EditorEventType } from '../constants/editor-event';
 
-interface EditorState {
+export interface EditorState {
   webviewContent: string | null;
 }
 
-interface EditorProps {
+export interface EditorProps {
   style?: any;
 }
 
-export class QuillEditor extends React.Component<EditorProps, EditorState> {
+export default class QuillEditor extends React.Component<
+  EditorProps,
+  EditorState
+> {
   private _webview: React.RefObject<WebView>;
   private _formatChangeHandlers: Array<Function>;
   private _promises: Array<EditorResponse>;
@@ -38,11 +41,11 @@ export class QuillEditor extends React.Component<EditorProps, EditorState> {
   };
 
   blur = () => {
-    this.post({ type: "blur" });
+    this.post({ type: 'blur' });
   };
 
   focus = () => {
-    this.post({ type: "focus" });
+    this.post({ type: 'focus' });
   };
 
   private getKey(): string {
@@ -51,43 +54,43 @@ export class QuillEditor extends React.Component<EditorProps, EditorState> {
   }
 
   hasFocus = (): Promise<boolean> => {
-    return this.postAwait<any>({ type: "hasFocus" });
+    return this.postAwait<any>({ type: 'hasFocus' });
   };
 
   enable = (enable = true) => {
-    this.post({ type: "enable", value: enable });
+    this.post({ type: 'enable', value: enable });
   };
 
   disable = () => {
-    this.post({ type: "enable", value: false });
+    this.post({ type: 'enable', value: false });
   };
 
   update = () => {
-    this.post({ type: "update" });
+    this.post({ type: 'update' });
   };
 
   format = (name: string, value: any) => {
-    this.post({ type: "format", name, value });
+    this.post({ type: 'format', name, value });
   };
 
   deleteText = (index: number, length: number) => {
-    this.post({ type: "deleteText", index, length });
+    this.post({ type: 'deleteText', index, length });
   };
 
   getContents = (index?: number, length?: number): Promise<any> => {
-    return this.postAwait<any>({ type: "getContents", index, length });
+    return this.postAwait<any>({ type: 'getContents', index, length });
   };
 
   getHtml = (): Promise<any> => {
-    return this.postAwait<any>({ type: "getHtml" });
+    return this.postAwait<any>({ type: 'getHtml' });
   };
 
   getLength = (): Promise<any> => {
-    return this.postAwait<any>({ type: "getLength" });
+    return this.postAwait<any>({ type: 'getLength' });
   };
 
   getText = (index?: number, length?: number): Promise<any> => {
-    return this.postAwait<any>({ type: "getText", index, length });
+    return this.postAwait<any>({ type: 'getText', index, length });
   };
 
   private postAwait<T>(data: any): Promise<T> {
@@ -137,14 +140,14 @@ export class QuillEditor extends React.Component<EditorProps, EditorState> {
     const response = message.key
       ? this._promises.find((x) => x.key === message.key)
       : undefined;
-    if (message.type === "format-change") {
+    if (message.type === 'format-change') {
       this._formatChangeHandlers.forEach((handler) => handler(message.data));
     } else if (
-      message.type === "has-focus" ||
-      message.type === "get-contents" ||
-      message.type === "get-text" ||
-      message.type === "get-length" ||
-      message.type === "get-html"
+      message.type === 'has-focus' ||
+      message.type === 'get-contents' ||
+      message.type === 'get-text' ||
+      message.type === 'get-length' ||
+      message.type === 'get-html'
     ) {
       if (response) {
         response.resolve(message.data);

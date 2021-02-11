@@ -1,12 +1,12 @@
-import React from "react";
+import React from 'react';
 import {
   TouchableWithoutFeedback,
   View,
   Image,
   StyleSheet,
-} from "react-native";
-import type { ToolbarTheme } from "../../types";
-import { useToolbar } from "./toolbar-context";
+} from 'react-native';
+import type { ToolbarTheme } from '../../types';
+import { useToolbar } from './toolbar-context';
 
 interface Props {
   name: string;
@@ -41,8 +41,8 @@ const makeStyles = (theme: ToolbarTheme) =>
     },
     tool: {
       borderRadius: 3,
-      alignItems: "center",
-      justifyContent: "center",
+      alignItems: 'center',
+      justifyContent: 'center',
       padding: 2,
       marginRight: 4,
       marginLeft: 4,

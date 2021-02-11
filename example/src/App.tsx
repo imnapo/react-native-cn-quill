@@ -1,4 +1,4 @@
-import * as React from "react";
+import * as React from 'react';
 
 import {
   StyleSheet,
@@ -9,8 +9,8 @@ import {
   KeyboardAvoidingView,
   Button,
   Alert,
-} from "react-native";
-import { QuillEditor, QuillToolbar } from "react-native-cn-quill";
+} from 'react-native';
+import QuillEditor, { QuillToolbar } from 'react-native-cn-quill';
 
 export default class App extends React.Component<any, any> {
   private _editor: React.RefObject<QuillEditor>;
@@ -31,7 +31,7 @@ export default class App extends React.Component<any, any> {
 
   handleHasFocus = () => {
     this._editor.current?.getText().then((res) => {
-      console.log("Text :", res);
+      console.log('Text :', res);
       Alert.alert(res);
     });
   };
@@ -41,7 +41,7 @@ export default class App extends React.Component<any, any> {
       <SafeAreaView style={styles.root}>
         <KeyboardAvoidingView
           style={styles.conatainer}
-          behavior={Platform.OS === "ios" ? "padding" : "height"}
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
           onTouchStart={() => this._editor.current?.blur()}
         >
           <View style={styles.editor} onTouchStart={(e) => e.stopPropagation()}>
@@ -68,9 +68,9 @@ var styles = StyleSheet.create({
   conatainer: {
     flex: 1,
     marginTop: StatusBar.currentHeight || 0,
-    backgroundColor: "#eee",
-    flexDirection: "column",
-    justifyContent: "space-between",
+    backgroundColor: '#eee',
+    flexDirection: 'column',
+    justifyContent: 'space-between',
   },
 
   editor: {
@@ -79,7 +79,7 @@ var styles = StyleSheet.create({
     marginRight: 40,
     marginLeft: 40,
     paddingBottom: 1,
-    backgroundColor: "#fff",
+    backgroundColor: '#fff',
     minHeight: 300,
     paddingHorizontal: 15,
   },

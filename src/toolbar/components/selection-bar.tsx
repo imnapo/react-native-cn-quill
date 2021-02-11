@@ -1,17 +1,17 @@
-import React from "react";
+import React from 'react';
 import {
   ScrollView,
   Text,
   StyleSheet,
   View,
   TouchableOpacity,
-} from "react-native";
-import type { ToolbarTheme } from "../../types";
-import { useToolbar } from "./toolbar-context";
-import { ToggleTextButton } from "./toggle-text-button";
-import { ToggleColorButton } from "./toggle-color-button";
-import { ToggleIconButton } from "./toggle-icon-button";
-import { formatType } from "../../constants/formats";
+} from 'react-native';
+import type { ToolbarTheme } from '../../types';
+import { useToolbar } from './toolbar-context';
+import { ToggleTextButton } from './toggle-text-button';
+import { ToggleColorButton } from './toggle-color-button';
+import { ToggleIconButton } from './toggle-icon-button';
+import { formatType } from '../../constants/formats';
 
 interface Props {
   toolStyle: any;
@@ -83,30 +83,30 @@ const useStyles = (theme: ToolbarTheme) =>
     },
     selection: {
       padding: 2,
-      position: "absolute",
+      position: 'absolute',
       top: 0,
       backgroundColor: theme.overlay, //'=rgba(0,0,0,.1)',
-      width: "100%",
-      flexDirection: "row",
-      justifyContent: "space-between",
-      alignItems: "center",
+      width: '100%',
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
       height: theme.size + 4,
     },
     scroll: {
       flexGrow: 1,
-      display: "flex",
-      flexDirection: "row",
-      justifyContent: "center",
-      alignItems: "center",
+      display: 'flex',
+      flexDirection: 'row',
+      justifyContent: 'center',
+      alignItems: 'center',
     },
     text: {
       color: theme.color,
-      fontWeight: "bold",
+      fontWeight: 'bold',
     },
     close: {
       borderRadius: 3,
-      alignItems: "center",
-      justifyContent: "center",
+      alignItems: 'center',
+      justifyContent: 'center',
       borderWidth: 1,
       borderColor: theme.overlay,
       paddingHorizontal: 10,

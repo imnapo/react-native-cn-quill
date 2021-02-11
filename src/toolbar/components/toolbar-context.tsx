@@ -1,7 +1,7 @@
-import React, { Component, useContext } from "react";
-import { StyleSheet, Animated, Easing } from "react-native";
-import { lightTheme } from "../../constants/themes";
-import type { ToggleData, ToolbarTheme } from "../../types";
+import React, { Component, useContext } from 'react';
+import { StyleSheet, Animated, Easing } from 'react-native';
+import { lightTheme } from '../../constants/themes';
+import type { ToggleData, ToolbarTheme } from '../../types';
 
 export interface ContextProps {
   format: Function;
@@ -25,7 +25,7 @@ const ToolbarContext = React.createContext<ContextProps>({
   isSelected: () => false,
   theme: lightTheme,
   options: [],
-  selectionName: "",
+  selectionName: '',
   getSelected: () => false,
 });
 
@@ -52,7 +52,7 @@ export class ToolbarProvider extends Component<ProviderProps, ProviderState> {
       open: false,
       isAnimating: false,
       options: [],
-      name: "",
+      name: '',
     };
     this.animatedValue = new Animated.Value(0);
   }
@@ -85,7 +85,7 @@ export class ToolbarProvider extends Component<ProviderProps, ProviderState> {
           useNativeDriver: false,
         }).start(() => {
           this.setState({
-            name: "",
+            name: '',
             open: false,
             options: [],
             isAnimating: false,
@@ -157,9 +157,9 @@ const makeStyles = (theme: ToolbarTheme) =>
       borderLeftWidth: 1,
       borderRightWidth: 1,
       borderColor: theme.color,
-      position: "relative",
+      position: 'relative',
       backgroundColor: theme.background,
-      width: "100%",
+      width: '100%',
     },
   });
 

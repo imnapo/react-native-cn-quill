@@ -1,10 +1,10 @@
-import React from "react";
-import { View, StyleSheet } from "react-native";
-import { TextListButton } from "./text-list-button";
-import { ToggleIconButton } from "./toggle-icon-button";
-import { ColorListButton } from "./color-list-button";
-import type { ColorListData, TextListData, ToggleData } from "../../types";
-import { formatType } from "../../constants/formats";
+import React from 'react';
+import { View, StyleSheet } from 'react-native';
+import { TextListButton } from './text-list-button';
+import { ToggleIconButton } from './toggle-icon-button';
+import { ColorListButton } from './color-list-button';
+import type { ColorListData, TextListData, ToggleData } from '../../types';
+import { formatType } from '../../constants/formats';
 
 interface Props {
   tools: Array<ToggleData | TextListData | ColorListData>;
@@ -63,9 +63,9 @@ export const ToolSet: React.FC<Props> = (props) => {
 
 const styles = StyleSheet.create({
   toolset: {
-    flexDirection: "row",
-    justifyContent: "flex-start",
-    alignItems: "flex-start",
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start',
     paddingTop: 2,
     paddingBottom: 2,
     paddingLeft: 3,

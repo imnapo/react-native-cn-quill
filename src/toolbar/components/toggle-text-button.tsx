@@ -1,7 +1,7 @@
-import React from "react";
-import { TouchableWithoutFeedback, View, Text, StyleSheet } from "react-native";
-import type { ToolbarTheme } from "../../types";
-import { useToolbar } from "./toolbar-context";
+import React from 'react';
+import { TouchableWithoutFeedback, View, Text, StyleSheet } from 'react-native';
+import type { ToolbarTheme } from '../../types';
+import { useToolbar } from './toolbar-context';
 
 interface Props {
   valueName: string;
@@ -36,8 +36,8 @@ const makeStyles = (theme: ToolbarTheme) =>
     },
     tool: {
       borderRadius: 3,
-      alignItems: "center",
-      justifyContent: "center",
+      alignItems: 'center',
+      justifyContent: 'center',
       paddingHorizontal: 4,
       marginRight: 4,
       marginLeft: 4,
@@ -45,7 +45,7 @@ const makeStyles = (theme: ToolbarTheme) =>
     },
     text: {
       color: theme.color,
-      fontWeight: "bold",
+      fontWeight: 'bold',
     },
   });
 

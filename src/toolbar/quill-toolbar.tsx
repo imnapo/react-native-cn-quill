@@ -1,21 +1,21 @@
-import React, { Component } from "react";
-import { View, ScrollView, Dimensions, StyleSheet } from "react-native";
-import { fullOptions, basicOptions } from "../constants/toolbar-options";
+import React, { Component } from 'react';
+import { View, ScrollView, Dimensions, StyleSheet } from 'react-native';
+import { fullOptions, basicOptions } from '../constants/toolbar-options';
 import type {
   ToolbarTheme,
   TextListData,
   ToggleData,
   ColorListData,
-} from "../types";
-import { lightTheme, darkTheme } from "../constants/themes";
-import { getToolbarData } from "../utils/toolbar-utils";
-import type { QuillEditor } from "../editor/quill-editor";
-import { ToolbarProvider } from "./components/toolbar-context";
-import { SelectionBar } from "./components/selection-bar";
-import { ToolSet } from "./components/tool-set";
-import { ToolbarSeperator } from "./components/toolbar-separator";
-import { EditorEventType } from "../constants/editor-event";
-const WIDTH = Dimensions.get("window").width;
+} from '../types';
+import { lightTheme, darkTheme } from '../constants/themes';
+import { getToolbarData } from '../utils/toolbar-utils';
+import type QuillEditor from '../editor/quill-editor';
+import { ToolbarProvider } from './components/toolbar-context';
+import { SelectionBar } from './components/selection-bar';
+import { ToolSet } from './components/tool-set';
+import { ToolbarSeperator } from './components/toolbar-separator';
+import { EditorEventType } from '../constants/editor-event';
+const WIDTH = Dimensions.get('window').width;
 
 interface customStyles {
   toolbar?: object;
@@ -24,10 +24,10 @@ interface customStyles {
 }
 
 interface QuillToolbarProps {
-  options: Array<Array<string | object> | string | object> | "full" | "basic";
+  options: Array<Array<string | object> | string | object> | 'full' | 'basic';
   styles?: customStyles;
   editor: React.RefObject<QuillEditor>;
-  theme: ToolbarTheme | "dark" | "light";
+  theme: ToolbarTheme | 'dark' | 'light';
 }
 
 interface ToolbarState {
@@ -38,7 +38,7 @@ interface ToolbarState {
 
 export class QuillToolbar extends Component<QuillToolbarProps, ToolbarState> {
   public static defaultProps = {
-    theme: "dark",
+    theme: 'dark',
   };
 
   constructor(props: QuillToolbarProps) {
@@ -70,9 +70,9 @@ export class QuillToolbar extends Component<QuillToolbarProps, ToolbarState> {
   changeTheme() {
     let theme: ToolbarTheme = lightTheme;
 
-    if (this.props.theme === "dark") {
+    if (this.props.theme === 'dark') {
       theme = darkTheme;
-    } else if (this.props.theme !== "light") {
+    } else if (this.props.theme !== 'light') {
       theme = this.props.theme;
     }
     this.setState({ theme });
@@ -81,9 +81,9 @@ export class QuillToolbar extends Component<QuillToolbarProps, ToolbarState> {
   private prepareIconset = () => {
     const { options } = this.props;
     let toolbarOptions: Array<Array<string | object> | string | object> = [];
-    if (options === "full" || options === []) {
+    if (options === 'full' || options === []) {
       toolbarOptions = fullOptions;
-    } else if (options === "basic") {
+    } else if (options === 'basic') {
       toolbarOptions = basicOptions;
     } else {
       toolbarOptions = options;
@@ -157,14 +157,14 @@ export class QuillToolbar extends Component<QuillToolbarProps, ToolbarState> {
 const makeStyles = (theme: ToolbarTheme) =>
   StyleSheet.create({
     toolbar: {
-      position: "absolute",
+      position: 'absolute',
       bottom: 0,
       left: 0,
       width: WIDTH,
       padding: 2,
       backgroundColor: theme.background,
-      flexDirection: "row",
-      justifyContent: "flex-start",
+      flexDirection: 'row',
+      justifyContent: 'flex-start',
       height: theme.size + 8,
     },
   });
