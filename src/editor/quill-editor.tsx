@@ -134,7 +134,7 @@ export default class QuillEditor extends React.Component<
     return message;
   };
 
-  onMessage = (event: any) => {
+  private onMessage = (event: any) => {
     const message = this.toMessage(event.nativeEvent.data);
 
     const response = message.key
