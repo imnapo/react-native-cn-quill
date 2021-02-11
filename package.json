@@ -1,6 +1,6 @@
 {
   "name": "react-native-cn-quill",
-  "version": "0.3.0-rc.0",
+  "version": "0.3.0-rc.1",
   "description": "react-native quill richtext editor",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
