@@ -1,16 +1,21 @@
 import React from "react";
-import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
-import type { ToggleData, ToolbarTheme } from "../const";
+import { View, Image, StyleSheet, TouchableOpacity } from "react-native";
+import type { ToggleData, ToolbarTheme } from "../../types";
 import { useToolbar } from "./toolbar-context";
 
 interface Props {
   name: string;
+  source: any;
   items: Array<ToggleData>;
   style: any;
-  source: any;
 }
 
-export const TextListButton: React.FC<Props> = ({ name, items, style }) => {
+export const ColorListButton: React.FC<Props> = ({
+  name,
+  items,
+  style,
+  source,
+}) => {
   const { theme, show, hide, open, selectionName, getSelected } = useToolbar();
   const styles = makeStyles(theme);
 
@@ -22,17 +27,21 @@ export const TextListButton: React.FC<Props> = ({ name, items, style }) => {
   const selectedValue = getSelected(name);
   const selectedItem = items.find((x) => x.valueOn === selectedValue);
   const isOpen = selectionName === name;
-
   return (
     <TouchableOpacity onPress={showMenu}>
       <View style={[styles.tool, style]}>
-        {selectedItem?.source ? (
-          <Image source={selectedItem.source} style={[styles.image]} />
-        ) : (
-          <Text style={styles.text}>
-            {selectedItem ? selectedItem.name : name}
-          </Text>
-        )}
+        <Image
+          source={source}
+          style={[
+            styles.image,
+            {
+              tintColor:
+                selectedItem && selectedItem.valueOn !== false
+                  ? selectedItem.valueOn
+                  : theme.color,
+            },
+          ]}
+        />
         {isOpen && <View style={[styles.overlay]} />}
       </View>
     </TouchableOpacity>
@@ -54,14 +63,11 @@ const makeStyles = (theme: ToolbarTheme) =>
       marginRight: 4,
       marginLeft: 4,
       height: Math.round(theme.size),
+      width: Math.round(theme.size),
     },
     image: {
       height: Math.round(theme.size * 0.6),
       width: Math.round(theme.size * 0.6),
       tintColor: theme.color,
-    },
-    text: {
-      color: theme.color,
-      fontWeight: "bold",
     },
   });

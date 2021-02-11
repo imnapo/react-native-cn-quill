@@ -1,26 +1,12 @@
 import * as React from "react";
 import { WebView } from "react-native-webview";
 import { View, Text, StyleSheet } from "react-native";
-import { createHtml } from "./utils/editor-utils";
+import { createHtml } from "../utils/editor-utils";
+import type { EditorMessage, EditorResponse } from "../types";
+import { EditorEventType } from "../constants/editor-event";
 
 interface EditorState {
   webviewContent: string | null;
-}
-
-interface EditorMessage {
-  type: string;
-  data: any;
-  key?: string;
-}
-
-interface EditorResponse {
-  key: string;
-  resolve: Function;
-}
-
-export enum EditorEventType {
-  formatChange = "format-changed",
-  selectionChange = "selection-change",
 }
 
 interface EditorProps {

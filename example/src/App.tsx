@@ -8,6 +8,7 @@ import {
   Platform,
   KeyboardAvoidingView,
   Button,
+  Alert,
 } from "react-native";
 import { QuillEditor, QuillToolbar } from "react-native-cn-quill";
 
@@ -22,10 +23,6 @@ export default class App extends React.Component<any, any> {
     };
   }
 
-  setEditorRef = (ref: any) => {
-    this._editor = ref;
-  };
-
   onDisabled = () => {
     this._editor.current?.focus();
 
@@ -35,6 +32,7 @@ export default class App extends React.Component<any, any> {
   handleHasFocus = () => {
     this._editor.current?.getText().then((res) => {
       console.log("Text :", res);
+      Alert.alert(res);
     });
   };
 

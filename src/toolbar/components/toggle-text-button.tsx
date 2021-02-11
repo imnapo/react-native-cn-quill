@@ -1,31 +1,26 @@
 import React from "react";
-import {
-  TouchableWithoutFeedback,
-  View,
-  Image,
-  StyleSheet,
-} from "react-native";
+import { TouchableWithoutFeedback, View, Text, StyleSheet } from "react-native";
+import type { ToolbarTheme } from "../../types";
 import { useToolbar } from "./toolbar-context";
-import type { ToolbarTheme } from "../const";
 
 interface Props {
-  name: string;
+  valueName: string;
   valueOn: any;
-  valueOff: any;
-  source: any;
+  valueOff?: any;
   style: any;
+  name: string;
 }
 
-export const ToggleIconButton: React.FC<Props> = (props) => {
+export const ToggleTextButton: React.FC<Props> = (props) => {
   const { format, isSelected, theme } = useToolbar();
-  const { name, valueOff, valueOn, source, style } = props;
+  const { name, valueOff, valueOn, valueName, style } = props;
   const selected = isSelected(name, valueOn);
   const handlePresss = () => format(name, selected ? valueOff : valueOn);
   const styles = makeStyles(theme);
   return (
     <TouchableWithoutFeedback onPress={handlePresss}>
       <View style={[styles.tool, style]}>
-        <Image source={source} style={[styles.image]} />
+        <Text style={styles.text}>{valueName}</Text>
         {selected && <View style={[styles.overlay]} />}
       </View>
     </TouchableWithoutFeedback>
@@ -43,19 +38,17 @@ const makeStyles = (theme: ToolbarTheme) =>
       borderRadius: 3,
       alignItems: "center",
       justifyContent: "center",
-      padding: 2,
+      paddingHorizontal: 4,
       marginRight: 4,
       marginLeft: 4,
       height: Math.round(theme.size),
-      width: Math.round(theme.size),
     },
-    image: {
-      height: Math.round(theme.size * 0.6),
-      width: Math.round(theme.size * 0.6),
-      tintColor: theme.color,
+    text: {
+      color: theme.color,
+      fontWeight: "bold",
     },
   });
 
-ToggleIconButton.defaultProps = {
+ToggleTextButton.defaultProps = {
   valueOff: false,
 };

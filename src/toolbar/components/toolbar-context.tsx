@@ -1,6 +1,8 @@
 import React, { Component, useContext } from "react";
 import { StyleSheet, Animated, Easing } from "react-native";
-import { ToolbarTheme, lightTheme, ToggleData } from "../const";
+import { lightTheme } from "../../constants/themes";
+import type { ToggleData, ToolbarTheme } from "../../types";
+
 export interface ContextProps {
   format: Function;
   selectedFormats: object;

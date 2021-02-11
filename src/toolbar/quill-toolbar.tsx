@@ -1,21 +1,20 @@
 import React, { Component } from "react";
 import { View, ScrollView, Dimensions, StyleSheet } from "react-native";
-import {
-  fullOptions,
-  basicOptions,
-  lightTheme,
-  darkTheme,
+import { fullOptions, basicOptions } from "../constants/toolbar-options";
+import type {
   ToolbarTheme,
   TextListData,
   ToggleData,
   ColorListData,
-} from "../const";
+} from "../types";
+import { lightTheme, darkTheme } from "../constants/themes";
 import { getToolbarData } from "../utils/toolbar-utils";
-import { ToolbarSeperator } from "./toolbar-separator";
-import { ToolSet } from "./tool-set";
-import { ToolbarProvider } from "./toolbar-context";
-import { SelectionBar } from "./selection-bar";
-import { EditorEventType, QuillEditor } from "../quill-editor";
+import type { QuillEditor } from "../editor/quill-editor";
+import { ToolbarProvider } from "./components/toolbar-context";
+import { SelectionBar } from "./components/selection-bar";
+import { ToolSet } from "./components/tool-set";
+import { ToolbarSeperator } from "./components/toolbar-separator";
+import { EditorEventType } from "../constants/editor-event";
 const WIDTH = Dimensions.get("window").width;
 
 interface customStyles {

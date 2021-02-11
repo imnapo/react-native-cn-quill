@@ -1,8 +1,5 @@
-interface format {
-  name: string;
-  defaults?: Array<formatDefault>;
-  type: formatType;
-}
+import type { format, formatDefault } from "../types";
+import { colors } from "./colors";
 
 export enum formatType {
   toggle,
@@ -16,78 +13,6 @@ export enum formatValueType {
   icon,
   color,
 }
-
-export interface formatDefault {
-  name: string;
-  value: string | number | boolean;
-  type: formatValueType;
-}
-
-export interface ToggleData {
-  name: string;
-  valueOn: any;
-  valueOff: any;
-  source: any;
-  type: formatType.toggle | formatType.color | formatType.icon;
-}
-
-export interface ColorListData {
-  name: string;
-  source: any;
-  values: Array<ToggleData>;
-  type: formatType.color;
-}
-
-export interface IconListData {
-  name: string;
-  source: any;
-  values: Array<ToggleData>;
-  type: formatType.select;
-}
-
-export interface TextListData {
-  name: string;
-  values: Array<ToggleData>;
-  type: formatType.select;
-}
-
-const colors = [
-  "#000000",
-  "#e60000",
-  "#ff9900",
-  "#ffff00",
-  "#008a00",
-  "#0066cc",
-  "#9933ff",
-  "#ffffff",
-  "#facccc",
-  "#ffebcc",
-  "#ffffcc",
-  "#cce8cc",
-  "#cce0f5",
-  "#ebd6ff",
-  "#bbbbbb",
-  "#f06666",
-  "#ffc266",
-  "#ffff66",
-  "#66b966",
-  "#66a3e0",
-  "#c285ff",
-  "#888888",
-  "#a10000",
-  "#b26b00",
-  "#b2b200",
-  "#006100",
-  "#0047b2",
-  "#6b24b2",
-  "#444444",
-  "#5c0000",
-  "#663d00",
-  "#666600",
-  "#003700",
-  "#002966",
-  "#3d1466",
-];
 
 export const formats: Array<format> = [
   {
@@ -213,51 +138,3 @@ export const formats: Array<format> = [
   { name: "image", type: formatType.toggle },
   { name: "video", type: formatType.toggle },
 ];
-
-export const fullOptions = [
-  ["bold", "italic", "underline", "strike"], // toggled buttons
-  ["blockquote", "code-block"],
-  [{ size: ["small", false, "large", "huge"] }], // custom dropdown
-
-  [{ header: 1 }, { header: 2 }], // custom button values
-  [{ list: "ordered" }, { list: "bullet" }],
-  [{ script: "sub" }, { script: "super" }], // superscript/subscript
-  [{ indent: "-1" }, { indent: "+1" }], // outdent/indent
-  [{ direction: "rtl" }], // text direction
-
-  [{ header: [1, 2, 3, 4, 5, 6, false] }],
-
-  [{ color: [] }, { background: [] }], // dropdown with defaults from theme
-  [{ font: [] }],
-  [{ align: [] }],
-
-  // ["clean"], // remove formatting button
-];
-
-export const basicOptions = [
-  ["bold", "italic", "underline", "strike"], // toggled buttons
-  [{ header: 1 }, { header: 2 }], // custom button values
-  [{ list: "ordered" }, { list: "bullet" }],
-  [{ align: [] }],
-];
-
-export interface ToolbarTheme {
-  background: string;
-  color: string;
-  overlay: string;
-  size: number;
-}
-
-export const darkTheme: ToolbarTheme = {
-  background: "#1c1e21",
-  color: "#ebedf0",
-  overlay: "rgba(255, 255, 255, .15)",
-  size: 30,
-};
-
-export const lightTheme: ToolbarTheme = {
-  background: "#ebedf0",
-  color: "#1c1e21",
-  overlay: "rgba(55,99,115, .1)",
-  size: 30,
-};

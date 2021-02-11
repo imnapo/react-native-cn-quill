@@ -3,7 +3,8 @@ import { View, StyleSheet } from "react-native";
 import { TextListButton } from "./text-list-button";
 import { ToggleIconButton } from "./toggle-icon-button";
 import { ColorListButton } from "./color-list-button";
-import { ToggleData, TextListData, ColorListData, formatType } from "../const";
+import type { ColorListData, TextListData, ToggleData } from "../../types";
+import { formatType } from "../../constants/formats";
 
 interface Props {
   tools: Array<ToggleData | TextListData | ColorListData>;

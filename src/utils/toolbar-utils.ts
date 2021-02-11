@@ -1,12 +1,6 @@
-import {
-  ToggleData,
-  TextListData,
-  formats,
-  formatType,
-  ColorListData,
-  formatValueType,
-} from "../const";
-import { icons } from "../icons";
+import { formats, formatType, formatValueType } from "../constants/formats";
+import type { ColorListData, TextListData, ToggleData } from "../types";
+import { icons } from "../constants/icons";
 
 export const getToolbarData = (
   options: Array<Array<string | object> | string | object>

@@ -6,11 +6,12 @@ import {
   View,
   TouchableOpacity,
 } from "react-native";
-import { formatType, ToolbarTheme } from "../const";
+import type { ToolbarTheme } from "../../types";
 import { useToolbar } from "./toolbar-context";
 import { ToggleTextButton } from "./toggle-text-button";
 import { ToggleColorButton } from "./toggle-color-button";
 import { ToggleIconButton } from "./toggle-icon-button";
+import { formatType } from "../../constants/formats";
 
 interface Props {
   toolStyle: any;
