@@ -17,10 +17,10 @@ interface Props {
 }
 
 export const ToggleIconButton: React.FC<Props> = (props) => {
-  const { format, isSelected, theme } = useToolbar();
+  const { apply, isSelected, theme } = useToolbar();
   const { name, valueOff, valueOn, source, style } = props;
   const selected = isSelected(name, valueOn);
-  const handlePresss = () => format(name, selected ? valueOff : valueOn);
+  const handlePresss = () => apply(name, selected ? valueOff : valueOn);
   const styles = makeStyles(theme);
   return (
     <TouchableWithoutFeedback onPress={handlePresss}>

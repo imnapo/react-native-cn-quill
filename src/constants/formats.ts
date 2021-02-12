@@ -17,6 +17,7 @@ export enum formatValueType {
 export const formats: Array<format> = [
   {
     name: 'background',
+    allowCustoms: true,
     type: formatType.color,
     defaults: [
       {
@@ -37,6 +38,7 @@ export const formats: Array<format> = [
   {
     name: 'color',
     type: formatType.color,
+    allowCustoms: true,
     defaults: [
       {
         name: 'no color',

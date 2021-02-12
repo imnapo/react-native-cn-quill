@@ -40,58 +40,10 @@ export default class QuillEditor extends React.Component<
     this.setState({ webviewContent: HTML });
   };
 
-  blur = () => {
-    this.post({ type: 'blur' });
-  };
-
-  focus = () => {
-    this.post({ type: 'focus' });
-  };
-
   private getKey(): string {
     var timestamp = new Date().getUTCMilliseconds();
     return `${timestamp}${Math.random()}`;
   }
-
-  hasFocus = (): Promise<boolean> => {
-    return this.postAwait<any>({ type: 'hasFocus' });
-  };
-
-  enable = (enable = true) => {
-    this.post({ type: 'enable', value: enable });
-  };
-
-  disable = () => {
-    this.post({ type: 'enable', value: false });
-  };
-
-  update = () => {
-    this.post({ type: 'update' });
-  };
-
-  format = (name: string, value: any) => {
-    this.post({ type: 'format', name, value });
-  };
-
-  deleteText = (index: number, length: number) => {
-    this.post({ type: 'deleteText', index, length });
-  };
-
-  getContents = (index?: number, length?: number): Promise<any> => {
-    return this.postAwait<any>({ type: 'getContents', index, length });
-  };
-
-  getHtml = (): Promise<any> => {
-    return this.postAwait<any>({ type: 'getHtml' });
-  };
-
-  getLength = (): Promise<any> => {
-    return this.postAwait<any>({ type: 'getLength' });
-  };
-
-  getText = (index?: number, length?: number): Promise<any> => {
-    return this.postAwait<any>({ type: 'getText', index, length });
-  };
 
   private postAwait<T>(data: any): Promise<T> {
     const key = this.getKey();
@@ -111,18 +63,6 @@ export default class QuillEditor extends React.Component<
 
     return promise;
   }
-
-  on = (event: EditorEventType, handler: Function) => {
-    if (event === EditorEventType.formatChange) {
-      this._formatChangeHandlers.push(handler);
-    }
-  };
-
-  off = (event: EditorEventType) => {
-    if (event === EditorEventType.formatChange) {
-      this._formatChangeHandlers = [];
-    }
-  };
 
   private post = (obj: object) => {
     const jsonString = JSON.stringify(obj);
@@ -153,6 +93,86 @@ export default class QuillEditor extends React.Component<
         response.resolve(message.data);
         this._promises = this._promises.filter((x) => x.key !== message.key);
       }
+    }
+  };
+
+  blur = () => {
+    this.post({ command: 'blur' });
+  };
+
+  focus = () => {
+    this.post({ command: 'focus' });
+  };
+
+  hasFocus = (): Promise<boolean> => {
+    return this.postAwait<any>({ type: 'hasFocus' });
+  };
+
+  enable = (enable = true) => {
+    this.post({ command: 'enable', value: enable });
+  };
+
+  disable = () => {
+    this.post({ command: 'enable', value: false });
+  };
+
+  update = () => {
+    this.post({ command: 'update' });
+  };
+
+  format = (name: string, value: any) => {
+    this.post({ command: 'format', name, value });
+  };
+
+  deleteText = (index: number, length: number) => {
+    this.post({ command: 'deleteText', index, length });
+  };
+
+  getContents = (index?: number, length?: number): Promise<any> => {
+    return this.postAwait<any>({ type: 'getContents', index, length });
+  };
+
+  getHtml = (): Promise<any> => {
+    return this.postAwait<any>({ type: 'getHtml' });
+  };
+
+  getLength = (): Promise<any> => {
+    return this.postAwait<any>({ type: 'getLength' });
+  };
+
+  getText = (index?: number, length?: number): Promise<any> => {
+    return this.postAwait<any>({ type: 'getText', index, length });
+  };
+
+  insertEmbed = (index: number, type: string, value: any) => {
+    this.post({ command: 'insertEmbed', index, type, value });
+  };
+
+  insertText = (index: number, text: string, formats?: Record<string, any>) => {
+    this.post({ command: 'insertText', index, text, formats });
+  };
+
+  setContents = (delta: any) => {
+    this.post({ command: 'setContents', delta });
+  };
+
+  setText = (text: string) => {
+    this.post({ command: 'setText', text });
+  };
+
+  updateContents = (delta: any) => {
+    this.post({ command: 'updateContents', delta });
+  };
+
+  on = (event: EditorEventType, handler: Function) => {
+    if (event === EditorEventType.formatChange) {
+      this._formatChangeHandlers.push(handler);
+    }
+  };
+
+  off = (event: EditorEventType) => {
+    if (event === EditorEventType.formatChange) {
+      this._formatChangeHandlers = [];
     }
   };
 

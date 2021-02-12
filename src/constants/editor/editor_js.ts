@@ -69,11 +69,31 @@ export const editor_js = `
       sendMessage(getHtmlJson);
   }
 
+  var insertEmbed = function (index, type, value) {
+    quill.insertEmbed(index, type, value);
+  }
+
+  var insertText = function (index, text, formats={}) {
+    quill.insertText(index, text, formats);
+  }
+
+  var setContents = function (delta) {
+    quill.setContents(delta);
+  }
+
+  var setText = function (text) {
+    quill.setText(text);
+  }
+
+  var updateContents = function (delta) {
+    quill.updateContents(delta);
+  }
+
   var getRequest = function (event) {
 
     var msg = JSON.parse(event.data);
     
-    switch (msg.type) {
+    switch (msg.command) {
       case 'format':
         formatSelection(msg.name, msg.value);
         break;
@@ -106,6 +126,21 @@ export const editor_js = `
           break;
         case 'getLength':
           getLength(msg.key);
+          break;
+        case 'insertEmbed':
+          insertEmbed(msg.index, msg.type, msg.value);
+          break;
+        case 'insertText':
+          insertText(msg.index, msg.text, msg.formats);
+          break;
+        case 'setContents':
+          setContents(msg.delta);
+          break;
+        case 'setText':
+          setText(msg.text);
+          break;
+        case 'updateContents':
+          updateContents(msg.delta);
           break;
       default:
         break;

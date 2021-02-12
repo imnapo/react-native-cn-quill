@@ -14,7 +14,7 @@ const fullOptions = [
   [{ color: [] }, { background: [] }], // dropdown with defaults from theme
   [{ font: [] }],
   [{ align: [] }],
-
+  ['image', 'video'],
   // ["clean"], // remove formatting button
 ];
 

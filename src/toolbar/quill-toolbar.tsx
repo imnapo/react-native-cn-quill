@@ -6,6 +6,7 @@ import type {
   TextListData,
   ToggleData,
   ColorListData,
+  ToolbarCustom,
 } from '../types';
 import { lightTheme, darkTheme } from '../constants/themes';
 import { getToolbarData } from '../utils/toolbar-utils';
@@ -28,6 +29,7 @@ interface QuillToolbarProps {
   styles?: customStyles;
   editor: React.RefObject<QuillEditor>;
   theme: ToolbarTheme | 'dark' | 'light';
+  custom?: ToolbarCustom;
 }
 
 interface ToolbarState {
@@ -79,7 +81,7 @@ export class QuillToolbar extends Component<QuillToolbarProps, ToolbarState> {
   }
 
   private prepareIconset = () => {
-    const { options } = this.props;
+    const { options, custom } = this.props;
     let toolbarOptions: Array<Array<string | object> | string | object> = [];
     if (options === 'full' || options === []) {
       toolbarOptions = fullOptions;
@@ -88,7 +90,7 @@ export class QuillToolbar extends Component<QuillToolbarProps, ToolbarState> {
     } else {
       toolbarOptions = options;
     }
-    const toolSets = getToolbarData(toolbarOptions);
+    const toolSets = getToolbarData(toolbarOptions, custom?.icons);
     this.setState({ toolSets });
   };
 
@@ -114,7 +116,7 @@ export class QuillToolbar extends Component<QuillToolbarProps, ToolbarState> {
   };
 
   render() {
-    const { styles } = this.props;
+    const { styles, custom } = this.props;
     const { toolSets, theme, formats } = this.state;
     const classes = makeStyles(theme);
 
@@ -123,6 +125,7 @@ export class QuillToolbar extends Component<QuillToolbarProps, ToolbarState> {
         theme={theme}
         format={this.format}
         selectedFormats={formats}
+        custom={custom}
       >
         <SelectionBar toolStyle={styles?.tool} />
         <View style={[classes.toolbar, styles?.toolbar]}>

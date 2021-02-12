@@ -11,6 +11,7 @@ import {
   Alert,
 } from 'react-native';
 import QuillEditor, { QuillToolbar } from 'react-native-cn-quill';
+const clockIcon = require('../assets/icons/clock.png');
 
 export default class App extends React.Component<any, any> {
   private _editor: React.RefObject<QuillEditor>;
@@ -21,6 +22,18 @@ export default class App extends React.Component<any, any> {
     this.state = {
       disabled: false,
     };
+  }
+
+  getCurrentDate() {
+    let d = new Date(),
+      month = '' + (d.getMonth() + 1),
+      day = '' + d.getDate(),
+      year = d.getFullYear();
+
+    if (month.length < 2) month = '0' + month;
+    if (day.length < 2) day = '0' + day;
+
+    return [year, month, day].join('-');
   }
 
   onDisabled = () => {
@@ -34,6 +47,23 @@ export default class App extends React.Component<any, any> {
       console.log('Text :', res);
       Alert.alert(res);
     });
+  };
+
+  customHandler = (name: string, value: any) => {
+    if (name === 'image') {
+      this._editor.current?.insertEmbed(
+        0,
+        'image',
+        'https://picsum.photos/200/300'
+      );
+    } else if (name === 'clock') {
+      this._editor.current?.insertText(0, `Today is ${this.getCurrentDate()}`, {
+        bold: true,
+        color: 'red',
+      });
+    } else {
+      console.log(`${name} clicked with value: ${value}`);
+    }
   };
 
   render() {
@@ -53,7 +83,27 @@ export default class App extends React.Component<any, any> {
             <QuillEditor ref={this._editor} />
           </View>
           <View onTouchStart={(e) => e.stopPropagation()}>
-            <QuillToolbar editor={this._editor} options="full" theme="light" />
+            <QuillToolbar
+              editor={this._editor}
+              options={[
+                ['bold', 'italic', 'underline'],
+                [{ header: 1 }, { header: 2 }],
+                [{ align: [] }],
+                [
+                  { color: ['#000000', '#e60000', '#ff9900', 'yellow'] },
+                  { background: [] },
+                ],
+                ['image', 'clock'],
+              ]}
+              theme="light"
+              custom={{
+                handler: this.customHandler,
+                actions: ['image', 'clock'],
+                icons: {
+                  clock: clockIcon,
+                },
+              }}
+            />
           </View>
         </KeyboardAvoidingView>
       </SafeAreaView>

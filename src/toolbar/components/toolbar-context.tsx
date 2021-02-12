@@ -1,10 +1,10 @@
 import React, { Component, useContext } from 'react';
 import { StyleSheet, Animated, Easing } from 'react-native';
 import { lightTheme } from '../../constants/themes';
-import type { ToggleData, ToolbarTheme } from '../../types';
+import type { ToggleData, ToolbarCustom, ToolbarTheme } from '../../types';
 
 export interface ContextProps {
-  format: Function;
+  apply: (name: string, value: any) => void;
   selectedFormats: object;
   isSelected: (name: string, value: any) => boolean;
   theme: ToolbarTheme;
@@ -17,7 +17,7 @@ export interface ContextProps {
 }
 
 const ToolbarContext = React.createContext<ContextProps>({
-  format: () => {},
+  apply: () => {},
   show: () => {},
   hide: () => {},
   selectedFormats: {},
@@ -35,6 +35,7 @@ interface ProviderProps {
   format: Function;
   selectedFormats: Record<string, any>;
   theme: ToolbarTheme;
+  custom?: ToolbarCustom;
 }
 
 interface ProviderState {
@@ -112,19 +113,26 @@ export class ToolbarProvider extends Component<ProviderProps, ProviderState> {
     return selected ? selected : false;
   };
 
-  format = (name: string, value: any) => {
-    this.props.format(name, value);
+  apply = (name: string, value: any) => {
+    const { format, custom } = this.props;
+
+    if (custom?.actions) custom.actions.find((x) => x === name);
+    if (custom?.actions?.indexOf(name) !== -1) {
+      if (custom?.handler) custom.handler(name, value);
+    } else {
+      format(name, value);
+    }
   };
 
   render() {
-    const { selectedFormats, format, children, theme } = this.props;
+    const { selectedFormats, children, theme } = this.props;
     const { open, options, name } = this.state;
     const styles = makeStyles(theme);
     return (
       <ToolbarContext.Provider
         value={{
           selectedFormats,
-          format,
+          apply: this.apply,
           isSelected: this.isSelected,
           theme,
           open,
@@ -170,7 +178,7 @@ export const withToolbar = (MyComponent: any) => {
         <MyComponent
           {...props}
           ref={ref}
-          format={context.format}
+          apply={context.apply}
           selectedFormats={context.selectedFormats}
         />
       )}

@@ -33,7 +33,11 @@
   "keywords": [
     "react-native",
     "ios",
-    "android"
+    "android",
+    "rich-text",
+    "WYSIWYG editor",
+    "quill",
+    "editor"
   ],
   "repository": "https://github.com/imnapo/react-native-cn-quill",
   "author": "Narbe HS <imnapo@gmail.com> (https://github.com/imnapo)",

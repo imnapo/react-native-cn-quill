@@ -4,6 +4,7 @@ export interface format {
   name: string;
   defaults?: Array<formatDefault>;
   type: formatType;
+  allowCustoms?: boolean;
 }
 
 export interface formatDefault {
@@ -56,4 +57,17 @@ export interface EditorMessage {
 export interface EditorResponse {
   key: string;
   resolve: Function;
+}
+
+export interface SampleArray {
+  [index: number]: {
+    action: string;
+    handler: (name: string, value: any) => void;
+  };
+}
+
+export interface ToolbarCustom {
+  handler?: (name: string, value: any) => void;
+  actions?: Array<string>;
+  icons?: Record<string, any>;
 }

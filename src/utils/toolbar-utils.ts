@@ -1,21 +1,30 @@
 import { formats, formatType, formatValueType } from '../constants/formats';
-import type { ColorListData, TextListData, ToggleData } from '../types';
-import { icons } from '../constants/icons';
+import type {
+  ColorListData,
+  formatDefault,
+  TextListData,
+  ToggleData,
+} from '../types';
+import { icons as defaultIcons } from '../constants/icons';
 
 export const getToolbarData = (
-  options: Array<Array<string | object> | string | object>
+  options: Array<Array<string | object> | string | object>,
+  customIcons?: Record<string, any>
 ): Array<Array<ToggleData | TextListData | ColorListData>> => {
   let iconSet: Array<Array<ToggleData | TextListData | ColorListData>> = [];
+  const icons = customIcons
+    ? { ...defaultIcons, ...customIcons }
+    : defaultIcons;
 
   const isSingle: boolean = !(options.length > 0 && Array.isArray(options[0]));
   if (isSingle) {
-    const set = createToolSet(options);
+    const set = createToolSet(options, icons);
     iconSet.push(set);
   } else {
     for (let i = 0; i < options.length; i++) {
       const opt = options[i];
       if (Array.isArray(opt)) {
-        const set = createToolSet(opt);
+        const set = createToolSet(opt, icons);
         iconSet.push(set);
       } else
         console.log(opt, 'is not an array, you should pass it as an array');
@@ -26,7 +35,8 @@ export const getToolbarData = (
 };
 
 const createToolSet = (
-  tools: Array<string | object>
+  tools: Array<string | object>,
+  icons: Record<string, any>
 ): Array<ToggleData | TextListData | ColorListData> => {
   let ic: Array<ToggleData | TextListData | ColorListData> = [];
   for (let i = 0; i < tools.length; i++) {
@@ -34,11 +44,11 @@ const createToolSet = (
 
     if (typeof opt === 'string') {
       const format = formats.find((f) => f.name === opt);
-      if (format && format.type === formatType.toggle) {
-        const formatIcon = icons[format.name];
+      if ((format && format.type === formatType.toggle) || !format) {
+        const formatIcon = icons[opt];
         if (formatIcon) {
           ic.push({
-            name: format.name,
+            name: opt,
             source: formatIcon,
             valueOff: false,
             valueOn: true,
@@ -46,7 +56,7 @@ const createToolSet = (
           } as ToggleData);
         } else {
           ic.push({
-            name: format.name,
+            name: opt,
             valueOff: false,
             valueOn: true,
             type: formatType.toggle,
@@ -60,87 +70,99 @@ const createToolSet = (
         const key = keys[j];
         const value = values[j];
         const format = formats.find((f) => f.name === key);
-        if (format) {
-          if (typeof value === 'string' || typeof value === 'number') {
-            const formatIcon = icons[format.name][value];
-            if (formatIcon) {
+        if (typeof value === 'string' || typeof value === 'number') {
+          const formatIcon = icons[key][value];
+          if (formatIcon) {
+            ic.push({
+              name: key,
+              source: formatIcon,
+              valueOff: false,
+              valueOn: value,
+              type: formatType.toggle,
+            } as ToggleData);
+          } else {
+            ic.push({
+              name: key,
+              valueOff: false,
+              valueOn: value,
+              type: formatType.toggle,
+            } as ToggleData);
+          }
+        } else if (Array.isArray(value)) {
+          const formatIcon = icons[key];
+          let listItems: formatDefault[] = [];
+          if ((!format || format.allowCustoms === true) && value.length > 0) {
+            listItems = value.map((v) => {
+              const def = format?.defaults?.find((f) => f.value === v);
+              return def
+                ? def
+                : ({
+                    name: v,
+                    value: v,
+                    type: formatValueType.text,
+                  } as formatDefault);
+            });
+          } else if (format?.defaults && value.length === 0) {
+            listItems = format.defaults;
+          } else if (format?.defaults && value.length > 0) {
+            listItems = format.defaults.filter(
+              (f) => value.indexOf(f.value) !== -1
+            );
+          }
+          if (listItems.length > 0) {
+            if (!format || format.type === formatType.select) {
               ic.push({
-                name: format.name,
-                source: formatIcon,
-                valueOff: false,
-                valueOn: value,
-                type: formatType.toggle,
-              } as ToggleData);
+                name: key,
+                values: listItems.map((x) => {
+                  let icon =
+                    x.type === formatValueType.icon
+                      ? x.value === false
+                        ? icons[key]['']
+                        : typeof x.value === 'string'
+                        ? icons[key][x.value]
+                        : undefined
+                      : undefined;
+
+                  return {
+                    name: x.name,
+                    valueOff: false,
+                    valueOn: x.value,
+                    source: icon,
+                    type: (
+                      x.type === formatValueType.icon && icon ? true : false
+                    )
+                      ? formatType.icon
+                      : formatType.toggle,
+                  } as ToggleData;
+                }),
+                type: formatType.select,
+              } as TextListData);
             } else {
               ic.push({
-                name: format.name,
-                valueOff: false,
-                valueOn: value,
-                type: formatType.toggle,
-              } as ToggleData);
-            }
-          } else if (Array.isArray(value)) {
-            const formatIcon = icons[format.name];
-
-            if (format.defaults) {
-              const listItems =
-                value.length > 0
-                  ? format.defaults.filter((f) => value.indexOf(f.value) !== -1)
-                  : format.defaults;
-              if (format.type === formatType.select) {
-                ic.push({
-                  name: format.name,
-                  values: listItems.map((x) => {
-                    let icon =
-                      x.type === formatValueType.icon
-                        ? x.value === false
-                          ? icons[format.name]['']
-                          : typeof x.value === 'string'
-                          ? icons[format.name][x.value]
-                          : undefined
-                        : undefined;
-
-                    return {
+                name: key,
+                source: formatIcon,
+                values: listItems.map(
+                  (x) =>
+                    ({
                       name: x.name,
                       valueOff: false,
                       valueOn: x.value,
-                      source: icon,
-                      type: (
-                        x.type === formatValueType.icon && icon ? true : false
-                      )
-                        ? formatType.icon
-                        : formatType.toggle,
-                    } as ToggleData;
-                  }),
-                  type: formatType.select,
-                } as TextListData);
-              } else {
-                ic.push({
-                  name: format.name,
-                  source: formatIcon,
-                  values: listItems.map(
-                    (x) =>
-                      ({
-                        name: x.name,
-                        valueOff: false,
-                        valueOn: x.value,
-                        type: formatType.color,
-                      } as ToggleData)
-                  ),
-                  type: formatType.color,
-                } as ColorListData);
-              }
-            } else {
-              const fIcon = icons[format.name];
-              if (fIcon) {
-                ic.push({
-                  name: format.name,
-                  source: fIcon,
-                  valueOff: false,
-                  valueOn: true,
-                  type: formatType.toggle,
-                } as ToggleData);
-              }
+                      type: formatType.color,
+                    } as ToggleData)
+                ),
+                type: formatType.color,
+              } as ColorListData);
+            }
+          } else {
+            const fIcon = icons[key];
+            if (fIcon) {
+              ic.push({
+                name: key,
+                source: fIcon,
+                valueOff: false,
+                valueOn: true,
+                type: formatType.toggle,
+              } as ToggleData);
             }
           }
         }
