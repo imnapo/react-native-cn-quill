@@ -1,9 +1,13 @@
 # react-native-cn-quill
 
-react-native-cn-quill is a react-native module for the Quill Rich Text Editor.
+react-native-cn-quill is a rich-text editor for react-native. We've developed this library on top of Quill Api.  
 
 <img src="./images/quill-editor.jpeg" width="50%">
 
+## Why Quill
+Quill is a free, open source WYSIWYG editor built for the modern web. Completely customize it for any need with its modular architecture and expressive API. Read more [here](https://quilljs.com/guides/why-quill/).
+
+## Prerequisite
 This package is using `react-native-webview`. Please follow [this document](https://github.com/react-native-community/react-native-webview/blob/master/docs/Getting-Started.md) to install it.
 
 ## Installation
@@ -68,7 +72,9 @@ const styles = StyleSheet.create({
   },
 });
 ```
-## API
+## QuillEditor
+QuillEditor is the main component of this library. You may easily add it to your application. It is also a wrapper for Quill and provides most of it's functionalities.  
+
 ### QuillEditor Props
 
 | Name | Description | Required |
@@ -76,26 +82,76 @@ const styles = StyleSheet.create({
 | style | Styles applied to the outermost component. | No |
 
 
-### QuillEditor Instance methods
+### Instance methods
 
 Read about these methods and their functionality on [Quill Api](https://quilljs.com/docs/api/)
 
-| Name | Params | Returns |
-| ------ | ---- | ------ |
-| focus | - | void |
-| blur | - | void |
-| hasFocus | - | `Promise<boolean>` |
-| enable | `enable?` | void |
-| disable | - | void |
-| format | `name: string, value: any` | void |
-| deleteText | `index: number, length: number` | void |
-| getContents | `index?: number, length?: number` | `Promise` |
-| getHtml | - | `Promise` |
-| getLength | - | `Promise` |
-| getText | `index?: number, length?: number` | `Promise` |
-| on | - | `event: EditorEventType, handler: Function` |
-| off | - | `event: EditorEventType` |
-| disable | - | void |
+| Name | Params | Returns | type |
+| ------ | ---- | ------ | --- |
+| blur | - | void | Editor |
+| focus | - | void | Editor |
+| disable | - | void | Editor |
+| enable | `enable?` | void | Editor |
+| hasFocus | - | `Promise<boolean>` | Editor |
+| update | - | void | Editor |
+| format | `name: string, value: any` | void | Formating |
+| deleteText | `index: number, length: number` | void | Content |
+| getContents | `index?: number, length?: number` | `Promise` | Content |
+| getLength | - | `Promise` | Content |
+| getHtml | - | `Promise` | Content |
+| getText | `index?: number, length?: number` | `Promise` | Content |
+| insertEmbed | `index: number, type: string, value: any` | void | Content |
+| insertText | `index: number, text: string, formats?: Record<string, any>` | void | Content |
+| setContents | `delta: any` | void | Content |
+| setText | `text: string` | void | Content |
+| updateContents | `delta: any` | void | Content |
+| on | - | `event: EditorEventType, handler: Function` | Event `(under development)` |
+| off | - | `event: EditorEventType` | Event `(under development)`|
+
+## QuillToolbar
+The QuillToolbar component allow users to easily format Quill’s contents. QuillToolbar controls can be specified by a simple array of format names like `['bold', 'italic', 'underline', 'strike']` or by just passing 'basic' or 'full' string to options prop. we've tried to develop it just like [Quill Toolbar options](https://quilljs.com/docs/modules/toolbar/#container).
+The QuillToolbar uses a series of icons to render controls. this controls by default applies and removes formatting, but you can easily extend or overwrite these with `custom` prop.  
+For example we may add the `image` and `clock` (user defined control that inserts current date to the editor) handlers just like this:
+```
+...
+  const clockIcon = require('../assets/icons/clock.png');
+
+  customHandler = (name: string, value: any) => {
+    if (name === 'image') {
+      this._editor.current?.insertEmbed(
+        0,
+        'image',
+        'https://picsum.photos/200/300'
+      );
+    } else if (name === 'clock') {
+      this._editor.current?.insertText(0, `Today is ${this.getCurrentDate()}`, {
+        bold: true,
+        color: 'red',
+      });
+    } else {
+      console.log(`${name} clicked with value: ${value}`);
+    }
+  };
+
+  render() {
+    ...
+        <QuillToolbar
+          editor={this._editor}
+          options={['image', 'clock']}
+          theme="light"
+          custom={{
+            handler: this.customHandler,
+            actions: ['image', 'clock'],
+            icons: {
+              clock: clockIcon,
+            },
+          }}
+        />
+        ...
+  }
+
+```
+To see an example of how to fully implement this please check this [Link](https://github.com/imnapo/react-native-cn-quill/blob/master/example/src/App.tsx).  
 
 ### QuillToolbar Props
 
@@ -103,9 +159,9 @@ Read about these methods and their functionality on [Quill Api](https://quilljs.
 | ------ | ----------- | ---- |
 | styles | `{ toolbar?, toolset?, tool? }` | No |
 | editor | `React.RefObject<QuillEditor>` | Yes |
-| theme | `ToolbarTheme object, 'dark' , 'light'` | Yes |
+| theme | `'dark' , 'light', ToolbarTheme (ex: { size: 30, color: 'white', background: 'gray', overlay: 'rgba(0,0,0,.5')})` | false |
 | options | `'full' , 'basic', array (ex: [['bold', 'italic'], ['link', 'image']])` | Yes |
-
+| custom | `{ handler?: (name: string, value: any) => void; actions?: Array<string>; icons?: Record<string, any>; }` | No |
 
 ## Contributing
 

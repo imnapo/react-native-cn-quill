@@ -95,7 +95,6 @@ export default class App extends React.Component<any, any> {
                 ],
                 ['image', 'clock'],
               ]}
-              theme="light"
               custom={{
                 handler: this.customHandler,
                 actions: ['image', 'clock'],
