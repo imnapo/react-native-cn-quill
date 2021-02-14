@@ -8,6 +8,7 @@
   "source": "src/index",
   "files": [
     "lib",
+    "src",
     "!lib/example",
     "!**/__tests__",
     "!**/__fixtures__",
