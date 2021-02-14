@@ -2,21 +2,13 @@
   "name": "react-native-cn-quill",
   "version": "0.3.0",
   "description": "react-native quill richtext editor",
-  "main": "lib/commonjs/index",
-  "module": "lib/module/index",
-  "types": "lib/typescript/src/index.d.ts",
+  "main": "lib/src/index.js",
+  "types": "lib/src/index.d.ts",
   "react-native": "src/index",
   "source": "src/index",
   "files": [
-    "src",
     "lib",
-    "android",
-    "ios",
-    "cpp",
-    "react-native-cn-quill.podspec",
-    "!lib/typescript/example",
-    "!android/build",
-    "!ios/build",
+    "!lib/example",
     "!**/__tests__",
     "!**/__fixtures__",
     "!**/__mocks__"
@@ -25,10 +17,10 @@
     "test": "jest",
     "typescript": "tsc --noEmit",
     "lint": "eslint \"**/*.{js,ts,tsx}\"",
-    "prepare": "bob build",
     "release": "release-it",
     "example": "yarn --cwd example",
-    "bootstrap": "yarn example && yarn"
+    "bootstrap": "yarn example && yarn",
+    "prepublish": "tsc"
   },
   "keywords": [
     "react-native",
