@@ -117,7 +117,7 @@ export class ToolbarProvider extends Component<ProviderProps, ProviderState> {
     const { format, custom } = this.props;
 
     if (custom?.actions) custom.actions.find((x) => x === name);
-    if (custom?.actions?.indexOf(name) !== -1) {
+    if (custom?.actions && custom?.actions?.indexOf(name) > -1) {
       if (custom?.handler) custom.handler(name, value);
     } else {
       format(name, value);
