@@ -1,4 +1,7 @@
-export const quill_css = `
+export const quill_snow_css = (cdn: boolean) =>
+  cdn === true
+    ? '<link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">'
+    : `
 <style>
 /*!
 * Quill Editor v1.3.6

@@ -11,6 +11,14 @@ export interface EditorState {
 
 export interface EditorProps {
   style?: any;
+  initialHtml?: string;
+  placeholder?: string;
+  toolbar?: boolean | Array<Array<string | object> | string | object>;
+  quillTheme?: 'snow' | 'bubble';
+  libraries?: 'local' | 'cdn';
+  editorId?: string;
+  containerId?: string;
+  editorTheme?: { background: string; color: string; placeholder: string };
 }
 
 export default class QuillEditor extends React.Component<
@@ -25,19 +33,41 @@ export default class QuillEditor extends React.Component<
     super(props);
     this._webview = React.createRef();
     this.state = {
-      webviewContent: null,
+      webviewContent: this.getInitalHtml(),
     };
+
     this._formatChangeHandlers = [];
     this._promises = [];
   }
 
-  componentDidMount() {
-    this.loadHTMLFile();
-  }
+  private getInitalHtml = (): string => {
+    const {
+      initialHtml = '',
+      placeholder = 'write here!',
+      toolbar = false,
+      libraries = 'local',
+      quillTheme = 'snow',
+      editorId = 'editor-container',
+      containerId = 'standalone-container',
+      editorTheme = {
+        background: 'white',
+        color: 'rgb(32, 35, 42)',
+        placeholder: 'rgba(0,0,0,0.6)',
+      },
+    } = this.props;
 
-  private loadHTMLFile = async () => {
-    const HTML = createHtml();
-    this.setState({ webviewContent: HTML });
+    return createHtml({
+      initialHtml,
+      placeholder,
+      theme: quillTheme,
+      toolbar: JSON.stringify(toolbar),
+      libraries: libraries,
+      editorId,
+      containerId,
+      color: editorTheme.color,
+      backgroundColor: editorTheme.background,
+      placeholderColor: editorTheme.placeholder,
+    });
   };
 
   private getKey(): string {
@@ -180,7 +210,6 @@ export default class QuillEditor extends React.Component<
     const { webviewContent } = this.state;
     const { style } = this.props;
     if (!webviewContent) return <Text>Please wait...</Text>;
-
     return (
       <View style={[styles.container, style]}>
         <WebView

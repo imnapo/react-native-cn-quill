@@ -1,4 +1,7 @@
-export const quill_js = `
+export const quill_js = (cdn: boolean) =>
+  cdn === true
+    ? '<script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>'
+    : `
 <script>
 /*!
 * Quill Editor v1.3.6
