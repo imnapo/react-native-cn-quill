@@ -80,7 +80,16 @@ export default class App extends React.Component<any, any> {
               onPress={() => this._editor.current?.focus()}
             />
             <Button title="Get Text" onPress={this.handleHasFocus} />
-            <QuillEditor ref={this._editor} />
+            <QuillEditor
+              ref={this._editor}
+              quill={{
+                placeholder: 'this is placeholder',
+                modules: { toolbar: true },
+                theme: 'bubble',
+              }}
+              import3rdParties="cdn"
+              initialHtml="<h1>Quill Editor for react-native</h1><p>this is intial html</p>"
+            />
           </View>
           <View onTouchStart={(e) => e.stopPropagation()}>
             <QuillToolbar

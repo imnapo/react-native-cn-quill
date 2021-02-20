@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { WebView } from 'react-native-webview';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, StyleProp, ViewStyle } from 'react-native';
 import { createHtml } from '../utils/editor-utils';
-import type { EditorMessage, EditorResponse } from '../types';
+import type { EditorMessage, EditorResponse, QuillConfig } from '../types';
 import { EditorEventType } from '../constants/editor-event';
 
 export interface EditorState {
@@ -10,7 +10,12 @@ export interface EditorState {
 }
 
 export interface EditorProps {
-  style?: any;
+  style?: StyleProp<ViewStyle>;
+  quill?: QuillConfig;
+  initialHtml?: string;
+  import3rdParties?: 'local' | 'cdn';
+  containerId?: string;
+  theme?: { background: string; color: string; placeholder: string };
 }
 
 export default class QuillEditor extends React.Component<
@@ -25,19 +30,45 @@ export default class QuillEditor extends React.Component<
     super(props);
     this._webview = React.createRef();
     this.state = {
-      webviewContent: null,
+      webviewContent: this.getInitalHtml(),
     };
+
     this._formatChangeHandlers = [];
     this._promises = [];
   }
 
-  componentDidMount() {
-    this.loadHTMLFile();
-  }
+  private getInitalHtml = (): string => {
+    const {
+      initialHtml = '',
+      import3rdParties = 'local',
+      containerId = 'standalone-container',
+      theme = {
+        background: 'white',
+        color: 'rgb(32, 35, 42)',
+        placeholder: 'rgba(0,0,0,0.6)',
+      },
+      quill = {
+        id: 'editor-container',
+        placeholder: 'write here!',
+        modules: {
+          toolbar: false,
+        },
+        theme: 'snow',
+      },
+    } = this.props;
 
-  private loadHTMLFile = async () => {
-    const HTML = createHtml();
-    this.setState({ webviewContent: HTML });
+    return createHtml({
+      initialHtml,
+      placeholder: quill.placeholder,
+      theme: quill.theme ? quill.theme : 'snow',
+      toolbar: JSON.stringify(quill.modules?.toolbar),
+      libraries: import3rdParties,
+      editorId: quill.id ? quill.id : 'editor-container',
+      containerId,
+      color: theme.color,
+      backgroundColor: theme.background,
+      placeholderColor: theme.placeholder,
+    });
   };
 
   private getKey(): string {
@@ -180,7 +211,6 @@ export default class QuillEditor extends React.Component<
     const { webviewContent } = this.state;
     const { style } = this.props;
     if (!webviewContent) return <Text>Please wait...</Text>;
-
     return (
       <View style={[styles.container, style]}>
         <WebView

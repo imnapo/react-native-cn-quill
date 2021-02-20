@@ -1,11 +1,16 @@
-export const create_quill = `
+export const create_quill = (
+  id: string,
+  toolbar: 'false' | string,
+  placeholder: string,
+  theme: 'snow' | 'bubble'
+) => `
 <script>
-var quill = new Quill('#editor-container', {
+var quill = new Quill('#${id}', {
   modules: {
-    toolbar: false
+    toolbar: ${toolbar}
   },
-  placeholder: 'Write here',
-  theme: 'snow'
+  placeholder: '${placeholder}',
+  theme: '${theme}'
 });
 </script>
 `;

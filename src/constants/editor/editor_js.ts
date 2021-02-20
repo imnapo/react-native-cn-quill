@@ -149,7 +149,7 @@ export const editor_js = `
 
   document.addEventListener("message", getRequest, false);
   window.addEventListener("message", getRequest, false);
-
+ 
   quill.on('editor-change', function(eventName, ...args) {
     if (eventName === 'text-change') {
       getSelectedFormats();

@@ -77,9 +77,14 @@ QuillEditor is the main component of this library. You may easily add it to your
 
 ### QuillEditor Props
 
-| Name | Description | Required |
+| Name | Type | Required |
 | ------ | ----------- | ---- |
-| style | Styles applied to the outermost component. | No |
+| style | `StyleProp<ViewStyle>` | No |
+| initialHtml | `string` | No |
+| quill | `{ id?: string; modules?: { toolbar: boolean  Array<Array<string  \| object> \| string \| object> \| string}; theme?: 'snow' \| 'bubble'; placeholder: string; }` | No |
+| import3rdParties | `'local' \| 'cdn'` | No |
+| containerId | `string` | No |
+| theme | `{ background: string; color: string; placeholder: string }` | No |
 
 
 ### Instance methods
@@ -155,7 +160,7 @@ To see an example of how to fully implement this please check this [Link](https:
 
 ### QuillToolbar Props
 
-| Name | Description | Required |
+| Name | Type | Required |
 | ------ | ----------- | ---- |
 | styles | `{ toolbar?, toolset?, tool? }` | No |
 | editor | `React.RefObject<QuillEditor>` | Yes |

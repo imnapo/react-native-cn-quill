@@ -71,3 +71,12 @@ export interface ToolbarCustom {
   actions?: Array<string>;
   icons?: Record<string, any>;
 }
+
+export interface QuillConfig {
+  id?: string;
+  modules?: {
+    toolbar: boolean | Array<Array<string | object> | string | object> | string;
+  };
+  theme?: 'snow' | 'bubble';
+  placeholder: string;
+}
