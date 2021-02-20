@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { WebView } from 'react-native-webview';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, StyleProp, ViewStyle } from 'react-native';
 import { createHtml } from '../utils/editor-utils';
-import type { EditorMessage, EditorResponse } from '../types';
+import type { EditorMessage, EditorResponse, QuillConfig } from '../types';
 import { EditorEventType } from '../constants/editor-event';
 
 export interface EditorState {
@@ -10,15 +10,12 @@ export interface EditorState {
 }
 
 export interface EditorProps {
-  style?: any;
+  style?: StyleProp<ViewStyle>;
+  quill?: QuillConfig;
   initialHtml?: string;
-  placeholder?: string;
-  toolbar?: boolean | Array<Array<string | object> | string | object>;
-  quillTheme?: 'snow' | 'bubble';
-  libraries?: 'local' | 'cdn';
-  editorId?: string;
+  import3rdParties?: 'local' | 'cdn';
   containerId?: string;
-  editorTheme?: { background: string; color: string; placeholder: string };
+  theme?: { background: string; color: string; placeholder: string };
 }
 
 export default class QuillEditor extends React.Component<
@@ -43,30 +40,34 @@ export default class QuillEditor extends React.Component<
   private getInitalHtml = (): string => {
     const {
       initialHtml = '',
-      placeholder = 'write here!',
-      toolbar = false,
-      libraries = 'local',
-      quillTheme = 'snow',
-      editorId = 'editor-container',
+      import3rdParties = 'local',
       containerId = 'standalone-container',
-      editorTheme = {
+      theme = {
         background: 'white',
         color: 'rgb(32, 35, 42)',
         placeholder: 'rgba(0,0,0,0.6)',
+      },
+      quill = {
+        id: 'editor-container',
+        placeholder: 'write here!',
+        modules: {
+          toolbar: false,
+        },
+        theme: 'snow',
       },
     } = this.props;
 
     return createHtml({
       initialHtml,
-      placeholder,
-      theme: quillTheme,
-      toolbar: JSON.stringify(toolbar),
-      libraries: libraries,
-      editorId,
+      placeholder: quill.placeholder,
+      theme: quill.theme ? quill.theme : 'snow',
+      toolbar: JSON.stringify(quill.modules?.toolbar),
+      libraries: import3rdParties,
+      editorId: quill.id ? quill.id : 'editor-container',
       containerId,
-      color: editorTheme.color,
-      backgroundColor: editorTheme.background,
-      placeholderColor: editorTheme.placeholder,
+      color: theme.color,
+      backgroundColor: theme.background,
+      placeholderColor: theme.placeholder,
     });
   };
 
