@@ -955,4 +955,5 @@ export const quill_bubble_css = (cdn: boolean) =>
 .ql-container.ql-bubble:not(.ql-disabled) a:hover::after {
   visibility: visible;
 }
+</style>
 `;
