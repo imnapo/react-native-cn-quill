@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, ViewStyle, StyleProp } from 'react-native';
 import { TextListButton } from './text-list-button';
 import { ToggleIconButton } from './toggle-icon-button';
 import { ColorListButton } from './color-list-button';
@@ -8,8 +8,8 @@ import { formatType } from '../../constants/formats';
 
 interface Props {
   tools: Array<ToggleData | TextListData | ColorListData>;
-  style: any;
-  toolStyle: any;
+  style: StyleProp<ViewStyle>;
+  toolStyle: StyleProp<ViewStyle>;
 }
 
 export const ToolSet: React.FC<Props> = (props) => {
@@ -31,7 +31,6 @@ export const ToolSet: React.FC<Props> = (props) => {
       name={data.name}
       items={data.values}
       style={toolStyle}
-      source={undefined}
     />
   );
 

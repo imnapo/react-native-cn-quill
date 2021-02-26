@@ -1,9 +1,16 @@
 import * as React from 'react';
-import { WebView } from 'react-native-webview';
+import { WebView, WebViewProps } from 'react-native-webview';
 import { View, Text, StyleSheet, StyleProp, ViewStyle } from 'react-native';
 import { createHtml } from '../utils/editor-utils';
 import type { EditorMessage, EditorResponse, QuillConfig } from '../types';
-import { EditorEventType } from '../constants/editor-event';
+import type {
+  EditorEventHandler,
+  EditorEventType,
+  SelectionChangeData,
+  EditorChangeData,
+  TextChangeData,
+} from '../constants/editor-event';
+import { Loading } from './loading';
 
 export interface EditorState {
   webviewContent: string | null;
@@ -16,6 +23,12 @@ export interface EditorProps {
   import3rdParties?: 'local' | 'cdn';
   containerId?: string;
   theme?: { background: string; color: string; placeholder: string };
+  loading?: string | React.ReactNode;
+  container: boolean | React.ComponentType;
+  onSelectionChange?: (data: SelectionChangeData) => void;
+  onTextChange?: (data: TextChangeData) => void;
+  onEditorChange?: (data: EditorChangeData) => void;
+  webview?: WebViewProps;
 }
 
 export default class QuillEditor extends React.Component<
@@ -23,7 +36,10 @@ export default class QuillEditor extends React.Component<
   EditorState
 > {
   private _webview: React.RefObject<WebView>;
-  private _formatChangeHandlers: Array<Function>;
+  private _handlers: Array<{
+    event: EditorEventType;
+    handler: EditorEventHandler;
+  }>;
   private _promises: Array<EditorResponse>;
 
   constructor(props: EditorProps) {
@@ -33,8 +49,18 @@ export default class QuillEditor extends React.Component<
       webviewContent: this.getInitalHtml(),
     };
 
-    this._formatChangeHandlers = [];
+    this._handlers = [];
     this._promises = [];
+    const { onSelectionChange, onEditorChange, onTextChange } = this.props;
+    if (onSelectionChange) {
+      this.on('selection-change', onSelectionChange);
+    }
+    if (onEditorChange) {
+      this.on('editor-change', onEditorChange);
+    }
+    if (onTextChange) {
+      this.on('text-change', onTextChange);
+    }
   }
 
   private getInitalHtml = (): string => {
@@ -111,8 +137,15 @@ export default class QuillEditor extends React.Component<
     const response = message.key
       ? this._promises.find((x) => x.key === message.key)
       : undefined;
-    if (message.type === 'format-change') {
-      this._formatChangeHandlers.forEach((handler) => handler(message.data));
+    if (
+      message.type === 'format-change' ||
+      message.type === 'text-change' ||
+      message.type === 'selection-change' ||
+      message.type === 'editor-change'
+    ) {
+      this._handlers
+        .filter((x) => x.event === message.type)
+        .forEach((item) => item.handler(message.data));
     } else if (
       message.type === 'has-focus' ||
       message.type === 'get-contents' ||
@@ -136,7 +169,7 @@ export default class QuillEditor extends React.Component<
   };
 
   hasFocus = (): Promise<boolean> => {
-    return this.postAwait<any>({ type: 'hasFocus' });
+    return this.postAwait<any>({ command: 'hasFocus' });
   };
 
   enable = (enable = true) => {
@@ -160,19 +193,19 @@ export default class QuillEditor extends React.Component<
   };
 
   getContents = (index?: number, length?: number): Promise<any> => {
-    return this.postAwait<any>({ type: 'getContents', index, length });
+    return this.postAwait<any>({ command: 'getContents', index, length });
   };
 
   getHtml = (): Promise<any> => {
-    return this.postAwait<any>({ type: 'getHtml' });
+    return this.postAwait<any>({ command: 'getHtml' });
   };
 
   getLength = (): Promise<any> => {
-    return this.postAwait<any>({ type: 'getLength' });
+    return this.postAwait<any>({ command: 'getLength' });
   };
 
   getText = (index?: number, length?: number): Promise<any> => {
-    return this.postAwait<any>({ type: 'getText', index, length });
+    return this.postAwait<any>({ command: 'getText', index, length });
   };
 
   insertEmbed = (index: number, type: string, value: any) => {
@@ -195,50 +228,77 @@ export default class QuillEditor extends React.Component<
     this.post({ command: 'updateContents', delta });
   };
 
-  on = (event: EditorEventType, handler: Function) => {
-    if (event === EditorEventType.formatChange) {
-      this._formatChangeHandlers.push(handler);
+  on = (event: EditorEventType, handler: EditorEventHandler) => {
+    this._handlers.push({ event, handler });
+  };
+
+  off = (event: EditorEventType, handler: Function) => {
+    const index = this._handlers.findIndex(
+      (x) => x.event === event && x.handler === handler
+    );
+    if (index > -1) {
+      this._handlers.splice(index, 1);
     }
   };
 
-  off = (event: EditorEventType) => {
-    if (event === EditorEventType.formatChange) {
-      this._formatChangeHandlers = [];
-    }
-  };
+  renderWebview = (
+    content: string,
+    style: StyleProp<ViewStyle>,
+    props: WebViewProps = {}
+  ) => (
+    <WebView
+      scrollEnabled={false}
+      hideKeyboardAccessoryView={true}
+      keyboardDisplayRequiresUserAction={false}
+      originWhitelist={['*']}
+      style={style}
+      onError={(syntheticEvent) => {
+        const { nativeEvent } = syntheticEvent;
+        console.warn('WebView error: ', nativeEvent);
+      }}
+      allowFileAccess={true}
+      domStorageEnabled={false}
+      automaticallyAdjustContentInsets={true}
+      bounces={false}
+      dataDetectorTypes="none"
+      {...props}
+      javaScriptEnabled={true}
+      source={{ html: content }}
+      ref={this._webview}
+      onMessage={this.onMessage}
+    />
+  );
 
   render() {
     const { webviewContent } = this.state;
-    const { style } = this.props;
-    if (!webviewContent) return <Text>Please wait...</Text>;
-    return (
-      <View style={[styles.container, style]}>
-        <WebView
-          scrollEnabled={false}
-          hideKeyboardAccessoryView={true}
-          keyboardDisplayRequiresUserAction={false}
-          ref={this._webview}
-          onMessage={this.onMessage}
-          style={styles.webView}
-          // renderError={(error) => console.log('error:', error)}
-          source={{ html: webviewContent }}
-          allowFileAccess={true}
-          domStorageEnabled={false}
-          allowUniversalAccessFromFileURLs={true}
-          allowFileAccessFromFileURLs={true}
-          javaScriptEnabled={true}
-          automaticallyAdjustContentInsets
-          mixedContentMode="always"
-        />
-      </View>
-    );
+    const {
+      style,
+      webview,
+      container = false,
+      loading = 'Please Wait ...',
+    } = this.props;
+
+    if (container === false) {
+      if (!webviewContent) return <Text>Please wait...</Text>;
+      return this.renderWebview(webviewContent, style, webview);
+    } else {
+      const ContainerComponent = container === true ? View : container;
+      return (
+        <ContainerComponent style={style}>
+          {webviewContent ? (
+            this.renderWebview(webviewContent, styles.webView, webview)
+          ) : typeof loading === 'string' ? (
+            <Loading text={loading} />
+          ) : (
+            loading
+          )}
+        </ContainerComponent>
+      );
+    }
   }
 }
 
 let styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
   webView: {
     flexGrow: 1,
     borderWidth: 0,

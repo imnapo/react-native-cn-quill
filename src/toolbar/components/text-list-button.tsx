@@ -1,13 +1,20 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Image,
+  ViewStyle,
+  StyleProp,
+} from 'react-native';
 import type { ToggleData, ToolbarTheme } from '../../types';
 import { useToolbar } from './toolbar-context';
 
 interface Props {
   name: string;
   items: Array<ToggleData>;
-  style: any;
-  source: any;
+  style: StyleProp<ViewStyle>;
 }
 
 export const TextListButton: React.FC<Props> = ({ name, items, style }) => {

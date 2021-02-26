@@ -12,7 +12,7 @@ export const editor_js = `
     var formats = quill.getFormat();
       var contentChanged = JSON.stringify({
                 type: 'format-change',
-                data: formats });
+                data: {formats} });
       sendMessage(contentChanged);
   }
   //Format text at user’s current selection
@@ -90,9 +90,7 @@ export const editor_js = `
   }
 
   var getRequest = function (event) {
-
-    var msg = JSON.parse(event.data);
-    
+    var msg = JSON.parse(event.data);    
     switch (msg.command) {
       case 'format':
         formatSelection(msg.name, msg.value);
@@ -104,10 +102,7 @@ export const editor_js = `
         quill.blur();
         break;
       case 'enable':
-        alert(msg.value);
-        if(msg.value == true) {
-          quill.enable();
-        } else if(msg.value == false) quill.disable();
+        quill.enable(msg.value);
         break;
         case 'hasFocus':
           hasFocus(msg.key);
@@ -159,6 +154,24 @@ export const editor_js = `
         getSelectedFormats();
       } 
     }
+    var getEditorChange = JSON.stringify({
+      type: 'editor-change',
+      data: { eventName, args } });
+      sendMessage(getEditorChange);
+  });
+
+  quill.on('text-change', function(delta, oldDelta, source) {
+    var getTextChange = JSON.stringify({
+      type: 'text-change',
+      data: { delta, oldDelta, source } });
+      sendMessage(getTextChange);
+  });
+
+  quill.on('selection-change', function(range, oldRange, source) {
+    var getSelectionChange = JSON.stringify({
+      type: 'selection-change',
+      data: { range, oldRange, source } });
+      sendMessage(getSelectionChange)
   });
 
 })(document)

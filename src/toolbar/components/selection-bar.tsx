@@ -5,6 +5,8 @@ import {
   StyleSheet,
   View,
   TouchableOpacity,
+  StyleProp,
+  ViewStyle,
 } from 'react-native';
 import type { ToolbarTheme } from '../../types';
 import { useToolbar } from './toolbar-context';
@@ -14,15 +16,19 @@ import { ToggleIconButton } from './toggle-icon-button';
 import { formatType } from '../../constants/formats';
 
 interface Props {
-  toolStyle: any;
+  toolStyle: StyleProp<ViewStyle>;
+  selectionStyle: StyleProp<ViewStyle>;
 }
 
-export const SelectionBar: React.FC<Props> = ({ toolStyle }) => {
+export const SelectionBar: React.FC<Props> = ({
+  toolStyle,
+  selectionStyle,
+}) => {
   const { theme, options, hide, selectionName } = useToolbar();
   const styles = useStyles(theme);
 
   return (
-    <View style={styles.selection}>
+    <View style={[styles.selection, selectionStyle]}>
       <ScrollView
         horizontal={true}
         bounces={false}
@@ -31,7 +37,11 @@ export const SelectionBar: React.FC<Props> = ({ toolStyle }) => {
       >
         {options &&
           options.map((item, index) => {
-            if (item.type === formatType.color) {
+            if (
+              item.type === formatType.color &&
+              item.valueOn !== true &&
+              typeof item.valueOn !== 'number'
+            ) {
               return (
                 <ToggleColorButton
                   key={index}

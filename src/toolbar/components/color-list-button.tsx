@@ -1,11 +1,17 @@
 import React from 'react';
-import { View, Image, StyleSheet, TouchableOpacity } from 'react-native';
+import {
+  View,
+  Image,
+  StyleSheet,
+  TouchableOpacity,
+  ImageSourcePropType,
+} from 'react-native';
 import type { ToggleData, ToolbarTheme } from '../../types';
 import { useToolbar } from './toolbar-context';
 
 interface Props {
   name: string;
-  source: any;
+  source: ImageSourcePropType;
   items: Array<ToggleData>;
   style: any;
 }
@@ -36,7 +42,9 @@ export const ColorListButton: React.FC<Props> = ({
             styles.image,
             {
               tintColor:
-                selectedItem && selectedItem.valueOn !== false
+                selectedItem &&
+                selectedItem.valueOn !== false &&
+                typeof selectedItem.valueOn === 'string'
                   ? selectedItem.valueOn
                   : theme.color,
             },
