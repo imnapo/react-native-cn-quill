@@ -4,16 +4,19 @@ import {
   View,
   Image,
   StyleSheet,
+  StyleProp,
+  ViewStyle,
+  ImageSourcePropType,
 } from 'react-native';
 import type { ToolbarTheme } from '../../types';
 import { useToolbar } from './toolbar-context';
 
 interface Props {
   name: string;
-  valueOn: any;
-  valueOff: any;
-  source: any;
-  style: any;
+  valueOn: string | number | boolean;
+  valueOff: string | number | boolean;
+  source: ImageSourcePropType;
+  style: StyleProp<ViewStyle>;
 }
 
 export const ToggleIconButton: React.FC<Props> = (props) => {

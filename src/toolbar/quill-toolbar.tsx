@@ -1,5 +1,14 @@
 import React, { Component } from 'react';
-import { View, ScrollView, Dimensions, StyleSheet } from 'react-native';
+import {
+  View,
+  KeyboardAvoidingView,
+  ScrollView,
+  Dimensions,
+  StyleSheet,
+  StyleProp,
+  ViewStyle,
+  Platform,
+} from 'react-native';
 import { fullOptions, basicOptions } from '../constants/toolbar-options';
 import type {
   ToolbarTheme,
@@ -15,11 +24,13 @@ import { ToolbarProvider } from './components/toolbar-context';
 import { SelectionBar } from './components/selection-bar';
 import { ToolSet } from './components/tool-set';
 import { ToolbarSeperator } from './components/toolbar-separator';
-import { EditorEventType } from '../constants/editor-event';
+import type { FormatChangeData } from '../constants/editor-event';
+
 const WIDTH = Dimensions.get('window').width;
 
 interface customStyles {
-  toolbar?: object;
+  toolbar?: StyleProp<ViewStyle>;
+  selection: StyleProp<ViewStyle>;
   toolset?: object;
   tool?: object;
 }
@@ -30,6 +41,7 @@ interface QuillToolbarProps {
   editor: React.RefObject<QuillEditor>;
   theme: ToolbarTheme | 'dark' | 'light';
   custom?: ToolbarCustom;
+  container?: false | 'avoiding-view' | React.ComponentType;
 }
 
 interface ToolbarState {
@@ -99,27 +111,25 @@ export class QuillToolbar extends Component<QuillToolbarProps, ToolbarState> {
       const {
         editor: { current },
       } = this.props;
-
       if (current) {
         this.editor = current;
-        current.on(EditorEventType.formatChange, this.onFormatChange);
+        current.on('format-change', this.onFormatChange);
       }
-    }, 100);
+    }, 200);
   };
 
-  private onFormatChange = (formats: object) => {
-    this.setState({ formats });
+  private onFormatChange = (data: FormatChangeData) => {
+    this.setState({ formats: data.formats });
   };
 
   private format = (name: string, value: any) => {
     this.editor?.format(name, value);
   };
 
-  render() {
+  renderToolbar = () => {
     const { styles, custom } = this.props;
     const { toolSets, theme, formats } = this.state;
     const classes = makeStyles(theme);
-
     return (
       <ToolbarProvider
         theme={theme}
@@ -127,8 +137,11 @@ export class QuillToolbar extends Component<QuillToolbarProps, ToolbarState> {
         selectedFormats={formats}
         custom={custom}
       >
-        <SelectionBar toolStyle={styles?.tool} />
-        <View style={[classes.toolbar, styles?.toolbar]}>
+        <SelectionBar
+          toolStyle={styles?.tool}
+          selectionStyle={styles?.selection}
+        />
+        <View style={[styles?.toolbar || classes.toolbar]}>
           <ScrollView
             horizontal={true}
             bounces={false}
@@ -154,6 +167,24 @@ export class QuillToolbar extends Component<QuillToolbarProps, ToolbarState> {
         </View>
       </ToolbarProvider>
     );
+  };
+
+  render() {
+    const { container = 'avoiding-view' } = this.props;
+    if (container === 'avoiding-view')
+      return (
+        <KeyboardAvoidingView
+          onTouchStart={(e) => e.stopPropagation()}
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        >
+          {this.renderToolbar()}
+        </KeyboardAvoidingView>
+      );
+    else if (container === false) return this.renderToolbar();
+    else {
+      const ContainerComponent = container;
+      return <ContainerComponent>{this.renderToolbar()}</ContainerComponent>;
+    }
   }
 }
 

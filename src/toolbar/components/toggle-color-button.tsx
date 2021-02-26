@@ -1,12 +1,18 @@
 import React from 'react';
-import { TouchableWithoutFeedback, View, StyleSheet } from 'react-native';
+import {
+  TouchableWithoutFeedback,
+  View,
+  StyleSheet,
+  StyleProp,
+  ViewStyle,
+} from 'react-native';
 import type { ToolbarTheme } from '../../types';
 import { useToolbar } from './toolbar-context';
 
 interface Props {
-  valueOn: any;
-  valueOff?: any;
-  style: any;
+  valueOn: string | false;
+  valueOff?: string | false;
+  style: StyleProp<ViewStyle>;
   name: string;
 }
 

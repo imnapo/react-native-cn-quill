@@ -1,3 +1,4 @@
+import type { ImageSourcePropType } from 'react-native';
 import type { formatType, formatValueType } from './constants/formats';
 
 export interface format {
@@ -15,22 +16,22 @@ export interface formatDefault {
 
 export interface ToggleData {
   name: string;
-  valueOn: any;
-  valueOff: any;
-  source: any;
+  valueOn: string | number | boolean;
+  valueOff: string | number | boolean;
+  source: ImageSourcePropType;
   type: formatType.toggle | formatType.color | formatType.icon;
 }
 
 export interface ColorListData {
   name: string;
-  source: any;
+  source: ImageSourcePropType;
   values: Array<ToggleData>;
   type: formatType.color;
 }
 
 export interface IconListData {
   name: string;
-  source: any;
+  source?: ImageSourcePropType;
   values: Array<ToggleData>;
   type: formatType.select;
 }
