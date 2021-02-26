@@ -136,7 +136,7 @@ export default class QuillEditor extends React.Component<
   };
 
   hasFocus = (): Promise<boolean> => {
-    return this.postAwait<any>({ type: 'hasFocus' });
+    return this.postAwait<any>({ command: 'hasFocus' });
   };
 
   enable = (enable = true) => {
@@ -160,19 +160,19 @@ export default class QuillEditor extends React.Component<
   };
 
   getContents = (index?: number, length?: number): Promise<any> => {
-    return this.postAwait<any>({ type: 'getContents', index, length });
+    return this.postAwait<any>({ command: 'getContents', index, length });
   };
 
   getHtml = (): Promise<any> => {
-    return this.postAwait<any>({ type: 'getHtml' });
+    return this.postAwait<any>({ command: 'getHtml' });
   };
 
   getLength = (): Promise<any> => {
-    return this.postAwait<any>({ type: 'getLength' });
+    return this.postAwait<any>({ command: 'getLength' });
   };
 
   getText = (index?: number, length?: number): Promise<any> => {
-    return this.postAwait<any>({ type: 'getText', index, length });
+    return this.postAwait<any>({ command: 'getText', index, length });
   };
 
   insertEmbed = (index: number, type: string, value: any) => {
