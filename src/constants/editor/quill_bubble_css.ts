@@ -2,6 +2,7 @@ export const quill_bubble_css = (cdn: boolean) =>
   cdn === true
     ? '<link rel="stylesheet" href="https://cdn.quilljs.com/1.3.6/quill.bubble.css">'
     : `
+<style>
 /*!
  * Quill Editor v1.3.6
  * https://quilljs.com/
