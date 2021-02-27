@@ -1,9 +1,6 @@
 # react-native-cn-quill
 
-react-native-cn-quill is a rich-text editor for react-native. We've created this library on top of Quill Api. While developing this package with have few things in our mind:
-- This package should be easy to use.
-- It should be as customizable as possible.
-- It should deliver most of Quill Api
+react-native-cn-quill is a rich-text editor for react-native. We've created this library on top of Quill Api.
 
 
 <img src="./images/quill-editor.jpeg" width="50%">
