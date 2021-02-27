@@ -53,7 +53,13 @@ export default class QuillEditor extends React.Component<
 
     this._handlers = [];
     this._promises = [];
-    const { onSelectionChange, onEditorChange, onTextChange, onBlur, onFocus } = this.props;
+    const {
+      onSelectionChange,
+      onEditorChange,
+      onTextChange,
+      onBlur,
+      onFocus,
+    } = this.props;
     if (onSelectionChange) {
       this.on('selection-change', onSelectionChange);
     }
@@ -64,10 +70,10 @@ export default class QuillEditor extends React.Component<
       this.on('text-change', onTextChange);
     }
     if (onBlur) {
-      this.on("blur", onBlur);
+      this.on('blur', onBlur);
     }
     if (onFocus) {
-      this.on("focus", onFocus);
+      this.on('focus', onFocus);
     }
   }
 
@@ -146,21 +152,21 @@ export default class QuillEditor extends React.Component<
       ? this._promises.find((x) => x.key === message.key)
       : undefined;
     switch (message.type) {
-      case "format-change":
-      case "text-change":
-      case "selection-change":
-      case "editor-change":
-      case "blur":
-      case "focus":
+      case 'format-change':
+      case 'text-change':
+      case 'selection-change':
+      case 'editor-change':
+      case 'blur':
+      case 'focus':
         this._handlers
           .filter((x) => x.event === message.type)
           .forEach((item) => item.handler(message.data));
         break;
-      case "has-focus":
-      case "get-contents":
-      case "get-text":
-      case "get-length":
-      case "get-html":
+      case 'has-focus':
+      case 'get-contents':
+      case 'get-text':
+      case 'get-length':
+      case 'get-html':
         if (response) {
           response.resolve(message.data);
           this._promises = this._promises.filter((x) => x.key !== message.key);

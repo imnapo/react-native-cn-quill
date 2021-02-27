@@ -3,8 +3,8 @@ export type EditorEventType =
   | 'selection-change'
   | 'text-change'
   | 'editor-change'
-  | "blur"
-  | "focus";
+  | 'blur'
+  | 'focus';
 
 export interface SelectionChangeData {
   range: { index: number; length: number } | null;
