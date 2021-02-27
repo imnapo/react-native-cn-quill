@@ -1,6 +1,10 @@
 # react-native-cn-quill
 
-react-native-cn-quill is a rich-text editor for react-native. We've developed this library on top of Quill Api.  
+react-native-cn-quill is a rich-text editor for react-native. We've created this library on top of Quill Api. While developing this package with have few things in our mind:
+- This package should be easy to use.
+- It should be as customizable as possible.
+- It should deliver most of Quill Api
+
 
 <img src="./images/quill-editor.jpeg" width="50%">
 
@@ -75,6 +79,7 @@ QuillEditor is the main component of this library. You may easily add it to your
 ## QuillEditor Props
 
 ### `style`
+Styles applied to the outermost component.
 
 | Type | Required |
 | ----------- | ----------- |
@@ -87,7 +92,7 @@ The Initial html string to display in editor.
 | `string` | No |
 ---
 ### `quill`
-You may pass serveral options to customize quill to suit your needs .
+You may pass several options to customize quill to suit your needs .
 | Type | Required | description
 | ----------- | ----------- | ----------- |
 | `{ id, modules: { toolbar }, theme, placeholder }` | No | described below |
@@ -163,10 +168,22 @@ Calls when when the contents of Quill have changed.
 | `(delta, oldContents, source) => void` | No |
 ---
 ###  `onEditorChange`
-Calls when when the contents of Quill have changed or quill's selection have changed.
+Calls when the contents of Quill have changed or quill's selection have changed.
 | Type | Required |
 | ----------- | ----------- |
 | `(name , args) => void` | No |
+---
+###  `onFocus`
+The `onfocus` event occurs when the editor gets focus. 
+| Type | Required |
+| ----------- | ----------- |
+| `() => void` | No |
+---
+###  `onBlur`
+The `onBlur` event occurs when the editor loses focus. 
+| Type | Required |
+| ----------- | ----------- |
+| `() => void` | No |
 ---
 ## QuillEditor Methods
 
@@ -196,6 +213,9 @@ Read about these methods and their functionality on [Quill Api](https://quilljs.
 ---
 # QuillToolbar
 The QuillToolbar component allow users to easily format Quill’s contents. QuillToolbar controls can be specified by a simple array of format names like `['bold', 'italic', 'underline', 'strike']` or by just passing 'basic' or 'full' string to options prop. we've tried to develop it just like [Quill Toolbar options](https://quilljs.com/docs/modules/toolbar/#container).
+
+If you prefer to use quill's built-in toolbar follow [this](https://github.com/imnapo/react-native-cn-quill#quillmodules) instruction.
+
 The QuillToolbar uses a series of icons to render controls. this controls by default applies and removes formatting, but you can easily extend or overwrite these with `custom` prop.  
 For example we may add the `image` and `clock` (user defined control that inserts current date to the editor) handlers just like this:
 ## Custom Handlers Usage
