@@ -29,6 +29,8 @@ export interface EditorProps {
   onTextChange?: (data: TextChangeData) => void;
   onEditorChange?: (data: EditorChangeData) => void;
   webview?: WebViewProps;
+  onBlur?: () => void;
+  onFocus?: () => void;
 }
 
 export default class QuillEditor extends React.Component<
@@ -51,7 +53,7 @@ export default class QuillEditor extends React.Component<
 
     this._handlers = [];
     this._promises = [];
-    const { onSelectionChange, onEditorChange, onTextChange } = this.props;
+    const { onSelectionChange, onEditorChange, onTextChange, onBlur, onFocus } = this.props;
     if (onSelectionChange) {
       this.on('selection-change', onSelectionChange);
     }
@@ -60,6 +62,12 @@ export default class QuillEditor extends React.Component<
     }
     if (onTextChange) {
       this.on('text-change', onTextChange);
+    }
+    if (onBlur) {
+      this.on("blur", onBlur);
+    }
+    if (onFocus) {
+      this.on("focus", onFocus);
     }
   }
 
@@ -137,26 +145,27 @@ export default class QuillEditor extends React.Component<
     const response = message.key
       ? this._promises.find((x) => x.key === message.key)
       : undefined;
-    if (
-      message.type === 'format-change' ||
-      message.type === 'text-change' ||
-      message.type === 'selection-change' ||
-      message.type === 'editor-change'
-    ) {
-      this._handlers
-        .filter((x) => x.event === message.type)
-        .forEach((item) => item.handler(message.data));
-    } else if (
-      message.type === 'has-focus' ||
-      message.type === 'get-contents' ||
-      message.type === 'get-text' ||
-      message.type === 'get-length' ||
-      message.type === 'get-html'
-    ) {
-      if (response) {
-        response.resolve(message.data);
-        this._promises = this._promises.filter((x) => x.key !== message.key);
-      }
+    switch (message.type) {
+      case "format-change":
+      case "text-change":
+      case "selection-change":
+      case "editor-change":
+      case "blur":
+      case "focus":
+        this._handlers
+          .filter((x) => x.event === message.type)
+          .forEach((item) => item.handler(message.data));
+        break;
+      case "has-focus":
+      case "get-contents":
+      case "get-text":
+      case "get-length":
+      case "get-html":
+        if (response) {
+          response.resolve(message.data);
+          this._promises = this._promises.filter((x) => x.key !== message.key);
+        }
+        break;
     }
   };
 

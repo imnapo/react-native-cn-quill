@@ -104,39 +104,39 @@ export const editor_js = `
       case 'enable':
         quill.enable(msg.value);
         break;
-        case 'hasFocus':
-          hasFocus(msg.key);
+      case 'hasFocus':
+        hasFocus(msg.key);
         break;
-        case 'deleteText':
-          quill.deleteText(msg.index, msg.length);
-          break;
-        case 'getContents':
-          getContents(msg.key, msg.index, msg.length);
-          break;
-        case 'getText':
-          getText(msg.key, msg.index, msg.length);
-          break;
-        case 'getHtml':
-          getHtml(msg.key);
-          break;
-        case 'getLength':
-          getLength(msg.key);
-          break;
-        case 'insertEmbed':
-          insertEmbed(msg.index, msg.type, msg.value);
-          break;
-        case 'insertText':
-          insertText(msg.index, msg.text, msg.formats);
-          break;
-        case 'setContents':
-          setContents(msg.delta);
-          break;
-        case 'setText':
-          setText(msg.text);
-          break;
-        case 'updateContents':
-          updateContents(msg.delta);
-          break;
+      case 'deleteText':
+        quill.deleteText(msg.index, msg.length);
+        break;
+      case 'getContents':
+        getContents(msg.key, msg.index, msg.length);
+        break;
+      case 'getText':
+        getText(msg.key, msg.index, msg.length);
+        break;
+      case 'getHtml':
+        getHtml(msg.key);
+        break;
+      case 'getLength':
+        getLength(msg.key);
+        break;
+      case 'insertEmbed':
+        insertEmbed(msg.index, msg.type, msg.value);
+        break;
+      case 'insertText':
+        insertText(msg.index, msg.text, msg.formats);
+        break;
+      case 'setContents':
+        setContents(msg.delta);
+        break;
+      case 'setText':
+        setText(msg.text);
+        break;
+      case 'updateContents':
+        updateContents(msg.delta);
+        break;
       default:
         break;
     }
@@ -172,6 +172,14 @@ export const editor_js = `
       type: 'selection-change',
       data: { range, oldRange, source } });
       sendMessage(getSelectionChange)
+  });
+  
+  quill.root.addEventListener('blur', function () {
+    sendMessage(JSON.stringify({type: 'blur'}));
+  });
+
+  quill.root.addEventListener('focus', function () {
+    sendMessage(JSON.stringify({type: 'focus'}));
   });
 
 })(document)
