@@ -117,7 +117,7 @@ Specify Quill's officially suppoted themes. (custom theme hasn't implemented yet
 | `'snow' \| 'bubble'` | No |
 ---
 ###  `import3rdParties`
-We provide two ways to import required 3rd party scritps and styles like quill's script and styles.
+We provide two ways to import required 3rd party scritps and styles. this option is only for the editor's own scripts and styles like quill's script and styles and it's not related to custom styles.
 | Type | Required |
 | ----------- | ----------- |
 | `'local' \| 'cdn'` | No |
