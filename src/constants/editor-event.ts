@@ -3,6 +3,7 @@ export type EditorEventType =
   | 'selection-change'
   | 'text-change'
   | 'editor-change'
+  | 'html-change'
   | 'blur'
   | 'focus';
 
@@ -16,6 +17,11 @@ export interface TextChangeData {
   delta: any;
   oldDelta: any;
   source: string;
+  html: string;
+}
+
+export interface HtmlChangeData {
+  html: string;
 }
 
 export interface EditorChangeData {
@@ -31,9 +37,11 @@ export type EditorChangeHandler = (data: EditorChangeData) => void;
 export type TextChangeHandler = (data: TextChangeData) => void;
 export type SelectionChangeHandler = (data: SelectionChangeData) => void;
 export type FormatChangeHandler = (data: FormatChangeData) => void;
+export type HtmlChangeHandler = (data: HtmlChangeData) => void;
 
 export type EditorEventHandler =
   | EditorChangeHandler
   | TextChangeHandler
   | SelectionChangeHandler
-  | FormatChangeHandler;
+  | FormatChangeHandler
+  | HtmlChangeHandler;
