@@ -88,6 +88,12 @@ The Initial html string to display in editor.
 | ----------- | ----------- |
 | `string` | No |
 ---
+### `customStyles`
+List of custom css string to be added to HTML Head.
+| Type | Required |
+| ----------- | ----------- |
+| `string[]` | No |
+---
 ### `quill`
 You may pass several options to customize quill to suit your needs .
 | Type | Required | description
@@ -156,19 +162,25 @@ You may specify custom props for `webview` component.
 Calls when quill's selection changes.
 | Type | Required |
 | ----------- | ----------- |
-| `(range: { index, lengthmber } , oldRange: { index, length }, source) => void` | No |
+| `({ range: { index, lengthmber } , oldRange: { index, length }, source }) => void` | No |
 ---
 ###  `onTextChange`
 Calls when when the contents of Quill have changed.
 | Type | Required |
 | ----------- | ----------- |
-| `(delta, oldContents, source) => void` | No |
+| `({ delta, oldContents, source }) => void` | No |
+---
+###  `onHtmlChange`
+Calls when when the contents of Quill have changed.
+| Type | Required |
+| ----------- | ----------- |
+| `({ html }) => void` | No |
 ---
 ###  `onEditorChange`
 Calls when the contents of Quill have changed or quill's selection have changed.
 | Type | Required |
 | ----------- | ----------- |
-| `(name , args) => void` | No |
+| `({name , args}) => void` | No |
 ---
 ###  `onFocus`
 The `onfocus` event occurs when the editor gets focus. 
@@ -182,32 +194,112 @@ The `onBlur` event occurs when the editor loses focus.
 | ----------- | ----------- |
 | `() => void` | No |
 ---
-## QuillEditor Methods
+## Editor Methods
+###  `focus()`
+Focuses the editor. 
 
+---
+###  `blur()`
+Removes focus from the editor. 
+
+---
+###  `hasFocus(): Boolean`
+Checks if editor has focus.
+
+---
+###  `disable()`
+Make the editor readonly. 
+
+---
+###  `enable(enabled: boolean = true)`
+Make the editor editable or readonly. 
+
+---
+###  `update()`
+Checks for user updates and fires events, if changes have occurred. 
+
+---
+## Event Methods
+###  `on(name: String, handler: Function)`
+Adds event handler. 
+
+---
+## Content Methods
+###  `deleteText(index: Number, length: Number)`
+Deletes text from the editor.
+
+---
+###  `getContents(index?: Number, length?: Number) : Promise<Delta>`
+gets contents of the editor with formats.
+
+---
+###  `getLength(): Promise<Number>`
+gets contents of the editor with formats.
+
+---
+###  `getText(index?: Number = 0, length?: Number): Promise<String>`
+gets string contents of the editor.
+
+---
+###  `insertEmbed(index: Number, type: String, value: any)`
+Insert embedded content into the editor. 
+#### Example: 
+```
+_editor.current.insertEmbed(10, 'image', 'https://quilljs.com/images/cloud.png');
+```
+
+---
+###  `insertText(index: number, text: string, formats?: Record<string, any>)`
+Inserts text into the editor,
+#### Example: 
+```
+_editor.current.insertText(5, 'Quill', {
+  'color': '#ffff00',
+  'italic': true
+});
+```
+---
+###  `setContents(delta: any)`
+Overwrites editor with given contents.
+#### Example: 
+```
+_editor.current.setContents([
+  { insert: 'Hello ' },
+  { insert: 'World!', attributes: { bold: true } },
+  { insert: '\n' }
+]);
+```
+---
+###  `setText(text: string)`
+Overwrites editor with given text.
+#### Example: 
+```
+_editor.current.setText('Hello\n');
+```
+---
+###  `updateContents(delta: any)`
+Applies Delta to editor contents.
+
+---
+## Formating Methods
+###  `format(name: String, value: any)`
+Format text at user’s current selection.
+#### Example: 
+```
+_editor.current.format('color', 'red');
+```
+---
+## Clipboard Methods
+###  `dangerouslyPasteHTML(index: number, html: string)`
+Inserts content represented by HTML snippet into editor at a given index.
+#### Example: 
+```
+_editor.current.dangerouslyPasteHTML(0, '<b>Hello World</b>');
+```
+---
 Read about these methods and their functionality on [Quill Api](https://quilljs.com/docs/api/)
 
-| Name | Params | Returns | type |
-| ------ | ---- | ------ | --- |
-| blur | - | void | Editor |
-| focus | - | void | Editor |
-| disable | - | void | Editor |
-| enable | `enable?` | void | Editor |
-| hasFocus | - | `Promise<boolean>` | Editor |
-| update | - | void | Editor |
-| format | `name: string, value: any` | void | Formating |
-| deleteText | `index: number, length: number` | void | Content |
-| getContents | `index?: number, length?: number` | `Promise` | Content |
-| getLength | - | `Promise` | Content |
-| getHtml | - | `Promise` | Content |
-| getText | `index?: number, length?: number` | `Promise` | Content |
-| insertEmbed | `index: number, type: string, value: any` | void | Content |
-| insertText | `index: number, text: string, formats?: Record<string, any>` | void | Content |
-| setContents | `delta: any` | void | Content |
-| setText | `text: string` | void | Content |
-| updateContents | `delta: any` | void | Content |
-| on | `event, handler ` | - | Event |
-| off | `event, handler` | - | Event |
----
+
 # QuillToolbar
 The QuillToolbar component allow users to easily format Quill’s contents. QuillToolbar controls can be specified by a simple array of format names like `['bold', 'italic', 'underline', 'strike']` or by just passing 'basic' or 'full' string to options prop. we've tried to develop it just like [Quill Toolbar options](https://quilljs.com/docs/modules/toolbar/#container).
 
