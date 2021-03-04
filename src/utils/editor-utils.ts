@@ -18,6 +18,7 @@ interface CreateHtmlArgs {
   color: string;
   backgroundColor: string;
   placeholderColor: string;
+  customStyles: string[];
 }
 
 const Inital_Args = {
@@ -31,6 +32,7 @@ const Inital_Args = {
   color: 'black',
   backgroundColor: 'white',
   placeholderColor: 'rgba(0,0,0,0.6)',
+  customStyles: [],
 } as CreateHtmlArgs;
 
 export const createHtml = (args: CreateHtmlArgs = Inital_Args) => {
@@ -52,6 +54,16 @@ export const createHtml = (args: CreateHtmlArgs = Inital_Args) => {
     args.backgroundColor,
     args.placeholderColor
   )}
+  ${
+    args.customStyles &&
+    args.customStyles
+      .map((style) => {
+        return style.toLocaleLowerCase().trim().startsWith('<style>')
+          ? style
+          : `<style>${style}</style>`;
+      })
+      .join('\n')
+  }
   </head>
   <body>
   <div id="${args.containerId}">

@@ -120,6 +120,7 @@ export default class App extends React.Component<any, any> {
           ref={this._editor}
           onSelectionChange={this.handleSelectionChange}
           onTextChange={this.handleTextChange}
+          onHtmlChange={({ html }) => console.log(html)}
           quill={{
             // not required just for to show how to pass this props
             placeholder: 'this is placeholder',

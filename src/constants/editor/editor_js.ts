@@ -89,6 +89,10 @@ export const editor_js = `
     quill.updateContents(delta);
   }
 
+  var dangerouslyPasteHTML = function (index, html) {
+    quill.clipboard.dangerouslyPasteHTML(index, html);
+  }
+
   var getRequest = function (event) {
     var msg = JSON.parse(event.data);    
     switch (msg.command) {
@@ -137,6 +141,9 @@ export const editor_js = `
       case 'updateContents':
         updateContents(msg.delta);
         break;
+      case 'dangerouslyPasteHTML':
+        dangerouslyPasteHTML(msg.index, msg.html);
+        break;
       default:
         break;
     }
@@ -163,8 +170,14 @@ export const editor_js = `
   quill.on('text-change', function(delta, oldDelta, source) {
     var getTextChange = JSON.stringify({
       type: 'text-change',
-      data: { delta, oldDelta, source } });
+      data: { delta, oldDelta, source, html } });
       sendMessage(getTextChange);
+
+      var html = quill.root.innerHTML;
+      var getHtmlJson = JSON.stringify({
+        type: 'html-change',
+        data: {html} });
+        sendMessage(getHtmlJson);
   });
 
   quill.on('selection-change', function(range, oldRange, source) {

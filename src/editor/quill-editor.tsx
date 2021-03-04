@@ -9,6 +9,7 @@ import type {
   SelectionChangeData,
   EditorChangeData,
   TextChangeData,
+  HtmlChangeData,
 } from '../constants/editor-event';
 import { Loading } from './loading';
 
@@ -20,6 +21,7 @@ export interface EditorProps {
   style?: StyleProp<ViewStyle>;
   quill?: QuillConfig;
   initialHtml?: string;
+  customStyles?: string[];
   import3rdParties?: 'local' | 'cdn';
   containerId?: string;
   theme?: { background: string; color: string; placeholder: string };
@@ -27,6 +29,7 @@ export interface EditorProps {
   container: boolean | React.ComponentType;
   onSelectionChange?: (data: SelectionChangeData) => void;
   onTextChange?: (data: TextChangeData) => void;
+  onHtmlChange?: (data: HtmlChangeData) => void;
   onEditorChange?: (data: EditorChangeData) => void;
   webview?: WebViewProps;
   onBlur?: () => void;
@@ -57,6 +60,7 @@ export default class QuillEditor extends React.Component<
       onSelectionChange,
       onEditorChange,
       onTextChange,
+      onHtmlChange,
       onBlur,
       onFocus,
     } = this.props;
@@ -68,6 +72,9 @@ export default class QuillEditor extends React.Component<
     }
     if (onTextChange) {
       this.on('text-change', onTextChange);
+    }
+    if (onHtmlChange) {
+      this.on('html-change', onHtmlChange);
     }
     if (onBlur) {
       this.on('blur', onBlur);
@@ -95,6 +102,7 @@ export default class QuillEditor extends React.Component<
         },
         theme: 'snow',
       },
+      customStyles = [],
     } = this.props;
 
     return createHtml({
@@ -108,6 +116,7 @@ export default class QuillEditor extends React.Component<
       color: theme.color,
       backgroundColor: theme.background,
       placeholderColor: theme.placeholder,
+      customStyles,
     });
   };
 
@@ -155,6 +164,7 @@ export default class QuillEditor extends React.Component<
       case 'format-change':
       case 'text-change':
       case 'selection-change':
+      case 'html-change':
       case 'editor-change':
       case 'blur':
       case 'focus':
@@ -256,6 +266,10 @@ export default class QuillEditor extends React.Component<
     }
   };
 
+  dangerouslyPasteHTML = (index: number, html: string) => {
+    this.post({ command: 'dangerouslyPasteHTML', index, html });
+  };
+
   renderWebview = (
     content: string,
     style: StyleProp<ViewStyle>,
@@ -292,7 +306,6 @@ export default class QuillEditor extends React.Component<
       container = false,
       loading = 'Please Wait ...',
     } = this.props;
-
     if (container === false) {
       if (!webviewContent) return <Text>Please wait...</Text>;
       return this.renderWebview(webviewContent, style, webview);
