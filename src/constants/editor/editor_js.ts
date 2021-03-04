@@ -170,13 +170,13 @@ export const editor_js = `
   quill.on('text-change', function(delta, oldDelta, source) {
     var getTextChange = JSON.stringify({
       type: 'text-change',
-      data: { delta, oldDelta, source, html } });
+      data: { delta, oldDelta, source } });
       sendMessage(getTextChange);
 
       var html = quill.root.innerHTML;
       var getHtmlJson = JSON.stringify({
         type: 'html-change',
-        data: {html} });
+        data: { html } });
         sendMessage(getHtmlJson);
   });
 
