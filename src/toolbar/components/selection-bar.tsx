@@ -18,14 +18,16 @@ import { formatType } from '../../constants/formats';
 interface Props {
   toolStyle: StyleProp<ViewStyle>;
   selectionStyle: StyleProp<ViewStyle>;
+  showSelectionbar: 'top' | 'bottom';
 }
 
 export const SelectionBar: React.FC<Props> = ({
   toolStyle,
   selectionStyle,
+  showSelectionbar,
 }) => {
   const { theme, options, hide, selectionName } = useToolbar();
-  const styles = useStyles(theme);
+  const styles = useStyles(theme, showSelectionbar);
 
   return (
     <View style={[styles.selection, selectionStyle]}>
@@ -84,7 +86,7 @@ export const SelectionBar: React.FC<Props> = ({
   );
 };
 
-const useStyles = (theme: ToolbarTheme) =>
+const useStyles = (theme: ToolbarTheme, showSelectionbar: 'top' | 'bottom') =>
   StyleSheet.create({
     overlay: {
       ...StyleSheet.absoluteFillObject,
@@ -94,7 +96,8 @@ const useStyles = (theme: ToolbarTheme) =>
     selection: {
       padding: 2,
       position: 'absolute',
-      top: 0,
+      top: showSelectionbar === 'top' ? 0 : undefined,
+      bottom: showSelectionbar === 'bottom' ? 0 : undefined,
       backgroundColor: theme.overlay, //'=rgba(0,0,0,.1)',
       width: '100%',
       flexDirection: 'row',

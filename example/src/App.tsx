@@ -114,6 +114,39 @@ export default class App extends React.Component<any, any> {
           onChangeText={(text) => this.setState({ title: text })}
           value={title}
         />
+        <View style={{ marginLeft: 20, marginRight: 20 }}>
+          <QuillToolbar
+            container={false}
+            editor={this._editor}
+            styles={{
+              toolbar: {
+                borderWidth: 2,
+                // paddingRight: 20,
+                // paddingLeft: 20,
+              },
+            }}
+            theme="light"
+            options={[
+              ['bold', 'italic', 'underline'],
+              [{ header: 1 }, { header: 2 }],
+              [{ header: [1, 2, 3] }],
+              [{ align: [] }],
+              [
+                { color: ['#000000', '#e60000', '#ff9900', 'yellow'] },
+                { background: [] },
+              ],
+              ['image', 'clock'],
+            ]}
+            custom={{
+              handler: this.customHandler,
+              actions: ['image', 'clock'],
+              icons: {
+                clock: clockIcon,
+              },
+            }}
+            showSelectionbar="bottom"
+          />
+        </View>
         <QuillEditor
           container={CustomContainer} // not required just to show how to pass cusom container
           style={[styles.input, styles.editor]}
@@ -130,7 +163,7 @@ export default class App extends React.Component<any, any> {
             theme: 'snow', // this is default value
           }}
           import3rdParties="cdn" // default value is 'local'
-          initialHtml="<h1>Quill Editor for react-native</h1><img src='https://picsum.photos/200/300'/><br/><p>On the other hand, we denounce with righteous indignation and dislike men who are so beguiled and demoralized by the charms of pleasure of the moment, so blinded by desire, that they cannot foresee the pain and trouble that are bound to ensue; and equal blame belongs to those who fail in their duty through weakness of will, which is the same as saying through shrinking from toil and pain. These cases are perfectly simple and easy to distinguish. In a free hour, when our power of choice is untrammelled and when nothing prevents our being able to do what we like best, every pleasure is to be welcomed and every pain avoided. But in certain circumstances and owing to the claims of duty or the obligations of business it will frequently occur that pleasures have to be repudiated and annoyances accepted. The wise man therefore always holds in these matters to this principle of selection: he rejects pleasures to secure other greater pleasures, or else he endures pains to avoid worse pains.</p>"
+          // initialHtml="<h1>Quill Editor for react-native</h1><img src='https://picsum.photos/200/300'/><br/><p>On the other hand, we denounce with righteous indignation and dislike men who are so beguiled and demoralized by the charms of pleasure of the moment, so blinded by desire, that they cannot foresee the pain and trouble that are bound to ensue; and equal blame belongs to those who fail in their duty through weakness of will, which is the same as saying through shrinking from toil and pain. These cases are perfectly simple and easy to distinguish. In a free hour, when our power of choice is untrammelled and when nothing prevents our being able to do what we like best, every pleasure is to be welcomed and every pain avoided. But in certain circumstances and owing to the claims of duty or the obligations of business it will frequently occur that pleasures have to be repudiated and annoyances accepted. The wise man therefore always holds in these matters to this principle of selection: he rejects pleasures to secure other greater pleasures, or else he endures pains to avoid worse pains.</p>"
         />
         <View style={styles.buttons}>
           <TouchableOpacity onPress={this.handleEnable} style={styles.btn}>
@@ -140,28 +173,6 @@ export default class App extends React.Component<any, any> {
             <Text>Html</Text>
           </TouchableOpacity>
         </View>
-
-        <QuillToolbar
-          editor={this._editor}
-          theme="light"
-          options={[
-            ['bold', 'italic', 'underline'],
-            [{ header: 1 }, { header: 2 }],
-            [{ align: [] }],
-            [
-              { color: ['#000000', '#e60000', '#ff9900', 'yellow'] },
-              { background: [] },
-            ],
-            ['image', 'clock'],
-          ]}
-          custom={{
-            handler: this.customHandler,
-            actions: ['image', 'clock'],
-            icons: {
-              clock: clockIcon,
-            },
-          }}
-        />
       </SafeAreaView>
     );
   }

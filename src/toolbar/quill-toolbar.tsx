@@ -1,10 +1,6 @@
 import React, { Component } from 'react';
 import {
-  View,
   KeyboardAvoidingView,
-  ScrollView,
-  Dimensions,
-  StyleSheet,
   StyleProp,
   ViewStyle,
   Platform,
@@ -22,15 +18,13 @@ import { getToolbarData } from '../utils/toolbar-utils';
 import type QuillEditor from '../editor/quill-editor';
 import { ToolbarProvider } from './components/toolbar-context';
 import { SelectionBar } from './components/selection-bar';
-import { ToolSet } from './components/tool-set';
-import { ToolbarSeperator } from './components/toolbar-separator';
+import { ToolsBar } from './components/tools-bar';
 import type { FormatChangeData } from '../constants/editor-event';
-
-const WIDTH = Dimensions.get('window').width;
+// const WIDTH = Dimensions.get('window').width;
 
 interface customStyles {
-  toolbar?: StyleProp<ViewStyle>;
-  selection: StyleProp<ViewStyle>;
+  toolbar?: ViewStyle;
+  selection?: StyleProp<ViewStyle>;
   toolset?: object;
   tool?: object;
 }
@@ -42,6 +36,7 @@ interface QuillToolbarProps {
   theme: ToolbarTheme | 'dark' | 'light';
   custom?: ToolbarCustom;
   container?: false | 'avoiding-view' | React.ComponentType;
+  showSelectionbar?: 'top' | 'bottom';
 }
 
 interface ToolbarState {
@@ -53,6 +48,7 @@ interface ToolbarState {
 export class QuillToolbar extends Component<QuillToolbarProps, ToolbarState> {
   public static defaultProps = {
     theme: 'dark',
+    showSelectionbar: 'top',
   };
 
   constructor(props: QuillToolbarProps) {
@@ -127,44 +123,28 @@ export class QuillToolbar extends Component<QuillToolbarProps, ToolbarState> {
   };
 
   renderToolbar = () => {
-    const { styles, custom } = this.props;
+    const { styles, custom, showSelectionbar = 'top' } = this.props;
     const { toolSets, theme, formats } = this.state;
-    const classes = makeStyles(theme);
     return (
       <ToolbarProvider
         theme={theme}
         format={this.format}
         selectedFormats={formats}
         custom={custom}
+        style={styles?.toolbar}
       >
         <SelectionBar
+          showSelectionbar={showSelectionbar}
           toolStyle={styles?.tool}
           selectionStyle={styles?.selection}
         />
-        <View style={[styles?.toolbar || classes.toolbar]}>
-          <ScrollView
-            horizontal={true}
-            bounces={false}
-            showsHorizontalScrollIndicator={false}
-          >
-            {toolSets.map((object, index) => {
-              return (
-                object.length > 0 && (
-                  <React.Fragment key={index}>
-                    <ToolSet
-                      tools={object}
-                      style={styles?.toolset}
-                      toolStyle={styles?.tool}
-                    />
-                    {toolSets.length > index && (
-                      <ToolbarSeperator color={theme.color} />
-                    )}
-                  </React.Fragment>
-                )
-              );
-            })}
-          </ScrollView>
-        </View>
+        <ToolsBar
+          showSelectionbar={showSelectionbar}
+          theme={theme}
+          toolSets={toolSets}
+          toolStyle={styles?.toolset}
+          toolsetStyle={styles?.toolset}
+        />
       </ToolbarProvider>
     );
   };
@@ -187,18 +167,3 @@ export class QuillToolbar extends Component<QuillToolbarProps, ToolbarState> {
     }
   }
 }
-
-const makeStyles = (theme: ToolbarTheme) =>
-  StyleSheet.create({
-    toolbar: {
-      position: 'absolute',
-      bottom: 0,
-      left: 0,
-      width: WIDTH,
-      padding: 2,
-      backgroundColor: theme.background,
-      flexDirection: 'row',
-      justifyContent: 'flex-start',
-      height: theme.size + 8,
-    },
-  });

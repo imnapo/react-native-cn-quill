@@ -1,5 +1,11 @@
 import React, { Component, useContext } from 'react';
-import { StyleSheet, Animated, Easing } from 'react-native';
+import {
+  StyleSheet,
+  Animated,
+  Easing,
+  ViewStyle,
+  LayoutChangeEvent,
+} from 'react-native';
 import { lightTheme } from '../../constants/themes';
 import type { ToggleData, ToolbarCustom, ToolbarTheme } from '../../types';
 
@@ -14,6 +20,9 @@ export interface ContextProps {
   options: Array<ToggleData>;
   selectionName: string;
   getSelected: (name: string) => any;
+  width: number;
+  top: number;
+  bottom: number;
 }
 
 const ToolbarContext = React.createContext<ContextProps>({
@@ -27,6 +36,9 @@ const ToolbarContext = React.createContext<ContextProps>({
   options: [],
   selectionName: '',
   getSelected: () => false,
+  width: 0,
+  top: 1,
+  bottom: 1,
 });
 
 export const ToolbarConsumer = ToolbarContext.Consumer;
@@ -36,6 +48,7 @@ interface ProviderProps {
   selectedFormats: Record<string, any>;
   theme: ToolbarTheme;
   custom?: ToolbarCustom;
+  style?: ViewStyle;
 }
 
 interface ProviderState {
@@ -43,6 +56,7 @@ interface ProviderState {
   isAnimating: boolean;
   options: Array<ToggleData>;
   name: string;
+  dimensions?: { width: number; height: number };
 }
 
 export class ToolbarProvider extends Component<ProviderProps, ProviderState> {
@@ -54,6 +68,7 @@ export class ToolbarProvider extends Component<ProviderProps, ProviderState> {
       isAnimating: false,
       options: [],
       name: '',
+      dimensions: undefined,
     };
     this.animatedValue = new Animated.Value(0);
   }
@@ -124,10 +139,32 @@ export class ToolbarProvider extends Component<ProviderProps, ProviderState> {
     }
   };
 
+  onLayout = (event: LayoutChangeEvent) => {
+    if (this.state.dimensions) return; // layout was already called
+    let { width, height } = event.nativeEvent.layout;
+    this.setState({ dimensions: { width: width - 2, height } });
+  };
+
   render() {
-    const { selectedFormats, children, theme } = this.props;
-    const { open, options, name } = this.state;
-    const styles = makeStyles(theme);
+    const { selectedFormats, children, theme, style } = this.props;
+    const { open, options, name, dimensions } = this.state;
+    const top = style
+      ? style.borderTopWidth
+        ? style?.borderTopWidth
+        : style.borderWidth
+        ? style.borderWidth
+        : 1
+      : 1;
+    const bottom = style
+      ? style.borderBottomWidth
+        ? style.borderBottomWidth
+        : style.borderWidth
+        ? style.borderWidth
+        : 1
+      : 1;
+
+    const styles = makeStyles(theme, top, bottom);
+
     return (
       <ToolbarContext.Provider
         value={{
@@ -141,14 +178,19 @@ export class ToolbarProvider extends Component<ProviderProps, ProviderState> {
           getSelected: this.getSelected,
           selectionName: name,
           options,
+          width: dimensions ? dimensions.width : 0,
+          top,
+          bottom,
         }}
       >
         <Animated.View
+          onLayout={this.onLayout}
           style={[
             styles.root,
             {
               height: this.animatedValue,
             },
+            style,
           ]}
         >
           {children}
@@ -158,16 +200,14 @@ export class ToolbarProvider extends Component<ProviderProps, ProviderState> {
   }
 }
 
-const makeStyles = (theme: ToolbarTheme) =>
+const makeStyles = (theme: ToolbarTheme, top: number, bottom: number) =>
   StyleSheet.create({
     root: {
-      borderTopWidth: 1,
-      borderLeftWidth: 1,
-      borderRightWidth: 1,
+      borderTopWidth: top,
+      borderBottomWidth: bottom,
       borderColor: theme.color,
       position: 'relative',
       backgroundColor: theme.background,
-      width: '100%',
     },
   });
 
