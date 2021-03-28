@@ -21,8 +21,6 @@ export interface ContextProps {
   selectionName: string;
   getSelected: (name: string) => any;
   width: number;
-  top: number;
-  bottom: number;
 }
 
 const ToolbarContext = React.createContext<ContextProps>({
@@ -37,8 +35,6 @@ const ToolbarContext = React.createContext<ContextProps>({
   selectionName: '',
   getSelected: () => false,
   width: 0,
-  top: 1,
-  bottom: 1,
 });
 
 export const ToolbarConsumer = ToolbarContext.Consumer;
@@ -77,10 +73,12 @@ export class ToolbarProvider extends Component<ProviderProps, ProviderState> {
     if (this.state.isAnimating) return;
 
     const { theme } = this.props;
+    const top = this.getTopBorder();
+    const bottom = this.getBottomBorder();
     if (theme) {
       this.setState({ options, name, isAnimating: true }, () => {
         Animated.timing(this.animatedValue, {
-          toValue: 2 * theme.size + 14,
+          toValue: 2 * theme.size + 12 + top + bottom,
           duration: 200,
           easing: Easing.sin,
           useNativeDriver: false,
@@ -92,10 +90,12 @@ export class ToolbarProvider extends Component<ProviderProps, ProviderState> {
   hide = () => {
     if (this.state.isAnimating) return;
     const { theme } = this.props;
+    const top = this.getTopBorder();
+    const bottom = this.getBottomBorder();
     if (theme) {
       this.setState({ isAnimating: true }, () => {
         Animated.timing(this.animatedValue, {
-          toValue: theme.size + 10,
+          toValue: theme.size + 8 + top + bottom,
           duration: 200,
           easing: Easing.linear,
           useNativeDriver: false,
@@ -113,7 +113,9 @@ export class ToolbarProvider extends Component<ProviderProps, ProviderState> {
 
   componentDidMount() {
     const { theme } = this.props;
-    this.animatedValue = new Animated.Value(theme.size + 10);
+    const top = this.getTopBorder();
+    const bottom = this.getBottomBorder();
+    this.animatedValue = new Animated.Value(theme.size + 8 + top + bottom);
   }
 
   isSelected = (name: string, value: any = true): boolean => {
@@ -142,27 +144,33 @@ export class ToolbarProvider extends Component<ProviderProps, ProviderState> {
   onLayout = (event: LayoutChangeEvent) => {
     if (this.state.dimensions) return; // layout was already called
     let { width, height } = event.nativeEvent.layout;
-    this.setState({ dimensions: { width: width - 2, height } });
+    this.setState({ dimensions: { width: width, height } });
+  };
+
+  getTopBorder = (): number => {
+    const { style } = this.props;
+
+    return style?.borderTopWidth
+      ? style.borderTopWidth
+      : style?.borderWidth
+      ? style.borderWidth
+      : 0;
+  };
+
+  getBottomBorder = (): number => {
+    const { style } = this.props;
+    return style?.borderBottomWidth
+      ? style.borderBottomWidth
+      : style?.borderWidth
+      ? style.borderWidth
+      : 0;
   };
 
   render() {
     const { selectedFormats, children, theme, style } = this.props;
     const { open, options, name, dimensions } = this.state;
-    const top = style
-      ? style.borderTopWidth
-        ? style?.borderTopWidth
-        : style.borderWidth
-        ? style.borderWidth
-        : 1
-      : 1;
-    const bottom = style
-      ? style.borderBottomWidth
-        ? style.borderBottomWidth
-        : style.borderWidth
-        ? style.borderWidth
-        : 1
-      : 1;
-
+    const top = this.getTopBorder();
+    const bottom = this.getBottomBorder();
     const styles = makeStyles(theme, top, bottom);
 
     return (
@@ -179,8 +187,6 @@ export class ToolbarProvider extends Component<ProviderProps, ProviderState> {
           selectionName: name,
           options,
           width: dimensions ? dimensions.width : 0,
-          top,
-          bottom,
         }}
       >
         <Animated.View
