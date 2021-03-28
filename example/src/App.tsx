@@ -114,13 +114,16 @@ export default class App extends React.Component<any, any> {
           onChangeText={(text) => this.setState({ title: text })}
           value={title}
         />
-        <View style={{ marginLeft: 20, marginRight: 20 }}>
+        <View
+          style={{ marginHorizontal: 30 }}
+          onTouchStart={(e) => e.stopPropagation()}
+        >
           <QuillToolbar
             container={false}
             editor={this._editor}
             styles={{
               toolbar: {
-                borderWidth: 2,
+                borderWidth: 1,
                 // paddingRight: 20,
                 // paddingLeft: 20,
               },
