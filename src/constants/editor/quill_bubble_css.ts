@@ -4,7 +4,7 @@ export const quill_bubble_css = (cdn: boolean) =>
     : `
 <style>
 /*!
- * Quill Editor v1.3.6
+ * Quill Editor v1.3.7
  * https://quilljs.com/
  * Copyright (c) 2014, Jason Chen
  * Copyright (c) 2013, salesforce.com
@@ -912,7 +912,7 @@ export const quill_bubble_css = (cdn: boolean) =>
 }
 .ql-bubble .ql-tooltip-editor a:before {
   color: #ccc;
-  content: "\\D7";
+  content: "\D7";
   font-size: 16px;
   font-weight: bold;
 }
