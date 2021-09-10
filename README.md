@@ -94,6 +94,21 @@ List of custom css string to be added to HTML Head.
 | ----------- | ----------- |
 | `string[]` | No |
 ---
+### `defaultFontFamily`
+Name of default font-family. you may use it only when you've added a custom font and it must be default font of the editor.
+| Type | Required |
+| ----------- | ----------- |
+| `string` | No |
+---
+### `customFonts`
+List of custom fonts to be added to editor.
+For now just base64 embed font-face can be used. 
+For more information check the example project. 
+This is sample data you may pass to this property: `[{name: 'Roboto', css: '@font-face {font-family: 'Roboto', src: url(base64);'}]`
+| Type | Required |
+| ----------- | ----------- |
+| `Array<{name, css}>` | No |
+---
 ### `quill`
 You may pass several options to customize quill to suit your needs .
 | Type | Required | description
