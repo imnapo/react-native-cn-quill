@@ -48,6 +48,7 @@ interface ToolbarState {
   toolSets: Array<Array<ToggleData | TextListData | ColorListData>>;
   formats: object;
   theme: ToolbarTheme;
+  defaultFontFamily?: string;
 }
 
 export class QuillToolbar extends Component<QuillToolbarProps, ToolbarState> {
@@ -61,6 +62,7 @@ export class QuillToolbar extends Component<QuillToolbarProps, ToolbarState> {
       toolSets: [],
       formats: {},
       theme: lightTheme,
+      defaultFontFamily: undefined,
     };
   }
 
@@ -72,8 +74,11 @@ export class QuillToolbar extends Component<QuillToolbarProps, ToolbarState> {
     this.changeTheme();
   }
 
-  componentDidUpdate(prevProps: QuillToolbarProps) {
-    if (prevProps.options !== this.props.options) {
+  componentDidUpdate(prevProps: QuillToolbarProps, prevState: ToolbarState) {
+    if (
+      prevProps.options !== this.props.options ||
+      prevState.defaultFontFamily !== this.state.defaultFontFamily
+    ) {
       this.prepareIconset();
     }
     if (prevProps.theme !== this.props.theme) {
@@ -102,7 +107,11 @@ export class QuillToolbar extends Component<QuillToolbarProps, ToolbarState> {
     } else {
       toolbarOptions = options;
     }
-    const toolSets = getToolbarData(toolbarOptions, custom?.icons);
+    const toolSets = getToolbarData(
+      toolbarOptions,
+      custom?.icons,
+      this.state.defaultFontFamily
+    );
     this.setState({ toolSets });
   };
 
@@ -114,6 +123,11 @@ export class QuillToolbar extends Component<QuillToolbarProps, ToolbarState> {
       if (current) {
         this.editor = current;
         current.on('format-change', this.onFormatChange);
+        if (this.editor?.props.defaultFontFamily) {
+          this.setState({
+            defaultFontFamily: this.editor?.props.defaultFontFamily,
+          });
+        }
       }
     }, 200);
   };

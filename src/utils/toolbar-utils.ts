@@ -6,10 +6,12 @@ import type {
   ToggleData,
 } from '../types';
 import { icons as defaultIcons } from '../constants/icons';
+import { getFontName } from './editor-utils';
 
 export const getToolbarData = (
   options: Array<Array<string | object> | string | object>,
-  customIcons?: Record<string, any>
+  customIcons?: Record<string, any>,
+  defaultFontFamily?: string
 ): Array<Array<ToggleData | TextListData | ColorListData>> => {
   let iconSet: Array<Array<ToggleData | TextListData | ColorListData>> = [];
   const icons = customIcons
@@ -24,7 +26,7 @@ export const getToolbarData = (
     for (let i = 0; i < options.length; i++) {
       const opt = options[i];
       if (Array.isArray(opt)) {
-        const set = createToolSet(opt, icons);
+        const set = createToolSet(opt, icons, defaultFontFamily);
         iconSet.push(set);
       } else
         console.log(opt, 'is not an array, you should pass it as an array');
@@ -36,7 +38,8 @@ export const getToolbarData = (
 
 const createToolSet = (
   tools: Array<string | object>,
-  icons: Record<string, any>
+  icons: Record<string, any>,
+  defaultFontFamily?: string
 ): Array<ToggleData | TextListData | ColorListData> => {
   let ic: Array<ToggleData | TextListData | ColorListData> = [];
   for (let i = 0; i < tools.length; i++) {
@@ -93,12 +96,20 @@ const createToolSet = (
           let listItems: formatDefault[] = [];
           if ((!format || format.allowCustoms === true) && value.length > 0) {
             listItems = value.map((v) => {
-              const def = format?.defaults?.find((f) => f.value === v);
+              let def = format?.defaults?.find(
+                (f) => f.value === (v !== '' ? v : false)
+              );
+              if (key === 'font' && defaultFontFamily && def?.value === false) {
+                def.name = defaultFontFamily;
+              }
               return def
                 ? def
                 : ({
                     name: v,
-                    value: v,
+                    value:
+                      key === 'font' && v !== false && v !== ''
+                        ? getFontName(v)
+                        : v,
                     type: formatValueType.text,
                   } as formatDefault);
             });

@@ -1,10 +1,35 @@
+import type { CustomFont } from 'src/types';
+
+const getFontName = (font: string) => {
+  return font.toLowerCase().replace(/\s/g, '-');
+};
+
 export const editor_css = (
   editorId: string,
   containerId: string,
   color = 'rgb(32, 35, 42)',
   background = 'white',
-  placeholder = 'rgba(0,0,0,0.6)'
-) => `
+  placeholder = 'rgba(0,0,0,0.6)',
+  fonts: Array<CustomFont> = [],
+  defaultFont: string | undefined = undefined
+) => {
+  let fontCss = '';
+  fonts.forEach((f) => {
+    fontCss = fontCss + ' ' + f.css;
+  });
+
+  fonts.forEach((f) => {
+    fontCss =
+      fontCss +
+      `
+      /* Set content font-families */
+      .ql-font-${getFontName(f.name)} {
+      font-family: "${f.name}";
+      }
+    `;
+  });
+
+  return `
 <style>
 * {outline: 0px solid transparent;-webkit-tap-highlight-color: rgba(0,0,0,0);-webkit-touch-callout: none;box-sizing: border-box;}
 html, body { margin: 0; padding: 0; height: 100%;}
@@ -14,6 +39,7 @@ body { overflow-y: hidden; -webkit-overflow-scrolling: touch;background-color: $
   height: 100%;
   outline: 0; overflow-y: auto;
   padding: 0;
+  ${defaultFont ? 'font-family: "' + defaultFont + '"' : ''}
 }
 
 #${editorId}:focus {
@@ -27,5 +53,10 @@ body { overflow-y: hidden; -webkit-overflow-scrolling: touch;background-color: $
 .ql-container > .ql-editor.ql-blank::before{
   color: ${placeholder};
 }
+
+${fontCss}
+
+
 </style>
 `;
+};

@@ -1,3 +1,4 @@
+import type { CustomFont } from 'src/types';
 import {
   create_quill,
   editor_css,
@@ -6,6 +7,10 @@ import {
   quill_snow_css,
   quill_js,
 } from '../constants/editor';
+
+export const getFontName = (font: string) => {
+  return font.toLowerCase().replace(/\s/g, '-');
+};
 
 interface CreateHtmlArgs {
   initialHtml?: string;
@@ -19,6 +24,8 @@ interface CreateHtmlArgs {
   backgroundColor: string;
   placeholderColor: string;
   customStyles: string[];
+  fonts: Array<CustomFont>;
+  defaultFontFamily?: string;
 }
 
 const Inital_Args = {
@@ -33,6 +40,7 @@ const Inital_Args = {
   backgroundColor: 'white',
   placeholderColor: 'rgba(0,0,0,0.6)',
   customStyles: [],
+  fonts: [],
 } as CreateHtmlArgs;
 
 export const createHtml = (args: CreateHtmlArgs = Inital_Args) => {
@@ -52,7 +60,9 @@ export const createHtml = (args: CreateHtmlArgs = Inital_Args) => {
     args.containerId,
     args.color,
     args.backgroundColor,
-    args.placeholderColor
+    args.placeholderColor,
+    args.fonts,
+    args.defaultFontFamily
   )}
   ${
     args.customStyles &&
@@ -64,6 +74,7 @@ export const createHtml = (args: CreateHtmlArgs = Inital_Args) => {
       })
       .join('\n')
   }
+  
   </head>
   <body>
   <div id="${args.containerId}">
@@ -72,7 +83,13 @@ export const createHtml = (args: CreateHtmlArgs = Inital_Args) => {
   </div>
   </div>
   ${quill_js(args.libraries === 'cdn')}
-  ${create_quill(args.editorId, args.toolbar, args.placeholder, args.theme)}
+  ${create_quill(
+    args.editorId,
+    args.toolbar,
+    args.placeholder,
+    args.theme,
+    args.fonts.map((f) => getFontName(f.name))
+  )}
   ${editor_js}
   </body>
   </html>

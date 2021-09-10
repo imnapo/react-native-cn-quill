@@ -73,6 +73,11 @@ export interface ToolbarCustom {
   icons?: Record<string, any>;
 }
 
+export interface CustomFont {
+  name: string;
+  css: string;
+}
+
 export interface QuillConfig {
   id?: string;
   modules?: {
