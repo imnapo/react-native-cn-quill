@@ -83,6 +83,7 @@ export const formats: Array<format> = [
   },
   {
     name: 'font',
+    allowCustoms: true,
     defaults: [
       { name: 'Sans Serif', value: false, type: formatValueType.text },
       { name: 'Serif', value: 'serif', type: formatValueType.text },

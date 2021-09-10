@@ -2,7 +2,12 @@ import * as React from 'react';
 import { WebView, WebViewProps } from 'react-native-webview';
 import { View, Text, StyleSheet, StyleProp, ViewStyle } from 'react-native';
 import { createHtml } from '../utils/editor-utils';
-import type { EditorMessage, EditorResponse, QuillConfig } from '../types';
+import type {
+  CustomFont,
+  EditorMessage,
+  EditorResponse,
+  QuillConfig,
+} from '../types';
 import type {
   EditorEventHandler,
   EditorEventType,
@@ -20,6 +25,8 @@ export interface EditorState {
 export interface EditorProps {
   style?: StyleProp<ViewStyle>;
   quill?: QuillConfig;
+  customFonts?: Array<CustomFont>;
+  defaultFontFamily?: string;
   initialHtml?: string;
   customStyles?: string[];
   import3rdParties?: 'local' | 'cdn';
@@ -102,7 +109,9 @@ export default class QuillEditor extends React.Component<
         },
         theme: 'snow',
       },
+      customFonts = [],
       customStyles = [],
+      defaultFontFamily = undefined,
     } = this.props;
 
     return createHtml({
@@ -112,8 +121,10 @@ export default class QuillEditor extends React.Component<
       toolbar: JSON.stringify(quill.modules?.toolbar),
       libraries: import3rdParties,
       editorId: quill.id ? quill.id : 'editor-container',
+      defaultFontFamily,
       containerId,
       color: theme.color,
+      fonts: customFonts,
       backgroundColor: theme.background,
       placeholderColor: theme.placeholder,
       customStyles,
