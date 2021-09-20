@@ -912,7 +912,7 @@ export const quill_bubble_css = (cdn: boolean) =>
 }
 .ql-bubble .ql-tooltip-editor a:before {
   color: #ccc;
-  content: "\D7";
+  content: "\\D7";
   font-size: 16px;
   font-weight: bold;
 }

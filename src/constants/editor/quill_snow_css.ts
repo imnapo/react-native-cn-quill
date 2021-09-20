@@ -74,7 +74,7 @@ export const quill_snow_css = (cdn: boolean) =>
   list-style-type: none;
 }
 .ql-editor ul > li::before {
-  content: '\2022';
+  content: '\\2022';
 }
 .ql-editor ul[data-checked=true],
 .ql-editor ul[data-checked=false] {
@@ -91,10 +91,10 @@ export const quill_snow_css = (cdn: boolean) =>
   pointer-events: all;
 }
 .ql-editor ul[data-checked=true] > li::before {
-  content: '\2611';
+  content: '\\2611';
 }
 .ql-editor ul[data-checked=false] > li::before {
-  content: '\2610';
+  content: '\\2610';
 }
 .ql-editor li::before {
   display: inline-block;
