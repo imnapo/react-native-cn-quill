@@ -4,7 +4,7 @@ export const quill_bubble_css = (cdn: boolean) =>
     : `
 <style>
 /*!
- * Quill Editor v1.3.6
+ * Quill Editor v1.3.7
  * https://quilljs.com/
  * Copyright (c) 2014, Jason Chen
  * Copyright (c) 2013, salesforce.com
