@@ -281,6 +281,9 @@ export default class QuillEditor extends React.Component<
     this.post({ command: 'dangerouslyPasteHTML', index, html });
   };
 
+ 
+
+
   renderWebview = (
     content: string,
     style: StyleProp<ViewStyle>,
@@ -317,6 +320,8 @@ export default class QuillEditor extends React.Component<
       container = false,
       loading = 'Please Wait ...',
     } = this.props;
+
+    console.log('quill-editor: ', webviewContent);
     if (container === false) {
       if (!webviewContent) return <Text>Please wait...</Text>;
       return this.renderWebview(webviewContent, style, webview);
