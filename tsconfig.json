@@ -24,6 +24,6 @@
     "strict": true,
     "target": "esnext",
     "declaration": false,
-    "outDir": "build"
+    "outDir": "lib"
   }
 }
