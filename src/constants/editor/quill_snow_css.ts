@@ -2,6 +2,7 @@ export const quill_snow_css = (cdn: boolean) =>
   cdn === true
     ? '<link href="https://cdn.quilljs.com/1.3.7/quill.snow.css" rel="stylesheet">'
     : `
+    <style>
     /*!
     * Quill Editor v1.3.7
     * https://quilljs.com/
@@ -947,5 +948,5 @@ export const quill_snow_css = (cdn: boolean) =>
    .ql-container.ql-snow {
      border: 1px solid #ccc;
    }
-   
+   </style>
 `;

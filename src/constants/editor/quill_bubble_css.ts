@@ -2,6 +2,7 @@ export const quill_bubble_css = (cdn: boolean) =>
   cdn === true
     ? '<link rel="stylesheet" href="https://cdn.quilljs.com/1.3.7/quill.bubble.css">'
     : `
+    <style>
     /*!
     * Quill Editor v1.3.7
     * https://quilljs.com/
@@ -954,4 +955,5 @@ export const quill_bubble_css = (cdn: boolean) =>
    .ql-container.ql-bubble:not(.ql-disabled) a:hover::after {
      visibility: visible;
    }   
+   </style>
 `;
