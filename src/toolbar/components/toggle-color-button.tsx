@@ -1,41 +1,41 @@
 import React from 'react';
-import {
-  TouchableWithoutFeedback,
-  View,
-  StyleSheet,
-  StyleProp,
-  ViewStyle,
-} from 'react-native';
+import { TouchableWithoutFeedback, View, StyleSheet } from 'react-native';
 import type { ToolbarTheme } from '../../types';
 import { useToolbar } from './toolbar-context';
 
 interface Props {
   valueOn: string | false;
   valueOff?: string | false;
-  style: StyleProp<ViewStyle>;
   name: string;
 }
 
 export const ToggleColorButton: React.FC<Props> = (props) => {
-  const { apply, isSelected, theme } = useToolbar();
-  const { name, valueOff, valueOn, style } = props;
+  const { apply, isSelected, theme, styles } = useToolbar();
+  const { name, valueOff, valueOn } = props;
   const selected = isSelected(name, valueOn);
   const handlePresss = () => apply(name, selected ? valueOff : valueOn);
-  const styles = makeStyles(theme);
-
+  const defaultStyles = makeStyles(theme);
+  const toolStyle = styles?.selection?.colorToggle?.tool
+    ? styles.selection.colorToggle.tool(defaultStyles.tool)
+    : defaultStyles.tool;
+  const overlayStyle = styles?.selection?.colorToggle?.overlay
+    ? styles.selection.colorToggle.overlay(defaultStyles.overlay)
+    : defaultStyles.overlay;
+  const noColorStyle = styles?.selection?.colorToggle?.noColor
+    ? styles.selection.colorToggle.noColor(defaultStyles.noColor)
+    : defaultStyles.noColor;
   return (
     <TouchableWithoutFeedback onPress={handlePresss}>
       <View
         style={[
-          styles.tool,
-          style,
+          toolStyle,
           {
             backgroundColor: valueOn !== false ? valueOn : theme.overlay,
           },
         ]}
       >
-        {selected && <View style={[styles.overlay]} />}
-        {valueOn === false && <View style={styles.noColor} />}
+        {selected && <View style={overlayStyle} />}
+        {valueOn === false && <View style={noColorStyle} />}
       </View>
     </TouchableWithoutFeedback>
   );

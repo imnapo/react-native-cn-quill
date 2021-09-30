@@ -5,8 +5,6 @@ import {
   StyleSheet,
   View,
   TouchableOpacity,
-  StyleProp,
-  ViewStyle,
 } from 'react-native';
 import type { ToolbarTheme } from '../../types';
 import { useToolbar } from './toolbar-context';
@@ -15,25 +13,31 @@ import { ToggleColorButton } from './toggle-color-button';
 import { ToggleIconButton } from './toggle-icon-button';
 import { formatType } from '../../constants/formats';
 
-interface Props {
-  toolStyle: StyleProp<ViewStyle>;
-  selectionStyle: StyleProp<ViewStyle>;
-}
+interface Props {}
 
-export const SelectionBar: React.FC<Props> = ({
-  toolStyle,
-  selectionStyle,
-}) => {
-  const { theme, options, hide, selectionName } = useToolbar();
-  const styles = useStyles(theme);
+export const SelectionBar: React.FC<Props> = ({}) => {
+  const { theme, options, hide, selectionName, styles } = useToolbar();
+  const defaultStyles = useStyles(theme);
+  const rootStyle = styles?.selection?.root
+    ? styles.selection.root(defaultStyles.selection)
+    : defaultStyles.selection;
+  const scrollStyle = styles?.selection?.scroll
+    ? styles.selection.scroll(defaultStyles.scroll)
+    : defaultStyles.scroll;
+  const closeViewStyle = styles?.selection?.close?.view
+    ? styles.selection.close.view(defaultStyles.close)
+    : defaultStyles.close;
 
+  const closeTextStyle = styles?.selection?.close?.text
+    ? styles.selection.close.text(defaultStyles.text)
+    : defaultStyles.text;
   return (
-    <View style={[styles.selection, selectionStyle]}>
+    <View style={rootStyle}>
       <ScrollView
         horizontal={true}
         bounces={false}
         showsHorizontalScrollIndicator={false}
-        contentContainerStyle={[styles.scroll]}
+        contentContainerStyle={scrollStyle}
       >
         {options &&
           options.map((item, index) => {
@@ -47,7 +51,6 @@ export const SelectionBar: React.FC<Props> = ({
                   key={index}
                   name={selectionName}
                   valueOff={false}
-                  style={toolStyle}
                   valueOn={item.valueOn}
                 />
               );
@@ -58,7 +61,6 @@ export const SelectionBar: React.FC<Props> = ({
                   source={item.source}
                   name={selectionName}
                   valueOff={false}
-                  style={toolStyle}
                   valueOn={item.valueOn}
                 />
               );
@@ -68,7 +70,6 @@ export const SelectionBar: React.FC<Props> = ({
                   key={index}
                   name={selectionName}
                   valueOff={false}
-                  style={toolStyle}
                   valueOn={item.valueOn}
                   valueName={item.name}
                 />
@@ -76,8 +77,8 @@ export const SelectionBar: React.FC<Props> = ({
           })}
       </ScrollView>
       <TouchableOpacity onPress={() => hide()}>
-        <View style={[styles.close]}>
-          <Text style={styles.text}>X</Text>
+        <View style={closeViewStyle}>
+          <Text style={closeTextStyle}>X</Text>
         </View>
       </TouchableOpacity>
     </View>

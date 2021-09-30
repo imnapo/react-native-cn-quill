@@ -369,7 +369,22 @@ To see an example of how to fully implement this please check this [Link](https:
 custom styles to pass to the inner components.
 | Type | Required |
 | ----------- | ----------- |
-| `{ toolbar, toolset, tool }` | No |
+| `{ toolbar : { provider, root, toolset }, selection: { root, textToggle, ... }, separator, ... }` | No |
+Example : 
+```
+const customStyles = {
+  toolbar: {
+    provider: (provided) => ({
+      ...provided,
+      borderTopWidth: 0,
+    }),
+    root: (provided) => ({
+      ...provided,
+      backgroundColor: 'orange',
+      }),
+    },
+  };
+```
 ---
 ### `editor`
 Reference of `QuillEditor` component.

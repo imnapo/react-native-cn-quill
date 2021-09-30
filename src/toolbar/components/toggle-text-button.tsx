@@ -1,12 +1,5 @@
 import React from 'react';
-import {
-  TouchableWithoutFeedback,
-  View,
-  Text,
-  StyleSheet,
-  StyleProp,
-  ViewStyle,
-} from 'react-native';
+import { TouchableWithoutFeedback, View, Text, StyleSheet } from 'react-native';
 import type { ToolbarTheme } from '../../types';
 import { useToolbar } from './toolbar-context';
 
@@ -14,21 +7,29 @@ interface Props {
   valueName: string;
   valueOn: string | number | boolean;
   valueOff?: string | number | boolean;
-  style: StyleProp<ViewStyle>;
   name: string;
 }
 
 export const ToggleTextButton: React.FC<Props> = (props) => {
-  const { apply, isSelected, theme } = useToolbar();
-  const { name, valueOff, valueOn, valueName, style } = props;
+  const { apply, isSelected, theme, styles } = useToolbar();
+  const { name, valueOff, valueOn, valueName } = props;
   const selected = isSelected(name, valueOn);
   const handlePresss = () => apply(name, selected ? valueOff : valueOn);
-  const styles = makeStyles(theme);
+  const defaultStyles = makeStyles(theme);
+  const toolStyle = styles?.selection?.iconToggle?.tool
+    ? styles.selection.iconToggle.tool(defaultStyles.tool)
+    : defaultStyles.tool;
+  const overlayStyle = styles?.selection?.iconToggle?.overlay
+    ? styles.selection.iconToggle.overlay(defaultStyles.overlay)
+    : defaultStyles.overlay;
+  const textStyle = styles?.selection?.iconToggle?.image
+    ? styles.selection.iconToggle.image(defaultStyles.text)
+    : defaultStyles.text;
   return (
     <TouchableWithoutFeedback onPress={handlePresss}>
-      <View style={[styles.tool, style]}>
-        <Text style={styles.text}>{valueName}</Text>
-        {selected && <View style={[styles.overlay]} />}
+      <View style={toolStyle}>
+        <Text style={textStyle}>{valueName}</Text>
+        {selected && <View style={overlayStyle} />}
       </View>
     </TouchableWithoutFeedback>
   );

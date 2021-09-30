@@ -1,26 +1,36 @@
 import React from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  Image,
-  ViewStyle,
-  StyleProp,
-} from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import type { ToggleData, ToolbarTheme } from '../../types';
 import { useToolbar } from './toolbar-context';
 
 interface Props {
   name: string;
   items: Array<ToggleData>;
-  style: StyleProp<ViewStyle>;
 }
 
-export const TextListButton: React.FC<Props> = ({ name, items, style }) => {
-  const { theme, show, hide, open, selectionName, getSelected } = useToolbar();
-  const styles = makeStyles(theme);
-
+export const ListButton: React.FC<Props> = ({ name, items }) => {
+  const {
+    theme,
+    show,
+    hide,
+    open,
+    selectionName,
+    getSelected,
+    styles,
+  } = useToolbar();
+  const defaultStyles = makeStyles(theme);
+  const toolStyle = styles?.toolbar?.toolset?.listButton?.tool
+    ? styles.toolbar?.toolset?.listButton.tool(defaultStyles.tool)
+    : defaultStyles.tool;
+  const overlayStyle = styles?.toolbar?.toolset?.listButton?.overlay
+    ? styles.toolbar?.toolset?.listButton.overlay(defaultStyles.overlay)
+    : defaultStyles.overlay;
+  const textStyle = styles?.toolbar?.toolset?.listButton?.text
+    ? styles.toolbar?.toolset?.listButton.text(defaultStyles.text)
+    : defaultStyles.text;
+  const imageStyle = styles?.toolbar?.toolset?.listButton?.image
+    ? styles.toolbar?.toolset?.listButton.image(defaultStyles.image)
+    : defaultStyles.image;
   const showMenu = () => {
     if (open && selectionName === name) hide();
     else show(name, items);
@@ -32,15 +42,15 @@ export const TextListButton: React.FC<Props> = ({ name, items, style }) => {
 
   return (
     <TouchableOpacity onPress={showMenu}>
-      <View style={[styles.tool, style]}>
+      <View style={toolStyle}>
         {selectedItem?.source ? (
-          <Image source={selectedItem.source} style={[styles.image]} />
+          <Image source={selectedItem.source} style={imageStyle} />
         ) : (
-          <Text style={styles.text}>
+          <Text style={textStyle}>
             {selectedItem ? selectedItem.name : name}
           </Text>
         )}
-        {isOpen && <View style={[styles.overlay]} />}
+        {isOpen && <View style={[overlayStyle]} />}
       </View>
     </TouchableOpacity>
   );

@@ -147,6 +147,18 @@ export default class App extends React.Component<any, any> {
         <QuillToolbar
           editor={this._editor}
           theme="light"
+          styles={{
+            toolbar: {
+              provider: (provided) => ({
+                ...provided,
+                borderTopWidth: 0,
+              }),
+              root: (provided) => ({
+                ...provided,
+                backgroundColor: 'orange',
+              }),
+            },
+          }}
           options={[
             ['bold', 'italic', 'underline'],
             [{ header: 1 }, { header: 2 }],

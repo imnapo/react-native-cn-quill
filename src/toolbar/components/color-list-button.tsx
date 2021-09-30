@@ -13,17 +13,28 @@ interface Props {
   name: string;
   source: ImageSourcePropType;
   items: Array<ToggleData>;
-  style: any;
 }
 
-export const ColorListButton: React.FC<Props> = ({
-  name,
-  items,
-  style,
-  source,
-}) => {
-  const { theme, show, hide, open, selectionName, getSelected } = useToolbar();
-  const styles = makeStyles(theme);
+export const ColorListButton: React.FC<Props> = ({ name, items, source }) => {
+  const {
+    theme,
+    show,
+    hide,
+    open,
+    selectionName,
+    getSelected,
+    styles,
+  } = useToolbar();
+  const defaultStyles = makeStyles(theme);
+  const toolStyle = styles?.toolbar?.toolset?.colorListButton?.tool
+    ? styles.toolbar?.toolset?.colorListButton.tool(defaultStyles.tool)
+    : defaultStyles.tool;
+  const overlayStyle = styles?.toolbar?.toolset?.colorListButton?.overlay
+    ? styles.toolbar?.toolset?.colorListButton.overlay(defaultStyles.overlay)
+    : defaultStyles.overlay;
+  const imageStyle = styles?.toolbar?.toolset?.colorListButton?.image
+    ? styles.toolbar?.toolset?.colorListButton.image(defaultStyles.image)
+    : defaultStyles.image;
 
   const showMenu = () => {
     if (open && selectionName === name) hide();
@@ -35,11 +46,11 @@ export const ColorListButton: React.FC<Props> = ({
   const isOpen = selectionName === name;
   return (
     <TouchableOpacity onPress={showMenu}>
-      <View style={[styles.tool, style]}>
+      <View style={toolStyle}>
         <Image
           source={source}
           style={[
-            styles.image,
+            imageStyle,
             {
               tintColor:
                 selectedItem &&
@@ -50,7 +61,7 @@ export const ColorListButton: React.FC<Props> = ({
             },
           ]}
         />
-        {isOpen && <View style={[styles.overlay]} />}
+        {isOpen && <View style={overlayStyle} />}
       </View>
     </TouchableOpacity>
   );

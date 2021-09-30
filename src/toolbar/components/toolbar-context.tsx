@@ -1,7 +1,12 @@
 import React, { Component, useContext } from 'react';
 import { StyleSheet, Animated, Easing } from 'react-native';
 import { lightTheme } from '../../constants/themes';
-import type { ToggleData, ToolbarCustom, ToolbarTheme } from '../../types';
+import type {
+  CustomStyles,
+  ToggleData,
+  ToolbarCustom,
+  ToolbarTheme,
+} from '../../types';
 
 export interface ContextProps {
   apply: (name: string, value: any) => void;
@@ -14,6 +19,7 @@ export interface ContextProps {
   options: Array<ToggleData>;
   selectionName: string;
   getSelected: (name: string) => any;
+  styles?: CustomStyles;
 }
 
 const ToolbarContext = React.createContext<ContextProps>({
@@ -36,6 +42,7 @@ interface ProviderProps {
   selectedFormats: Record<string, any>;
   theme: ToolbarTheme;
   custom?: ToolbarCustom;
+  styles?: CustomStyles;
 }
 
 interface ProviderState {
@@ -125,9 +132,12 @@ export class ToolbarProvider extends Component<ProviderProps, ProviderState> {
   };
 
   render() {
-    const { selectedFormats, children, theme } = this.props;
+    const { selectedFormats, children, theme, styles } = this.props;
     const { open, options, name } = this.state;
-    const styles = makeStyles(theme);
+    const defaultStyles = makeStyles(theme);
+    const rootStyle = styles?.toolbar?.provider
+      ? styles?.toolbar?.provider(defaultStyles.root)
+      : defaultStyles.root;
     return (
       <ToolbarContext.Provider
         value={{
@@ -141,11 +151,12 @@ export class ToolbarProvider extends Component<ProviderProps, ProviderState> {
           getSelected: this.getSelected,
           selectionName: name,
           options,
+          styles,
         }}
       >
         <Animated.View
           style={[
-            styles.root,
+            rootStyle,
             {
               height: this.animatedValue,
             },
