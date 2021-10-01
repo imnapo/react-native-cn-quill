@@ -3,7 +3,8 @@ export const create_quill = (
   toolbar: 'false' | string,
   placeholder: string,
   theme: 'snow' | 'bubble',
-  customFonts: Array<string> = []
+  customFonts: Array<string> = [],
+  customJS: string
 ) => {
   let font = '';
   if (customFonts.length > 0) {
@@ -21,7 +22,7 @@ export const create_quill = (
   <script>
   
   ${font}
-  
+  ${customJS}
   var quill = new Quill('#${id}', {
     modules: {
       toolbar: ${toolbar}
