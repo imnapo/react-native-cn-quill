@@ -155,6 +155,36 @@ Custom text or component to display before webview loaded.
 | ----------- | ----------- |
 | `string \| React.ReactNode` | No |
 ---
+###  `customJS`
+The users in the JS code will have access to the Quill object and thus can create, import and register with the Quill object.
+| Type | Required |
+| ----------- | ----------- |
+| `string` | No |
+
+#### Example from Quill js website : Extending Blots
+You can also extend existing formats. Here is a quick ES6 implementation of a list item that does not permit formatting its contents. Code blocks are implemented in exactly this way.
+
+```
+<QuillEditor 
+  customJS={`
+  var ListItem = Quill.import('formats/list/item');
+
+  class PlainListItem extends ListItem {
+    formatAt(index, length, name, value) {
+      if (name === 'list') {
+        // Allow changing or removing list format
+        super.formatAt(name, value);
+      }
+      // Otherwise ignore
+    }
+  }
+
+  Quill.register(PlainListItem, true); 
+`}
+/>
+```
+
+---
 ###  `theme`
 You may easily make your editor look good with the help of themes. you can pass color for `background`, `text` and `placeholder`.
 | Type | Required |
@@ -370,7 +400,9 @@ custom styles to pass to the inner components.
 | Type | Required |
 | ----------- | ----------- |
 | `{ toolbar : { provider, root, toolset }, selection: { root, textToggle, ... }, separator, ... }` | No |
-Example : 
+
+For Example : 
+
 ```
 const customStyles = {
   toolbar: {
@@ -385,6 +417,7 @@ const customStyles = {
     },
   };
 ```
+
 ---
 ### `editor`
 Reference of `QuillEditor` component.

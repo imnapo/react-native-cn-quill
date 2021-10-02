@@ -130,6 +130,26 @@ export default class App extends React.Component<any, any> {
             },
             theme: 'snow', // this is default value
           }}
+          //Extending Blots (from Quill js website example)
+          //You can also extend existing formats.
+          //Here is a quick ES6 implementation of a list item that does not permit formatting its contents.
+          // Code blocks are implemented in exactly this way.
+          customJS={`
+          var ListItem = Quill.import('formats/list/item');
+
+          class PlainListItem extends ListItem {
+            formatAt(index, length, name, value) {
+              if (name === 'list') {
+                // Allow changing or removing list format
+                super.formatAt(name, value);
+              }
+              // Otherwise ignore
+            }
+          }
+          
+          Quill.register(PlainListItem, true);
+            
+          `}
           defaultFontFamily={customFonts[0].name}
           customFonts={customFonts}
           import3rdParties="cdn" // default value is 'local'
