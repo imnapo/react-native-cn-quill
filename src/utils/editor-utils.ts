@@ -42,7 +42,7 @@ const Inital_Args = {
   placeholderColor: 'rgba(0,0,0,0.6)',
   customStyles: [],
   fonts: [],
-  customJS:''
+  customJS: '',
 } as CreateHtmlArgs;
 
 export const createHtml = (args: CreateHtmlArgs = Inital_Args) => {
@@ -91,7 +91,7 @@ export const createHtml = (args: CreateHtmlArgs = Inital_Args) => {
     args.placeholder,
     args.theme,
     args.fonts.map((f) => getFontName(f.name)),
-    args.customJS
+    args.customJS ? args.customJS : ''
   )}
   ${editor_js}
   </body>

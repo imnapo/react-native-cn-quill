@@ -113,7 +113,7 @@ export default class QuillEditor extends React.Component<
       customFonts = [],
       customStyles = [],
       defaultFontFamily = undefined,
-      customJS=''
+      customJS = '',
     } = this.props;
 
     return createHtml({
@@ -130,7 +130,7 @@ export default class QuillEditor extends React.Component<
       backgroundColor: theme.background,
       placeholderColor: theme.placeholder,
       customStyles,
-      customJS
+      customJS,
     });
   };
 
