@@ -93,6 +93,29 @@ export const editor_js = `
     quill.clipboard.dangerouslyPasteHTML(index, html);
   }
 
+  var setSelection = function (index, length = 0, source = 'api') {
+    quill.setSelection(index, length, source);
+  }
+
+  var getBounds = function (key, index, length = 0) {
+    var boundsData = quill.getBounds(index, length);
+    var getBoundsJson = JSON.stringify({
+      type: 'get-bounds',
+      key: key,
+      data: boundsData });
+      sendMessage(getBoundsJson);
+  }
+
+  var getSelection = function (key, focus = false) {
+    var getSelectionData = quill.getSelection(focus);
+    var getSelectionJson = JSON.stringify({
+      type: 'get-selectoin',
+      key: key,
+      data: getSelectionData });
+      sendMessage(getSelectionJson);
+  }
+
+
   var getRequest = function (event) {
     var msg = JSON.parse(event.data);    
     switch (msg.command) {
@@ -119,6 +142,15 @@ export const editor_js = `
         break;
       case 'getText':
         getText(msg.key, msg.index, msg.length);
+        break;
+      case 'getBounds':
+        getBounds(msg.key, msg.index, msg.length);
+        break;
+      case 'getSelection':
+        getSelection(msg.key, msg.focus);
+        break;
+      case 'setSelection':
+        setSelection(msg.index, msg.length, msg.source);   
         break;
       case 'getHtml':
         getHtml(msg.key);

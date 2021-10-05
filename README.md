@@ -334,6 +334,39 @@ Format text at user’s current selection.
 _editor.current.format('color', 'red');
 ```
 ---
+## Selection Methods
+###  `getBounds(index: Number, length: Number = 0)`
+Retrieves the pixel position and dimensions of a selection at a given location.
+#### Example: 
+```
+const data = await _editor.current.getBounds(7);
+//Ex. Returns { height: 15, width: 0, left: 27, top: 31 }
+```
+---
+###  `getSelection(focus = false) : { index: Number, length: Number }`
+Retrieves the user’s selection range.
+#### Example: 
+```
+var range = await _editor.current.getSelection();
+if (range) {
+  if (range.length == 0) {
+    console.log('User cursor is at index', range.index);
+  } else {
+    var text = quill.getText(range.index, range.length);
+    console.log('User has highlighted: ', text);
+  }
+} else {
+  console.log('User cursor is not in editor');
+}
+```
+---
+###  `setSelection(index: Number, length: Number = 0, source: String = 'api')`
+Format text at user’s current selection.
+#### Example: 
+```
+_editor.current.setSelection(0, 5);
+```
+---
 ## Clipboard Methods
 ###  `dangerouslyPasteHTML(index: number, html: string)`
 Inserts content represented by HTML snippet into editor at a given index.
