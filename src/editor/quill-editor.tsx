@@ -190,6 +190,8 @@ export default class QuillEditor extends React.Component<
       case 'get-contents':
       case 'get-text':
       case 'get-length':
+      case 'get-bounds':
+      case 'get-selection':
       case 'get-html':
         if (response) {
           response.resolve(message.data);
@@ -245,6 +247,18 @@ export default class QuillEditor extends React.Component<
 
   getText = (index?: number, length?: number): Promise<any> => {
     return this.postAwait<any>({ command: 'getText', index, length });
+  };
+
+  getBounds = (index: number, length?: number): Promise<any> => {
+    return this.postAwait<any>({ command: 'getBounds', index, length });
+  };
+
+  getSelection = (focus: boolean = false): Promise<any> => {
+    return this.postAwait<any>({ command: 'getSelection', focus });
+  };
+
+  setSelection = (index: number, length?: number, source?: String) => {
+    this.post({ command: 'setSelection', index, length, source });
   };
 
   insertEmbed = (index: number, type: string, value: any) => {
