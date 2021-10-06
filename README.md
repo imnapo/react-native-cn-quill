@@ -380,7 +380,7 @@ if (range) {
 ```
 ---
 ###  `setSelection(index: Number, length: Number = 0, source: String = 'api')`
-Format text at user’s current selection.
+Sets user selection to given range, which will also focus the editor. Providing null as the selection range will blur the editor. Source may be "user", "api", or "silent" [From Quill Js Docs](https://quilljs.com/docs/api/#setselection).
 #### Example: 
 ```
 _editor.current.setSelection(0, 5);
