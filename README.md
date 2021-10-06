@@ -113,7 +113,7 @@ This is sample data you may pass to this property: `[{name: 'Roboto', css: '@fon
 You may pass several options to customize quill to suit your needs .
 | Type | Required | description
 | ----------- | ----------- | ----------- |
-| `{ id, modules: { toolbar }, theme, placeholder }` | No | described below |
+| `{ id, modules: { toolbar, clipboard? }, theme, placeholder }` | No | described below |
 
 #### `quill.id`
 HTML id of the container where the editor will be appended.
@@ -126,11 +126,30 @@ Placeholder text to show when editor is empty.
 | ----------- | ----------- |
 | `string` | No |
 ####  `quill.modules`
-list of quill modules. (only toolbar is implemented)
-to enable quill's built in toolbar pass `true` or a simple array of format names to `quill.modules.toolbar`
+list of quill modules. (toolbar and clipboard implemented)
+- In order to enable quill's built in toolbar pass `true` or a simple array of format names to `quill.modules.toolbar`. 
+- For clipboard module pass a clipboard object as string to `quill.modules.clipboard`. An array of matchers can be passed into Clipboard’s configuration options. These will be appended after Quill’s own default matchers. (from QuillJs docs)
+  
 | Type | Required |
 | ----------- | ----------- |
-| `{toolbar: boolean \| array }` | No |
+| `{toolbar: boolean \| array, clipboard?: string; }` | No |
+
+Example: 
+```
+<QuillEditor 
+  quill={{
+    modules: {
+              clipboard: `{
+                matchers: [
+                  ['B', customMatcherA],
+                  [Node.TEXT_NODE, customMatcherB]
+                ]
+              }`
+            },
+  }}
+/>
+```
+
 ####  `quill.theme`
 Specify Quill's officially suppoted themes. (custom theme hasn't implemented yet)
 | Type | Required |
