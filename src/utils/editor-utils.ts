@@ -16,6 +16,7 @@ interface CreateHtmlArgs {
   initialHtml?: string;
   placeholder: string;
   toolbar: string;
+  clipboard?:string;
   libraries: 'local' | 'cdn';
   theme: 'snow' | 'bubble';
   editorId: string;
@@ -33,6 +34,7 @@ const Inital_Args = {
   initialHtml: '',
   placeholder: 'write here',
   toolbar: 'false',
+  clipboard:'',
   libraries: 'local',
   theme: 'snow',
   editorId: 'editor-container',
@@ -88,6 +90,7 @@ export const createHtml = (args: CreateHtmlArgs = Inital_Args) => {
   ${create_quill(
     args.editorId,
     args.toolbar,
+    args.clipboard?args.clipboard:'',
     args.placeholder,
     args.theme,
     args.fonts.map((f) => getFontName(f.name)),
