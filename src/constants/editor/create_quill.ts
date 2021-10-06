@@ -1,7 +1,7 @@
 export const create_quill = (
   id: string,
   toolbar: 'false' | string,
-  clipboard : string,
+  clipboard: string,
   placeholder: string,
   theme: 'snow' | 'bubble',
   customFonts: Array<string> = [],
@@ -18,11 +18,11 @@ export const create_quill = (
 
     `;
   }
-  let clipboardModule=''
-  if(clipboard){
-    clipboardModule=`clipboard: ${clipboard},`
+  let clipboardModule = '';
+  if (clipboard) {
+    clipboardModule = `clipboard: ${clipboard},`;
   }
-  
+
   return `
   <script>
   
