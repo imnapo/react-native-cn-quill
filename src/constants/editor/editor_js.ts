@@ -109,7 +109,7 @@ export const editor_js = `
   var getSelection = function (key, focus = false) {
     var getSelectionData = quill.getSelection(focus);
     var getSelectionJson = JSON.stringify({
-      type: 'get-selectoin',
+      type: 'get-selection',
       key: key,
       data: getSelectionData });
       sendMessage(getSelectionJson);
