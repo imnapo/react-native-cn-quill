@@ -1,5 +1,9 @@
 import * as React from 'react';
-import { WebView, WebViewProps } from 'react-native-webview';
+import {
+  WebView,
+  WebViewMessageEvent,
+  WebViewProps,
+} from 'react-native-webview';
 import { View, Text, StyleSheet, StyleProp, ViewStyle } from 'react-native';
 import { createHtml } from '../utils/editor-utils';
 import type {
@@ -169,7 +173,7 @@ export default class QuillEditor extends React.Component<
     return message;
   };
 
-  private onMessage = (event: any) => {
+  private onMessage = (event: WebViewMessageEvent) => {
     const message = this.toMessage(event.nativeEvent.data);
 
     const response = message.key
@@ -199,6 +203,11 @@ export default class QuillEditor extends React.Component<
           this._promises = this._promises.filter((x) => x.key !== message.key);
         }
         break;
+      default:
+        // Allow catching messages using the passed webview props
+        if (this.props.webview?.onMessage) {
+          this.props.webview?.onMessage(event);
+        }
     }
   };
 
