@@ -203,11 +203,11 @@ export default class QuillEditor extends React.Component<
           this._promises = this._promises.filter((x) => x.key !== message.key);
         }
         break;
-    }
-
-    // Allow catching messages using the passed webview props
-    if (this.props.webview?.onMessage) {
-      this.props.webview?.onMessage(event);
+      default:
+        // Allow catching messages using the passed webview props
+        if (this.props.webview?.onMessage) {
+          this.props.webview?.onMessage(event);
+        }
     }
   };
 
