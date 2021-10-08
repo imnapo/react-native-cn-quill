@@ -7,6 +7,7 @@ const getFontName = (font: string) => {
 export const editor_css = (
   editorId: string,
   containerId: string,
+  autoSize: boolean,
   color = 'rgb(32, 35, 42)',
   background = 'white',
   placeholder = 'rgba(0,0,0,0.6)',
@@ -34,10 +35,26 @@ export const editor_css = (
 * {outline: 0px solid transparent;-webkit-tap-highlight-color: rgba(0,0,0,0);-webkit-touch-callout: none;box-sizing: border-box;}
 html, body { margin: 0; padding: 0; height: 100%;}
 body { overflow-y: hidden; -webkit-overflow-scrolling: touch;background-color: ${background};}
-#${containerId} {color: ${color}; width: 100%;height: 100%;  -webkit-overflow-scrolling: touch;padding-left: 0;padding-right: 0;}
+#${containerId} {
+  color: ${color};
+  ${
+    autoSize
+      ? `
+    display: inline-block;
+  `
+      : `
+    height: 100%;
+  `
+  }
+  width: 100%;
+  -webkit-overflow-scrolling: touch;
+  padding-left: 0;
+  padding-right: 0;
+}
 #${editorId} {
   height: 100%;
-  outline: 0; overflow-y: auto;
+  outline: 0;
+  overflow-y: auto;
   padding: 0;
   ${defaultFont ? 'font-family: "' + defaultFont + '"' : ''}
 }

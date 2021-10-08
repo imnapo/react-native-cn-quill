@@ -20,6 +20,7 @@ interface CreateHtmlArgs {
   libraries: 'local' | 'cdn';
   theme: 'snow' | 'bubble';
   editorId: string;
+  autoSize?: boolean;
   containerId: string;
   color: string;
   backgroundColor: string;
@@ -38,6 +39,7 @@ const Inital_Args = {
   libraries: 'local',
   theme: 'snow',
   editorId: 'editor-container',
+  autoSize: false,
   containerId: 'standalone-container',
   color: 'black',
   backgroundColor: 'white',
@@ -62,6 +64,7 @@ export const createHtml = (args: CreateHtmlArgs = Inital_Args) => {
   ${editor_css(
     args.editorId,
     args.containerId,
+    !!args.autoSize,
     args.color,
     args.backgroundColor,
     args.placeholderColor,
@@ -78,13 +81,13 @@ export const createHtml = (args: CreateHtmlArgs = Inital_Args) => {
       })
       .join('\n')
   }
-  
+
   </head>
   <body>
   <div id="${args.containerId}">
-  <div id="${args.editorId}">
-    ${args.initialHtml}
-  </div>
+    <div id="${args.editorId}">
+      ${args.initialHtml}
+    </div>
   </div>
   ${quill_js(args.libraries === 'cdn')}
   ${create_quill(

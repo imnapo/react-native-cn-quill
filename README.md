@@ -2,13 +2,14 @@
 
 react-native-cn-quill is a rich-text editor for react-native. We've created this library on top of Quill Api.
 
-
 <img src="./images/quill-editor.jpeg" width="50%">
 
 ## Why Quill
+
 Quill is a free, open source WYSIWYG editor built for the modern web. Completely customize it for any need with its modular architecture and expressive API. Read more [here](https://quilljs.com/guides/why-quill/).
 
 ## Prerequisite
+
 This package is using `react-native-webview`. Please follow [this document](https://github.com/react-native-community/react-native-webview/blob/master/docs/Getting-Started.md) to install it.
 
 ## Installation
@@ -18,6 +19,7 @@ This package is using `react-native-webview`. Please follow [this document](http
 ```sh
 npm i react-native-cn-quill
 ```
+
 #### Install using yarn:
 
 ```
@@ -39,10 +41,10 @@ export default function App() {
     <SafeAreaView style={styles.root}>
       <StatusBar style="auto" />
       <QuillEditor
-          style={styles.editor}
-          ref={_editor}
-          initialHtml="<h1>Quill Editor for react-native</h1>"
-        />
+        style={styles.editor}
+        ref={_editor}
+        initialHtml="<h1>Quill Editor for react-native</h1>"
+      />
       <QuillToolbar editor={_editor} options="full" theme="light" />
     </SafeAreaView>
   );
@@ -70,73 +72,120 @@ const styles = StyleSheet.create({
   },
 });
 ```
+
+### Autosize
+
+Here is a simplified example on how to setup the an autosizing container
+
+```jsx
+const [height, setHeight] = useState();
+
+<QuillEditor
+  style={styles.editor}
+  ref={_editor}
+  initialHtml="<h1>Quill Editor for react-native</h1>"
+  container={CustomContainer} // Make sure to enable the wrapping container
+  style={
+    { minHeight: 100, maxHeight: 500, height: height }, // Setting minHeight and maxHeight is optional
+  }
+  onDimensionsChange={({ height }) => {
+    setHeight(height)
+  }}
+/>
+
+```
+
 # QuillEditor
-QuillEditor is the main component of this library. You may easily add it to your application. It is also a wrapper for Quill and provides most of it's functionalities.  
+
+QuillEditor is the main component of this library. You may easily add it to your application. It is also a wrapper for Quill and provides most of it's functionalities.
 
 ## QuillEditor Props
 
 ### `style`
+
 Styles applied to the outermost component.
 
-| Type | Required |
-| ----------- | ----------- |
-| `view.style` | No |
+| Type         | Required |
+| ------------ | -------- |
+| `view.style` | No       |
+
 ---
+
 ### `initialHtml`
+
 The Initial html string to display in editor.
 | Type | Required |
 | ----------- | ----------- |
 | `string` | No |
+
 ---
+
 ### `customStyles`
+
 List of custom css string to be added to HTML Head.
 | Type | Required |
 | ----------- | ----------- |
 | `string[]` | No |
+
 ---
+
 ### `defaultFontFamily`
+
 Name of default font-family. you may use it only when you've added a custom font and it must be default font of the editor.
 | Type | Required |
 | ----------- | ----------- |
 | `string` | No |
+
 ---
+
 ### `customFonts`
+
 List of custom fonts to be added to editor.
-For now just base64 embed font-face can be used. 
-For more information check the example project. 
+For now just base64 embed font-face can be used.
+For more information check the example project.
 This is sample data you may pass to this property: `[{name: 'Roboto', css: '@font-face {font-family: 'Roboto', src: url(base64);'}]`
 | Type | Required |
 | ----------- | ----------- |
 | `Array<{name, css}>` | No |
+
 ---
+
 ### `quill`
+
 You may pass several options to customize quill to suit your needs .
 | Type | Required | description
 | ----------- | ----------- | ----------- |
 | `{ id, modules: { toolbar, clipboard? }, theme, placeholder }` | No | described below |
 
 #### `quill.id`
+
 HTML id of the container where the editor will be appended.
 | Type | Required |
 | ----------- | ----------- |
 | `string` | No |
-####  `quill.placeholder`
+
+#### `quill.placeholder`
+
 Placeholder text to show when editor is empty.
 | Type | Required |
 | ----------- | ----------- |
 | `string` | No |
-####  `quill.modules`
-list of quill modules. (toolbar and clipboard implemented)
-- In order to enable quill's built in toolbar pass `true` or a simple array of format names to `quill.modules.toolbar`. 
-- For clipboard module pass a clipboard object as string to `quill.modules.clipboard`. An array of matchers can be passed into Clipboard’s configuration options. These will be appended after Quill’s own default matchers. (from QuillJs docs)
-  
-| Type | Required |
-| ----------- | ----------- |
-| `{toolbar: boolean \| array, clipboard?: string; }` | No |
 
-Example: 
+#### `quill.modules`
+
+list of quill modules. (toolbar and clipboard implemented)
+
+- In order to enable quill's built in toolbar pass `true` or a simple array of format names to `quill.modules.toolbar`.
+- For clipboard module pass a clipboard object as string to `quill.modules.clipboard`. An array of matchers can be passed into Clipboard’s configuration options. These will be appended after Quill’s own default matchers. (from QuillJs docs)
+
+| Type                                                | Required |
+| --------------------------------------------------- | -------- |
+| `{toolbar: boolean \| array, clipboard?: string; }` | No       |
+
+Example:
+
 ```
-<QuillEditor 
+<QuillEditor
   quill={{
     modules: {
               clipboard: `{
@@ -150,41 +199,55 @@ Example:
 />
 ```
 
-####  `quill.theme`
+#### `quill.theme`
+
 Specify Quill's officially suppoted themes. (custom theme hasn't implemented yet)
 | Type | Required |
 | ----------- | ----------- |
 | `'snow' \| 'bubble'` | No |
+
 ---
-###  `import3rdParties`
+
+### `import3rdParties`
+
 We provide two ways to import required 3rd party scritps and styles. this option is only for the editor's own scripts and styles like quill's script and styles and it's not related to custom styles.
 | Type | Required |
 | ----------- | ----------- |
 | `'local' \| 'cdn'` | No |
+
 ---
-###  `containerId`
+
+### `containerId`
+
 HTML element id of the container for the quill object.
 | Type | Required |
 | ----------- | ----------- |
 | `string` | No |
+
 ---
-###  `loading`
+
+### `loading`
+
 Custom text or component to display before webview loaded.
 | Type | Required |
 | ----------- | ----------- |
 | `string \| React.ReactNode` | No |
+
 ---
-###  `customJS`
+
+### `customJS`
+
 The users in the JS code will have access to the Quill object and thus can create, import and register with the Quill object.
 | Type | Required |
 | ----------- | ----------- |
 | `string` | No |
 
 #### Example from Quill js website : Extending Blots
+
 You can also extend existing formats. Here is a quick ES6 implementation of a list item that does not permit formatting its contents. Code blocks are implemented in exactly this way.
 
 ```
-<QuillEditor 
+<QuillEditor
   customJS={`
   var ListItem = Quill.import('formats/list/item');
 
@@ -198,134 +261,208 @@ You can also extend existing formats. Here is a quick ES6 implementation of a li
     }
   }
 
-  Quill.register(PlainListItem, true); 
+  Quill.register(PlainListItem, true);
 `}
 />
 ```
 
 ---
-###  `theme`
+
+### `theme`
+
 You may easily make your editor look good with the help of themes. you can pass color for `background`, `text` and `placeholder`.
 | Type | Required |
 | ----------- | ----------- |
 | `{ background: string; color: string; placeholder: string }` | No |
+
 ---
-###  `container`
+
+### `container`
+
 The container component of `webview`. you may pass `false` to remove container or pass a custom component. Defaults to `true` which will wrap the `webview` inside a `view` component.
 | Type | Required |
 | ----------- | ----------- |
 | ` boolean \| React.ComponentType` | No |
+
 ---
-###  `webview`
+
+### `webview`
+
 You may specify custom props for `webview` component.
 | Type | Required |
 | ----------- | ----------- |
 | `WebViewProps` | No |
+
 ---
-###  `onSelectionChange`
+
+### `onSelectionChange`
+
 Calls when quill's selection changes.
 | Type | Required |
 | ----------- | ----------- |
 | `({ range: { index, lengthmber } , oldRange: { index, length }, source }) => void` | No |
+
 ---
-###  `onTextChange`
+
+### `onTextChange`
+
 Calls when when the contents of Quill have changed.
 | Type | Required |
 | ----------- | ----------- |
 | `({ delta, oldContents, source }) => void` | No |
+
 ---
-###  `onHtmlChange`
+
+### `onHtmlChange`
+
 Calls when when the contents of Quill have changed.
 | Type | Required |
 | ----------- | ----------- |
 | `({ html }) => void` | No |
+
 ---
-###  `onEditorChange`
+
+### `onEditorChange`
+
 Calls when the contents of Quill have changed or quill's selection have changed.
 | Type | Required |
 | ----------- | ----------- |
 | `({name , args}) => void` | No |
+
 ---
-###  `onFocus`
-The `onfocus` event occurs when the editor gets focus. 
+
+### `onDimensionsChange`
+
+Calls when the contents of Quill have changed or quill's selection have changed.
+| Type | Required |
+| ----------- | ----------- |
+| `({width , height}) => void` | No |
+
+---
+
+### `onFocus`
+
+The `onfocus` event occurs when the editor gets focus.
 | Type | Required |
 | ----------- | ----------- |
 | `() => void` | No |
+
 ---
-###  `onBlur`
-The `onBlur` event occurs when the editor loses focus. 
+
+### `onBlur`
+
+The `onBlur` event occurs when the editor loses focus.
 | Type | Required |
 | ----------- | ----------- |
 | `() => void` | No |
+
 ---
+
 ## Editor Methods
-###  `focus()`
-Focuses the editor. 
+
+### `focus()`
+
+Focuses the editor.
 
 ---
-###  `blur()`
-Removes focus from the editor. 
+
+### `blur()`
+
+Removes focus from the editor.
 
 ---
-###  `hasFocus(): Boolean`
+
+### `hasFocus(): Boolean`
+
 Checks if editor has focus.
 
 ---
-###  `disable()`
-Make the editor readonly. 
+
+### `disable()`
+
+Make the editor readonly.
 
 ---
-###  `enable(enabled: boolean = true)`
-Make the editor editable or readonly. 
+
+### `enable(enabled: boolean = true)`
+
+Make the editor editable or readonly.
 
 ---
-###  `update()`
-Checks for user updates and fires events, if changes have occurred. 
+
+### `update()`
+
+Checks for user updates and fires events, if changes have occurred.
 
 ---
+
 ## Event Methods
-###  `on(name: String, handler: Function)`
-Adds event handler. 
+
+### `on(name: String, handler: Function)`
+
+Adds event handler.
 
 ---
+
 ## Content Methods
-###  `deleteText(index: Number, length: Number)`
+
+### `deleteText(index: Number, length: Number)`
+
 Deletes text from the editor.
 
 ---
-###  `getContents(index?: Number, length?: Number) : Promise<Delta>`
+
+### `getContents(index?: Number, length?: Number) : Promise<Delta>`
+
 gets contents of the editor with formats.
 
 ---
-###  `getLength(): Promise<Number>`
+
+### `getLength(): Promise<Number>`
+
 gets contents of the editor with formats.
 
 ---
-###  `getText(index?: Number = 0, length?: Number): Promise<String>`
+
+### `getText(index?: Number = 0, length?: Number): Promise<String>`
+
 gets string contents of the editor.
 
 ---
-###  `insertEmbed(index: Number, type: String, value: any)`
-Insert embedded content into the editor. 
-#### Example: 
+
+### `insertEmbed(index: Number, type: String, value: any)`
+
+Insert embedded content into the editor.
+
+#### Example:
+
 ```
 _editor.current.insertEmbed(10, 'image', 'https://quilljs.com/images/cloud.png');
 ```
 
 ---
-###  `insertText(index: number, text: string, formats?: Record<string, any>)`
+
+### `insertText(index: number, text: string, formats?: Record<string, any>)`
+
 Inserts text into the editor,
-#### Example: 
+
+#### Example:
+
 ```
 _editor.current.insertText(5, 'Quill', {
   'color': '#ffff00',
   'italic': true
 });
 ```
+
 ---
-###  `setContents(delta: any)`
+
+### `setContents(delta: any)`
+
 Overwrites editor with given contents.
-#### Example: 
+
+#### Example:
+
 ```
 _editor.current.setContents([
   { insert: 'Hello ' },
@@ -333,38 +470,62 @@ _editor.current.setContents([
   { insert: '\n' }
 ]);
 ```
+
 ---
-###  `setText(text: string)`
+
+### `setText(text: string)`
+
 Overwrites editor with given text.
-#### Example: 
+
+#### Example:
+
 ```
 _editor.current.setText('Hello\n');
 ```
+
 ---
-###  `updateContents(delta: any)`
+
+### `updateContents(delta: any)`
+
 Applies Delta to editor contents.
 
 ---
-## Formating Methods
-###  `format(name: String, value: any)`
+
+## Formatting Methods
+
+### `format(name: String, value: any)`
+
 Format text at user’s current selection.
-#### Example: 
+
+#### Example:
+
 ```
 _editor.current.format('color', 'red');
 ```
+
 ---
+
 ## Selection Methods
-###  `getBounds(index: Number, length: Number = 0)`
+
+### `getBounds(index: Number, length: Number = 0)`
+
 Retrieves the pixel position and dimensions of a selection at a given location.
-#### Example: 
+
+#### Example:
+
 ```
 const data = await _editor.current.getBounds(7);
 //Ex. Returns { height: 15, width: 0, left: 27, top: 31 }
 ```
+
 ---
-###  `getSelection(focus = false) : { index: Number, length: Number }`
+
+### `getSelection(focus = false) : { index: Number, length: Number }`
+
 Retrieves the user’s selection range.
-#### Example: 
+
+#### Example:
+
 ```
 var range = await _editor.current.getSelection();
 if (range) {
@@ -378,33 +539,48 @@ if (range) {
   console.log('User cursor is not in editor');
 }
 ```
+
 ---
-###  `setSelection(index: Number, length: Number = 0, source: String = 'api')`
+
+### `setSelection(index: Number, length: Number = 0, source: String = 'api')`
+
 Sets user selection to given range, which will also focus the editor. Providing null as the selection range will blur the editor. Source may be "user", "api", or "silent" [From Quill Js Docs](https://quilljs.com/docs/api/#setselection).
-#### Example: 
+
+#### Example:
+
 ```
 _editor.current.setSelection(0, 5);
 ```
+
 ---
+
 ## Clipboard Methods
-###  `dangerouslyPasteHTML(index: number, html: string)`
+
+### `dangerouslyPasteHTML(index: number, html: string)`
+
 Inserts content represented by HTML snippet into editor at a given index.
-#### Example: 
+
+#### Example:
+
 ```
 _editor.current.dangerouslyPasteHTML(0, '<b>Hello World</b>');
 ```
+
 ---
+
 Read about these methods and their functionality on [Quill Api](https://quilljs.com/docs/api/)
 
-
 # QuillToolbar
+
 The QuillToolbar component allow users to easily format Quill’s contents. QuillToolbar controls can be specified by a simple array of format names like `['bold', 'italic', 'underline', 'strike']` or by just passing 'basic' or 'full' string to options prop. we've tried to develop it just like [Quill Toolbar options](https://quilljs.com/docs/modules/toolbar/#container).
 
 If you prefer to use quill's built-in toolbar follow [this](https://github.com/imnapo/react-native-cn-quill#quillmodules) instruction.
 
-The QuillToolbar uses a series of icons to render controls. this controls by default applies and removes formatting, but you can easily extend or overwrite these with `custom` prop.  
+The QuillToolbar uses a series of icons to render controls. this controls by default applies and removes formatting, but you can easily extend or overwrite these with `custom` prop.
 For example we may add the `image` and `clock` (user defined control that inserts current date to the editor) handlers just like this:
+
 ## Custom Handlers Usage
+
 ```
 ...
   const clockIcon = require('../assets/icons/clock.png');
@@ -444,16 +620,19 @@ For example we may add the `image` and `clock` (user defined control that insert
   }
 
 ```
-To see an example of how to fully implement this please check this [Link](https://github.com/imnapo/react-native-cn-quill/blob/master/example/src/App.tsx).  
+
+To see an example of how to fully implement this please check this [Link](https://github.com/imnapo/react-native-cn-quill/blob/master/example/src/App.tsx).
 
 ## QuillToolbar Props
+
 ### `styles`
+
 custom styles to pass to the inner components.
 | Type | Required |
 | ----------- | ----------- |
 | `{ toolbar : { provider, root, toolset }, selection: { root, textToggle, ... }, separator, ... }` | No |
 
-For Example : 
+For Example :
 
 ```
 const customStyles = {
@@ -471,50 +650,72 @@ const customStyles = {
 ```
 
 ---
+
 ### `editor`
+
 Reference of `QuillEditor` component.
 | Type | Required |
 | ----------- | ----------- |
 | `React.RefObject<QuillEditor>` | Yes |
+
 ---
+
 ### `theme`
+
 You may easily make your toolbar look good with the help of themes. you can pass `dark`, `light` values or custom theme object with `size`,`color`,`background` and `overlay` props. ex. `{ size: 30, color: 'white', background: 'gray', overlay: 'rgba(0,0,0,.5')})`
 | Type | Required |
 | ----------- | ----------- |
 | `'dark' \| 'light' \| object` | No |
+
 ---
+
 ### `options`
+
 QuillToolbar controls can be specified by a simple array of format names like `['bold', 'italic', 'underline', 'strike']` or by just passing `basic` or `full`.
 | Type | Required |
 | ----------- | ----------- |
 | `'full' \| 'basic' \| array ` | Yes |
+
 ---
+
 ### `custom`
+
 You can easily extend or overwrite functionality of `QuillToolbar` with `custom` prop.
 | Type | Required |
 | ----------- | ----------- |
 | `{ handler, actions, icons }` | No |
+
 #### `custom.handler`
-| Type | Required |
-| ----------- | ----------- |
-| `(name: string, value: any) => void` | No |
+
+| Type                                 | Required |
+| ------------------------------------ | -------- |
+| `(name: string, value: any) => void` | No       |
+
 #### `custom.icons`
+
 You may pass a dictionary of icons to overwrite or extend the default icons of toolbar. for example: `{ video: require('../assets/icons/video.png') }`
 | Type | Required |
 | ----------- | ----------- |
 | `Record<string, any>` | No |
+
 #### `custom.actions`
+
 you may specify list of format names to be overwriten. for ex. `['video', 'image']`.
 | Type | Required |
 | ----------- | ----------- |
 | `string[]` | No |
+
 ---
-###  `container`
+
+### `container`
+
 The container component of `QuillToolbar`. you may pass `false` to remove container or pass a custom component. Defaults to `avoiding-view` which will wrap the `webview` inside a `KeyboardAvoidingView` component.
 | Type | Required |
 | ----------- | ----------- |
 | `false \| 'avoiding-view' \| React.ComponentType` | No |
+
 ---
+
 # Contributing
 
 See the [contributing guide](CONTRIBUTING.md) to learn how to contribute to the repository and the development workflow.

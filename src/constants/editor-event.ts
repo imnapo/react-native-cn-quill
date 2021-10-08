@@ -4,6 +4,7 @@ export type EditorEventType =
   | 'text-change'
   | 'editor-change'
   | 'html-change'
+  | 'dimensions-change'
   | 'blur'
   | 'focus';
 
@@ -33,15 +34,22 @@ export interface FormatChangeData {
   formats: any;
 }
 
+export interface DimensionsChangeData {
+  width: number;
+  height: number;
+}
+
 export type EditorChangeHandler = (data: EditorChangeData) => void;
 export type TextChangeHandler = (data: TextChangeData) => void;
 export type SelectionChangeHandler = (data: SelectionChangeData) => void;
 export type FormatChangeHandler = (data: FormatChangeData) => void;
 export type HtmlChangeHandler = (data: HtmlChangeData) => void;
+export type DimensionsChangeHandler = (data: DimensionsChangeData) => void;
 
 export type EditorEventHandler =
   | EditorChangeHandler
   | TextChangeHandler
   | SelectionChangeHandler
   | FormatChangeHandler
-  | HtmlChangeHandler;
+  | HtmlChangeHandler
+  | DimensionsChangeHandler;
