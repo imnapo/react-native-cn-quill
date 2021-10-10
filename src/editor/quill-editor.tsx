@@ -39,7 +39,7 @@ export interface EditorProps {
   containerId?: string;
   theme?: { background: string; color: string; placeholder: string };
   loading?: string | React.ReactNode;
-  container: boolean | React.ComponentType;
+  container?: boolean | React.ComponentType;
   onSelectionChange?: (data: SelectionChangeData) => void;
   onTextChange?: (data: TextChangeData) => void;
   onHtmlChange?: (data: HtmlChangeData) => void;
