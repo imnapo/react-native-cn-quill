@@ -80,7 +80,10 @@ Here is a simplified example on how to setup the an autosizing container
 ```jsx
 const [height, setHeight] = useState();
 
+...
+
 <QuillEditor
+  autoSize
   style={styles.editor}
   ref={_editor}
   initialHtml="<h1>Quill Editor for react-native</h1>"
