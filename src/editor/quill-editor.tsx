@@ -19,6 +19,7 @@ import type {
   EditorChangeData,
   TextChangeData,
   HtmlChangeData,
+  DimensionsChangeData,
 } from '../constants/editor-event';
 import { Loading } from './loading';
 
@@ -27,6 +28,7 @@ export interface EditorState {
 }
 
 export interface EditorProps {
+  autoSize?: boolean;
   style?: StyleProp<ViewStyle>;
   quill?: QuillConfig;
   customFonts?: Array<CustomFont>;
@@ -42,6 +44,7 @@ export interface EditorProps {
   onTextChange?: (data: TextChangeData) => void;
   onHtmlChange?: (data: HtmlChangeData) => void;
   onEditorChange?: (data: EditorChangeData) => void;
+  onDimensionsChange?: (data: DimensionsChangeData) => void;
   webview?: WebViewProps;
   onBlur?: () => void;
   onFocus?: () => void;
@@ -73,6 +76,7 @@ export default class QuillEditor extends React.Component<
       onEditorChange,
       onTextChange,
       onHtmlChange,
+      onDimensionsChange,
       onBlur,
       onFocus,
     } = this.props;
@@ -87,6 +91,9 @@ export default class QuillEditor extends React.Component<
     }
     if (onHtmlChange) {
       this.on('html-change', onHtmlChange);
+    }
+    if (onDimensionsChange) {
+      this.on('dimensions-change', onDimensionsChange);
     }
     if (onBlur) {
       this.on('blur', onBlur);
@@ -122,6 +129,7 @@ export default class QuillEditor extends React.Component<
 
     return createHtml({
       initialHtml,
+      autoSize: this.props.autoSize,
       placeholder: quill.placeholder,
       theme: quill.theme ? quill.theme : 'snow',
       toolbar: JSON.stringify(quill.modules?.toolbar),
@@ -184,6 +192,7 @@ export default class QuillEditor extends React.Component<
       case 'text-change':
       case 'selection-change':
       case 'html-change':
+      case 'dimensions-change':
       case 'editor-change':
       case 'blur':
       case 'focus':
@@ -197,6 +206,7 @@ export default class QuillEditor extends React.Component<
       case 'get-length':
       case 'get-bounds':
       case 'get-selection':
+      case 'get-dimensions':
       case 'get-html':
         if (response) {
           response.resolve(message.data);
@@ -241,6 +251,10 @@ export default class QuillEditor extends React.Component<
 
   deleteText = (index: number, length: number) => {
     this.post({ command: 'deleteText', index, length });
+  };
+
+  getDimensions = (): Promise<any> => {
+    return this.postAwait<any>({ command: 'getDimensions' });
   };
 
   getContents = (index?: number, length?: number): Promise<any> => {
