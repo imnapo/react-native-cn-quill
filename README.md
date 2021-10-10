@@ -286,6 +286,14 @@ The container component of `webview`. you may pass `false` to remove container o
 
 ---
 
+### `autoSize`
+
+| Type | Required | default |
+| ----------- | ----------- | ----------- |
+| ` boolean` | No | false |
+
+---
+
 ### `webview`
 
 You may specify custom props for `webview` component.
@@ -319,6 +327,15 @@ Calls when when the contents of Quill have changed.
 | Type | Required |
 | ----------- | ----------- |
 | `({ html }) => void` | No |
+
+---
+
+### `onDimensionsChange`
+
+Calls when when the dimensions of Quill have changed.
+| Type | Required |
+| ----------- | ----------- |
+| `({ height, width }) => void` | No |
 
 ---
 
