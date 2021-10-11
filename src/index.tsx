@@ -7,6 +7,7 @@ import type {
   TextChangeData,
   FormatChangeData,
   HtmlChangeData,
+  DimensionsChangeData,
 } from './constants/editor-event';
 export default QuillEditor;
 export { QuillToolbar };
@@ -17,4 +18,5 @@ export type {
   TextChangeData,
   FormatChangeData,
   HtmlChangeData,
+  DimensionsChangeData,
 };
