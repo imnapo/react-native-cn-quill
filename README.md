@@ -73,31 +73,6 @@ const styles = StyleSheet.create({
 });
 ```
 
-### Autosize
-
-Here is a simplified example on how to setup the an autosizing container
-
-```jsx
-const [height, setHeight] = useState();
-
-...
-
-<QuillEditor
-  autoSize
-  style={styles.editor}
-  ref={_editor}
-  initialHtml="<h1>Quill Editor for react-native</h1>"
-  container={CustomContainer} // Make sure to enable the wrapping container
-  style={
-    { minHeight: 100, maxHeight: 500, height: height }, // Setting minHeight and maxHeight is optional
-  }
-  onDimensionsChange={({ height }) => {
-    setHeight(height)
-  }}
-/>
-
-```
-
 # QuillEditor
 
 QuillEditor is the main component of this library. You may easily add it to your application. It is also a wrapper for Quill and provides most of it's functionalities.
@@ -290,10 +265,29 @@ The container component of `webview`. you may pass `false` to remove container o
 ---
 
 ### `autoSize`
+Automatically adjust size of the editor
 
 | Type | Required | default |
 | ----------- | ----------- | ----------- |
 | ` boolean` | No | false |
+
+
+### Autosize
+
+Here is a simplified example on how to setup the an autosizing container
+
+```jsx
+<QuillEditor
+  autoSize
+  container={true} // Make sure to enable the wrapping container (also custom container) 
+  ref={_editor}
+  initialHtml="<h1>Quill Editor for react-native</h1>" 
+  style={
+    { minHeight: 100, maxHeight: 500 }, // Setting minHeight and maxHeight is optional
+  }
+/>
+
+```
 
 ---
 

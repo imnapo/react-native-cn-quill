@@ -25,6 +25,7 @@ import { Loading } from './loading';
 
 export interface EditorState {
   webviewContent: string | null;
+  height?: number;
 }
 
 export interface EditorProps {
@@ -183,16 +184,21 @@ export default class QuillEditor extends React.Component<
 
   private onMessage = (event: WebViewMessageEvent) => {
     const message = this.toMessage(event.nativeEvent.data);
-
+    const { autoSize } = this.props;
     const response = message.key
       ? this._promises.find((x) => x.key === message.key)
       : undefined;
     switch (message.type) {
+      case 'dimensions-change':
+        if (autoSize === true) this.setState({ height: message.data.height });
+        this._handlers
+          .filter((x) => x.event === message.type)
+          .forEach((item) => item.handler(message.data));
+        break;
       case 'format-change':
       case 'text-change':
       case 'selection-change':
       case 'html-change':
-      case 'dimensions-change':
       case 'editor-change':
       case 'blur':
       case 'focus':
@@ -351,12 +357,13 @@ export default class QuillEditor extends React.Component<
   );
 
   render() {
-    const { webviewContent } = this.state;
+    const { webviewContent, height } = this.state;
     const {
       style,
       webview,
       container = false,
       loading = 'Please Wait ...',
+      autoSize = false,
     } = this.props;
     if (container === false) {
       if (!webviewContent) return <Text>Please wait...</Text>;
@@ -364,7 +371,9 @@ export default class QuillEditor extends React.Component<
     } else {
       const ContainerComponent = container === true ? View : container;
       return (
-        <ContainerComponent style={style}>
+        <ContainerComponent
+          style={[style, autoSize && height ? { height } : {}]}
+        >
           {webviewContent ? (
             this.renderWebview(webviewContent, styles.webView, webview)
           ) : typeof loading === 'string' ? (
