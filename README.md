@@ -272,7 +272,7 @@ Automatically adjust size of the editor
 | ` boolean` | No | false |
 
 
-### Autosize
+#### Example
 
 Here is a simplified example on how to setup the an autosizing container
 
