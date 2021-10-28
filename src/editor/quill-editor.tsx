@@ -4,7 +4,14 @@ import {
   WebViewMessageEvent,
   WebViewProps,
 } from 'react-native-webview';
-import { View, Text, StyleSheet, StyleProp, ViewStyle } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  StyleProp,
+  ViewStyle,
+  Platform,
+} from 'react-native';
 import { createHtml } from '../utils/editor-utils';
 import type {
   CustomFont,
@@ -233,6 +240,10 @@ export default class QuillEditor extends React.Component<
 
   focus = () => {
     this.post({ command: 'focus' });
+
+    if (Platform.OS === 'android') {
+      this._webview.current?.requestFocus();
+    }
   };
 
   hasFocus = (): Promise<boolean> => {
