@@ -258,6 +258,20 @@ export const editor_js = `
     sendMessage(JSON.stringify({type: 'focus'}));
   });
 
+
+
+  // Report initial dimensions when the editor is instantiated
+  setTimeout(() => {
+    const getDimensionsJson = JSON.stringify({
+      type: 'dimensions-change',
+      data: {
+        width: quill.root.scrollWidth,
+        height: quill.root.scrollHeight
+      }
+    });
+    sendMessage(getDimensionsJson);
+  }, 250)
+
 })(document)
 </script>
 `;
