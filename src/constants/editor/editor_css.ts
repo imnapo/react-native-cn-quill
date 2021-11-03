@@ -1,4 +1,4 @@
-import type { CustomFont } from 'src/types';
+import type { CustomFont } from '../../types';
 
 const getFontName = (font: string) => {
   return font.toLowerCase().replace(/\s/g, '-');
