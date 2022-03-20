@@ -265,12 +265,12 @@ The container component of `webview`. you may pass `false` to remove container o
 ---
 
 ### `autoSize`
+
 Automatically adjust size of the editor
 
-| Type | Required | default |
-| ----------- | ----------- | ----------- |
-| ` boolean` | No | false |
-
+| Type       | Required | default |
+| ---------- | -------- | ------- |
+| ` boolean` | No       | false   |
 
 #### Example
 
@@ -279,9 +279,9 @@ Here is a simplified example on how to setup the an autosizing container
 ```jsx
 <QuillEditor
   autoSize
-  container={true} // Make sure to enable the wrapping container (also custom container) 
+  container={true} // Make sure to enable the wrapping container (also custom container)
   ref={_editor}
-  initialHtml="<h1>Quill Editor for react-native</h1>" 
+  initialHtml="<h1>Quill Editor for react-native</h1>"
   style={
     { minHeight: 100, maxHeight: 500 }, // Setting minHeight and maxHeight is optional
   }
@@ -505,6 +505,40 @@ Applies Delta to editor contents.
 
 ---
 
+### `getFormat(index: Range = current | number, length?: number = 0): Promise<{ [string]: any }>`
+
+Gets format from selection
+
+#### Example:
+
+```
+_editor.current.getFormat({ index: 0, length: 5 });
+_editor.current.getFormat(5);
+
+```
+
+---
+
+### `getLeaf(index: Number): Promise<{ offset: number; text: string; length: number; index: number; attributes: Record<string, string> }>`
+
+Returns the leaf Blot at the specified index within the document.
+But RN can't push node thought webview event, will return simple result about selection
+attributes gets from first main parent of leaf
+
+#### Example:
+
+```
+quill.setText('Hello Good World!');
+quill.formatText(6, 4, "bold", true);
+
+let [leaf, offset] = quill.getLeaf(7);
+// leaf should be a Text Blot with value "Good"
+// offset should be 1, since the returned leaf started at index 6, with text "Good" and length 4
+
+```
+
+---
+
 ## Formatting Methods
 
 ### `format(name: String, value: any)`
@@ -515,6 +549,55 @@ Format text at user’s current selection.
 
 ```
 _editor.current.format('color', 'red');
+```
+
+---
+
+### `removeFormat(index: number, length: number): Promise<Delta>`
+
+Removes all formatting and embeds within given range, returning a Delta representing the change.
+
+#### Example:
+
+```
+quill.setContents([
+  { insert: 'Hello', { bold: true } },
+  { insert: '\n', { align: 'center' } },
+  { insert: { formula: 'x^2' } },
+  { insert: '\n', { align: 'center' } },
+  { insert: 'World', { italic: true }},
+  { insert: '\n', { align: 'center' } }
+]);
+
+quill.removeFormat(3, 7);
+// Editor contents are now
+// [
+//   { insert: 'Hel', { bold: true } },
+//   { insert: 'lo\n\nWo' },
+//   { insert: 'rld', { italic: true }},
+//   { insert: '\n', { align: 'center' } }
+// ]
+```
+
+---
+
+### `formatText(index: Number, length: Number, formats: Record<string, unknown>, source: string = 'api'): Promise<Delta>`
+
+Formats text in the editor, returning a Delta representing the change.
+
+#### Example:
+
+```
+quill.setText('Hello\nWorld!\n');
+
+quill.formatText(0, 5, 'bold', true);      // bolds 'hello'
+
+quill.formatText(0, 5, {                   // unbolds 'hello' and set its color to blue
+  'bold': false,
+  'color': 'rgb(0, 0, 255)'
+});
+
+quill.formatText(5, 1, 'align', 'right');  // right aligns the 'hello' line
 ```
 
 ---

@@ -2,6 +2,11 @@ export const editor_js = `
 <script>
 (function (doc) {
 
+  var getAttributes = function (node) {
+    const attrArray = node?.attributes ? [...node.attributes] : [];
+    return attrArray.reduce((_attr, node) => ({ ..._attr, [node.nodeName]: node.nodeValue}), {});
+  }
+
   var sendMessage = function (message) {
     if (window.ReactNativeWebView)
       window.ReactNativeWebView.postMessage(message);
@@ -125,8 +130,56 @@ export const editor_js = `
     var getSelectionJson = JSON.stringify({
       type: 'get-selection',
       key: key,
-      data: getSelectionData });
-      sendMessage(getSelectionJson);
+      data: getSelectionData 
+    });
+    sendMessage(getSelectionJson);
+  }
+
+  const getFormat = function (key, index, length) {
+    const getFormatData = quill.getFormat(index, length);
+    const getFormatJson = JSON.stringify({
+      type: 'get-format',
+      key: key,
+      data: getFormatData
+    });
+    sendMessage(getFormatJson);
+  }
+
+  const getLeaf = function (key, index) {
+    const [leaf, offset] = quill.getLeaf(index);
+    const getLeafData = leaf ? {
+      offset,
+      text: leaf.text,
+      length: leaf.text.length,
+      index: quill.getIndex(leaf),
+      attributes: getAttributes(leaf?.parent?.domNode)
+    } : null
+    const getLeafJson = JSON.stringify({
+      type: 'get-leaf',
+      key: key,
+      data: getLeafData
+    });
+    sendMessage(getLeafJson);
+  }
+
+  const removeFormat = function (key, index, length) {
+    const removeFormatData = quill.removeFormat(index, length);
+    const removeFormatJson = JSON.stringify({
+      type: 'remove-format',
+      key: key,
+      data: removeFormatData
+    });
+    sendMessage(removeFormatJson);
+  }
+
+  const formatText = function (key, index, length, formats, source) {
+    const formatTextData = quill.formatText(index, length, formats, source);
+    const formatTextJson = JSON.stringify({
+      type: 'format-text',
+      key: key,
+      data: formatTextData
+    });
+    sendMessage(formatTextJson);
   }
 
 
@@ -166,6 +219,12 @@ export const editor_js = `
       case 'getSelection':
         getSelection(msg.key, msg.focus);
         break;
+      case 'getFormat': 
+        getFormat(msg.key, msg?.index, msg?.length);
+        break;
+      case 'getLeaf':
+        getLeaf(msg.key, msg.index);
+        break;
       case 'setSelection':
         setSelection(msg.index, msg.length, msg.source);
         break;
@@ -192,6 +251,12 @@ export const editor_js = `
         break;
       case 'dangerouslyPasteHTML':
         dangerouslyPasteHTML(msg.index, msg.html);
+        break;
+      case 'removeFormat':
+        removeFormat(msg.key, msg.index, msg.length);
+        break;
+      case 'formatText':
+        formatText(msg.key, msg.index, msg.length, msg.formats, msg.source);
         break;
       default:
         break;
