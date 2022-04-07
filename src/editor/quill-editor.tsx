@@ -143,6 +143,7 @@ export default class QuillEditor extends React.Component<
       theme: quill.theme ? quill.theme : 'snow',
       toolbar: JSON.stringify(quill.modules?.toolbar),
       clipboard: quill.modules?.clipboard,
+      keyboard: quill.modules?.keyboard,
       libraries: import3rdParties,
       editorId: quill.id ? quill.id : 'editor-container',
       defaultFontFamily,

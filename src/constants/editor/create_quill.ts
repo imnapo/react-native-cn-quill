@@ -1,12 +1,22 @@
-export const create_quill = (
-  id: string,
-  toolbar: 'false' | string,
-  clipboard: string,
-  placeholder: string,
-  theme: 'snow' | 'bubble',
-  customFonts: Array<string> = [],
-  customJS: string
-) => {
+export const create_quill = ({
+  id,
+  toolbar,
+  clipboard,
+  keyboard,
+  placeholder,
+  theme,
+  customFonts = [],
+  customJS,
+}: {
+  id: string;
+  toolbar: 'false' | string;
+  clipboard: string;
+  keyboard: string;
+  placeholder: string;
+  theme: 'snow' | 'bubble';
+  customFonts: Array<string>;
+  customJS: string;
+}) => {
   let font = '';
   if (customFonts.length > 0) {
     const fontList = "'" + customFonts.join("','") + "'";
@@ -18,9 +28,14 @@ export const create_quill = (
 
     `;
   }
-  let clipboardModule = '';
+
+  let modules = `toolbar: ${toolbar},`;
+
   if (clipboard) {
-    clipboardModule = `clipboard: ${clipboard},`;
+    modules += `clipboard: ${clipboard},`;
+  }
+  if (keyboard) {
+    modules += `keyboard: ${keyboard},`;
   }
 
   return `
@@ -29,10 +44,7 @@ export const create_quill = (
   ${font}
   ${customJS}
   var quill = new Quill('#${id}', {
-    modules: {
-      toolbar: ${toolbar} ,
-      ${clipboardModule}
-    },
+    modules: { ${modules} },
     placeholder: '${placeholder}',
     theme: '${theme}'
   });

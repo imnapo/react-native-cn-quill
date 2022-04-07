@@ -91,6 +91,7 @@ export interface QuillConfig {
   modules?: {
     toolbar: boolean | Array<Array<string | object> | string | object> | string;
     clipboard?: string;
+    keyboard?: string;
   };
   theme?: 'snow' | 'bubble';
   placeholder: string;
