@@ -28,6 +28,7 @@ import type {
   TextChangeData,
   HtmlChangeData,
   DimensionsChangeData,
+  Range,
 } from '../constants/editor-event';
 import { Loading } from './loading';
 
@@ -288,23 +289,26 @@ export default class QuillEditor extends React.Component<
     return this.postAwait<any>({ command: 'getContents', index, length });
   };
 
-  getHtml = (): Promise<any> => {
+  getHtml = (): Promise<string> => {
     return this.postAwait<any>({ command: 'getHtml' });
   };
 
-  getLength = (): Promise<any> => {
+  getLength = (): Promise<number> => {
     return this.postAwait<any>({ command: 'getLength' });
   };
 
-  getText = (index?: number, length?: number): Promise<any> => {
+  getText = (index?: number, length?: number): Promise<string> => {
     return this.postAwait<any>({ command: 'getText', index, length });
   };
 
-  getBounds = (index: number, length?: number): Promise<any> => {
+  getBounds = (
+    index: number,
+    length?: number
+  ): Promise<{ left: number; top: number; height: number; width: number }> => {
     return this.postAwait<any>({ command: 'getBounds', index, length });
   };
 
-  getSelection = (focus: boolean = false): Promise<any> => {
+  getSelection = (focus: boolean = false): Promise<Range> => {
     return this.postAwait<any>({ command: 'getSelection', focus });
   };
 
