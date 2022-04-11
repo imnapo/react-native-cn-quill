@@ -78,11 +78,20 @@ export interface CustomFont {
   css: string;
 }
 
+export interface GetLeafResponse {
+  offset: number;
+  text: string;
+  length: number;
+  index: number;
+  attributes: Record<string, string>;
+}
+
 export interface QuillConfig {
   id?: string;
   modules?: {
     toolbar: boolean | Array<Array<string | object> | string | object> | string;
     clipboard?: string;
+    keyboard?: string;
   };
   theme?: 'snow' | 'bubble';
   placeholder: string;
