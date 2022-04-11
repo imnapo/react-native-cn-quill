@@ -254,6 +254,7 @@ export default class QuillEditor extends React.Component<
       case 'get-leaf':
       case 'remove-format':
       case 'format-text':
+      case 'format-line':
         if (response) {
           response.resolve(message.data);
           this._promises = this._promises.filter((x) => x.key !== message.key);
@@ -381,6 +382,21 @@ export default class QuillEditor extends React.Component<
   ): Promise<any> => {
     return this.postAwait({
       command: 'formatText',
+      index,
+      length,
+      formats,
+      source,
+    });
+  };
+
+  formatLine = (
+    index: number,
+    length: number,
+    formats: Record<string, unknown>,
+    source: string = 'api'
+  ): Promise<any> => {
+    return this.postAwait({
+      command: 'formatLine',
       index,
       length,
       formats,
