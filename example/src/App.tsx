@@ -12,8 +12,8 @@ import {
 import { CustomContainer } from './CustomContainer';
 import QuillEditor, { QuillToolbar } from 'react-native-cn-quill';
 import type {
-  SelectionChangeData,
-  TextChangeData,
+  SelectionChangeHandler,
+  TextChangeHandler,
 } from 'react-native-cn-quill';
 import { customFonts } from './customFonts';
 const clockIcon = require('../assets/icons/clock.png');
@@ -54,8 +54,7 @@ export default class App extends React.Component<any, any> {
     });
   };
 
-  handleSelectionChange = async (data: SelectionChangeData) => {
-    const { range } = data;
+  handleSelectionChange: SelectionChangeHandler = async (range) => {
     if (range) {
       if (range.length === 0) {
         console.log('User cursor is on', range.index);
@@ -71,10 +70,10 @@ export default class App extends React.Component<any, any> {
     }
   };
 
-  handleTextChange = (data: TextChangeData) => {
-    if (data.source === 'api') {
+  handleTextChange: TextChangeHandler = (delta, oldDelta, source) => {
+    if (source === 'api') {
       console.log('An API call triggered this change.');
-    } else if (data.source === 'user') {
+    } else if (source === 'user') {
       console.log('A user action triggered this change.');
     }
   };
