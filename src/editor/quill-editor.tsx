@@ -23,12 +23,14 @@ import type {
 import type {
   EditorEventHandler,
   EditorEventType,
-  SelectionChangeData,
   EditorChangeData,
-  TextChangeData,
   HtmlChangeData,
   DimensionsChangeData,
   Range,
+  TextChangeHandler,
+  SelectionChangeHandler,
+  DimensionsChangeHandler,
+  EditorCommonHandler,
 } from '../constants/editor-event';
 import { Loading } from './loading';
 
@@ -50,8 +52,8 @@ export interface EditorProps {
   theme?: { background: string; color: string; placeholder: string };
   loading?: string | React.ReactNode;
   container?: boolean | React.ComponentType;
-  onSelectionChange?: (data: SelectionChangeData) => void;
-  onTextChange?: (data: TextChangeData) => void;
+  onSelectionChange?: SelectionChangeHandler;
+  onTextChange?: TextChangeHandler;
   onHtmlChange?: (data: HtmlChangeData) => void;
   onEditorChange?: (data: EditorChangeData) => void;
   onDimensionsChange?: (data: DimensionsChangeData) => void;
@@ -203,18 +205,42 @@ export default class QuillEditor extends React.Component<
         if (autoSize === true) this.setState({ height: message.data.height });
         this._handlers
           .filter((x) => x.event === message.type)
-          .forEach((item) => item.handler(message.data));
+          .forEach((item) => {
+            const callback = item.handler as DimensionsChangeHandler;
+            callback(message.data);
+          });
         break;
+      case 'text-change': {
+        this._handlers
+          .filter((x) => x.event === message.type)
+          .forEach((item) => {
+            const { delta, oldDelta, source } = message.data;
+            const callback = item.handler as TextChangeHandler;
+            callback(delta, oldDelta, source);
+          });
+        break;
+      }
+      case 'selection-change': {
+        this._handlers
+          .filter((x) => x.event === message.type)
+          .forEach((item) => {
+            const { range, oldRange, source } = message.data;
+            const callback = item.handler as SelectionChangeHandler;
+            callback(range, oldRange, source);
+          });
+        break;
+      }
       case 'format-change':
-      case 'text-change':
-      case 'selection-change':
       case 'html-change':
       case 'editor-change':
       case 'blur':
       case 'focus':
         this._handlers
           .filter((x) => x.event === message.type)
-          .forEach((item) => item.handler(message.data));
+          .forEach((item) => {
+            const callback = item.handler as EditorCommonHandler;
+            callback(message.data);
+          });
         break;
       case 'has-focus':
       case 'get-contents':
