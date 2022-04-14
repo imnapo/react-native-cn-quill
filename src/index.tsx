@@ -9,6 +9,7 @@ import type {
   TextChangeHandler,
   SelectionChangeHandler,
 } from './constants/editor-event';
+import type { EditorProps } from './editor/quill-editor';
 export default QuillEditor;
 export { QuillToolbar };
 export type {
@@ -19,4 +20,5 @@ export type {
   DimensionsChangeData,
   TextChangeHandler,
   SelectionChangeHandler,
+  EditorProps,
 };
