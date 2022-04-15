@@ -98,8 +98,7 @@
       "publish": true
     },
     "github": {
-      "release": true,
-      "web": true
+      "release": true
     },
     "plugins": {
       "@release-it/conventional-changelog": {
