@@ -17,6 +17,7 @@ import type {
   CustomFont,
   EditorMessage,
   EditorResponse,
+  GetLeafResponse,
   QuillConfig,
 } from '../types';
 import type {
@@ -27,6 +28,7 @@ import type {
   TextChangeData,
   HtmlChangeData,
   DimensionsChangeData,
+  Range,
 } from '../constants/editor-event';
 import { Loading } from './loading';
 
@@ -142,6 +144,7 @@ export default class QuillEditor extends React.Component<
       theme: quill.theme ? quill.theme : 'snow',
       toolbar: JSON.stringify(quill.modules?.toolbar),
       clipboard: quill.modules?.clipboard,
+      keyboard: quill.modules?.keyboard,
       libraries: import3rdParties,
       editorId: quill.id ? quill.id : 'editor-container',
       defaultFontFamily,
@@ -221,6 +224,10 @@ export default class QuillEditor extends React.Component<
       case 'get-selection':
       case 'get-dimensions':
       case 'get-html':
+      case 'get-format':
+      case 'get-leaf':
+      case 'remove-format':
+      case 'format-text':
         if (response) {
           response.resolve(message.data);
           this._promises = this._promises.filter((x) => x.key !== message.key);
@@ -270,6 +277,10 @@ export default class QuillEditor extends React.Component<
     this.post({ command: 'deleteText', index, length });
   };
 
+  removeFormat = (index: number, length: number) => {
+    return this.postAwait({ command: 'removeFormat', index, length });
+  };
+
   getDimensions = (): Promise<any> => {
     return this.postAwait<any>({ command: 'getDimensions' });
   };
@@ -278,23 +289,26 @@ export default class QuillEditor extends React.Component<
     return this.postAwait<any>({ command: 'getContents', index, length });
   };
 
-  getHtml = (): Promise<any> => {
+  getHtml = (): Promise<string> => {
     return this.postAwait<any>({ command: 'getHtml' });
   };
 
-  getLength = (): Promise<any> => {
+  getLength = (): Promise<number> => {
     return this.postAwait<any>({ command: 'getLength' });
   };
 
-  getText = (index?: number, length?: number): Promise<any> => {
+  getText = (index?: number, length?: number): Promise<string> => {
     return this.postAwait<any>({ command: 'getText', index, length });
   };
 
-  getBounds = (index: number, length?: number): Promise<any> => {
+  getBounds = (
+    index: number,
+    length?: number
+  ): Promise<{ left: number; top: number; height: number; width: number }> => {
     return this.postAwait<any>({ command: 'getBounds', index, length });
   };
 
-  getSelection = (focus: boolean = false): Promise<any> => {
+  getSelection = (focus: boolean = false): Promise<Range> => {
     return this.postAwait<any>({ command: 'getSelection', focus });
   };
 
@@ -320,6 +334,32 @@ export default class QuillEditor extends React.Component<
 
   updateContents = (delta: any) => {
     this.post({ command: 'updateContents', delta });
+  };
+
+  getFormat = (
+    index: { index: number; length: number } | number,
+    length?: number
+  ): Promise<Record<string, unknown>> => {
+    return this.postAwait({ command: 'getFormat', index, length });
+  };
+
+  getLeaf = (index: number): Promise<GetLeafResponse | null> => {
+    return this.postAwait({ command: 'getLeaf', index });
+  };
+
+  formatText = (
+    index: number,
+    length: number,
+    formats: Record<string, unknown>,
+    source: string = 'api'
+  ): Promise<any> => {
+    return this.postAwait({
+      command: 'formatText',
+      index,
+      length,
+      formats,
+      source,
+    });
   };
 
   on = (event: EditorEventType, handler: EditorEventHandler) => {

@@ -53,3 +53,5 @@ export type EditorEventHandler =
   | FormatChangeHandler
   | HtmlChangeHandler
   | DimensionsChangeHandler;
+
+export type Range = { index: number; length: number };
