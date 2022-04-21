@@ -7,6 +7,8 @@ export const create_quill = ({
   theme,
   customFonts = [],
   customJS,
+  disabled,
+  initContent,
 }: {
   id: string;
   toolbar: 'false' | string;
@@ -16,7 +18,9 @@ export const create_quill = ({
   theme: 'snow' | 'bubble';
   customFonts: Array<string>;
   customJS: string;
-}) => {
+  disabled?: boolean;
+  initContent?: unknown;
+}): string => {
   let font = '';
   if (customFonts.length > 0) {
     const fontList = "'" + customFonts.join("','") + "'";
@@ -38,6 +42,21 @@ export const create_quill = ({
     modules += `keyboard: ${keyboard},`;
   }
 
+  let disableState = '';
+  if (disabled) {
+    disableState = 'quill.enable(false);';
+  }
+
+  let initContentState = '';
+  if (initContent) {
+    const parsedContent =
+      typeof initContent === 'string'
+        ? initContent
+        : JSON.stringify(initContent);
+
+    initContentState = `quill.setContents(${parsedContent})`;
+  }
+
   return `
   <script>
   
@@ -48,6 +67,8 @@ export const create_quill = ({
     placeholder: '${placeholder}',
     theme: '${theme}'
   });
+  ${disableState}
+  ${initContentState}
   </script>
   `;
 };
