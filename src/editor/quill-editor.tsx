@@ -132,6 +132,8 @@ export default class QuillEditor extends React.Component<
           toolbar: false,
         },
         theme: 'snow',
+        initContent: null,
+        disabled: false,
       },
       customFonts = [],
       customStyles = [],
@@ -157,6 +159,8 @@ export default class QuillEditor extends React.Component<
       placeholderColor: theme.placeholder,
       customStyles,
       customJS,
+      disabled: quill?.disabled,
+      initContent: quill?.initContent,
     });
   };
 
