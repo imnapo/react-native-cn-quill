@@ -26,7 +26,8 @@ export interface DimensionsChangeData {
   height: number;
 }
 
-export type EditorChangeHandler = (data: EditorChangeData) => void;
+export type EditorChangeHandler = (eventName: string,
+  ...args: Array<any>) => void;
 export type TextChangeHandler = (
   delta: any,
   oldDelta: any,
@@ -50,7 +51,6 @@ export type EditorEventHandler =
   | DimensionsChangeHandler;
 
 export type EditorCommonHandler =
-  | EditorChangeHandler
   | FormatChangeHandler
   | HtmlChangeHandler;
 

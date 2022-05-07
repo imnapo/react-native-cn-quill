@@ -305,7 +305,7 @@ You may specify custom props for `webview` component.
 Calls when quill's selection changes.
 | Type | Required |
 | ----------- | ----------- |
-| `({ range: { index, lengthmber } , oldRange: { index, length }, source }) => void` | No |
+| `(range: { index, length } , oldRange: { index, length }, source) => void` | No |
 
 ---
 
@@ -314,7 +314,7 @@ Calls when quill's selection changes.
 Calls when when the contents of Quill have changed.
 | Type | Required |
 | ----------- | ----------- |
-| `({ delta, oldContents, source }) => void` | No |
+| `(delta, oldContents, source) => void` | No |
 
 ---
 
@@ -341,7 +341,7 @@ Calls when when the dimensions of Quill have changed.
 Calls when the contents of Quill have changed or quill's selection have changed.
 | Type | Required |
 | ----------- | ----------- |
-| `({name , args}) => void` | No |
+| `(eventName , ...args) => void` | No |
 
 ---
 
@@ -420,7 +420,7 @@ Adds event handler.
 
 ## Content Methods
 
-### `deleteText(index: Number, length: Number)`
+### `deleteText(index: Number, length: Number, source?: String = 'api')`
 
 Deletes text from the editor.
 
@@ -444,7 +444,7 @@ gets string contents of the editor.
 
 ---
 
-### `insertEmbed(index: Number, type: String, value: any)`
+### `insertEmbed(index: Number, type: String, value: any, source?: String = 'api')`
 
 Insert embedded content into the editor.
 
@@ -456,7 +456,7 @@ _editor.current.insertEmbed(10, 'image', 'https://quilljs.com/images/cloud.png')
 
 ---
 
-### `insertText(index: number, text: string, formats?: Record<string, any>)`
+### `insertText(index: number, text: string, formats?: Record<string, any>, source?: String = 'api')`
 
 Inserts text into the editor,
 
@@ -541,7 +541,7 @@ let [leaf, offset] = quill.getLeaf(7);
 
 ## Formatting Methods
 
-### `format(name: String, value: any)`
+### `format(name: String, value: any, source?: String = 'api')`
 
 Format text at user’s current selection.
 
@@ -553,7 +553,7 @@ _editor.current.format('color', 'red');
 
 ---
 
-### `removeFormat(index: number, length: number): Promise<Delta>`
+### `removeFormat(index: number, length: number, source?: String = 'api'): Promise<Delta>`
 
 Removes all formatting and embeds within given range, returning a Delta representing the change.
 
@@ -581,7 +581,7 @@ quill.removeFormat(3, 7);
 
 ---
 
-### `formatText(index: Number, length: Number, formats: Record<string, unknown>, source: string = 'api'): Promise<Delta>`
+### `formatText(index: Number, length: Number, formats: Record<string, unknown>, source?: String = 'api'): Promise<Delta>`
 
 Formats text in the editor, returning a Delta representing the change.
 
@@ -639,7 +639,7 @@ if (range) {
 
 ---
 
-### `setSelection(index: Number, length: Number = 0, source: String = 'api')`
+### `setSelection(index: Number, length: Number = 0, source?: String = 'api')`
 
 Sets user selection to given range, which will also focus the editor. Providing null as the selection range will blur the editor. Source may be "user", "api", or "silent" [From Quill Js Docs](https://quilljs.com/docs/api/#setselection).
 
