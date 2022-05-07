@@ -34,10 +34,10 @@ export const editor_js = `
       sendMessage(contentChanged);
   }
   //Format text at user’s current selection
-  var formatSelection = function (name, value) {
+  var formatSelection = function (name, value, source) {
     var range = quill.getSelection();
     if (!range) quill.focus();
-    quill.format(name, value);
+    quill.format(name, value, source);
     getSelectedFormats();
   }
 
@@ -88,12 +88,12 @@ export const editor_js = `
     sendMessage(getHtmlJson);
   }
 
-  var insertEmbed = function (index, type, value) {
-    quill.insertEmbed(index, type, value);
+  var insertEmbed = function (index, type, value, source) {
+    quill.insertEmbed(index, type, value, source);
   }
 
-  var insertText = function (index, text, formats={}) {
-    quill.insertText(index, text, formats);
+  var insertText = function (index, text, formats={}, source) {
+    quill.insertText(index, text, formats, source);
   }
 
   var setContents = function (delta) {
@@ -162,8 +162,8 @@ export const editor_js = `
     sendMessage(getLeafJson);
   }
 
-  const removeFormat = function (key, index, length) {
-    const removeFormatData = quill.removeFormat(index, length);
+  const removeFormat = function (key, index, length, source) {
+    const removeFormatData = quill.removeFormat(index, length, source);
     const removeFormatJson = JSON.stringify({
       type: 'remove-format',
       key: key,
@@ -182,12 +182,22 @@ export const editor_js = `
     sendMessage(formatTextJson);
   }
 
+  const formatLine = function (key, index, length, formats, source) {
+    const formatLineData = quill.formatLine(index, length, formats, source);
+    const formatLineJson = JSON.stringify({
+      type: 'format-line',
+      key: key,
+      data: formatLineData
+    });
+    sendMessage(formatLineJson);
+  }
+
 
   var getRequest = function (event) {
     var msg = JSON.parse(event.data);
     switch (msg.command) {
       case 'format':
-        formatSelection(msg.name, msg.value);
+        formatSelection(msg.name, msg.value, msg.source);
         break;
       case 'focus':
         quill.focus();
@@ -202,7 +212,7 @@ export const editor_js = `
         hasFocus(msg.key);
         break;
       case 'deleteText':
-        quill.deleteText(msg.index, msg.length);
+        quill.deleteText(msg.index, msg.length, msg.source);
         break;
       case 'getDimensions':
         getDimensions(msg.key);
@@ -235,10 +245,10 @@ export const editor_js = `
         getLength(msg.key);
         break;
       case 'insertEmbed':
-        insertEmbed(msg.index, msg.type, msg.value);
+        insertEmbed(msg.index, msg.type, msg.value, msg.source);
         break;
       case 'insertText':
-        insertText(msg.index, msg.text, msg.formats);
+        insertText(msg.index, msg.text, msg.formats, msg.source);
         break;
       case 'setContents':
         setContents(msg.delta);
@@ -253,10 +263,13 @@ export const editor_js = `
         dangerouslyPasteHTML(msg.index, msg.html);
         break;
       case 'removeFormat':
-        removeFormat(msg.key, msg.index, msg.length);
+        removeFormat(msg.key, msg.index, msg.length, msg.source);
         break;
       case 'formatText':
         formatText(msg.key, msg.index, msg.length, msg.formats, msg.source);
+        break;
+      case 'formatLine':
+        formatLine(msg.key, msg.index, msg.length, msg.formats, msg.source);
         break;
       default:
         break;

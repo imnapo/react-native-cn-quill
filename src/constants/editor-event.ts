@@ -8,19 +8,6 @@ export type EditorEventType =
   | 'blur'
   | 'focus';
 
-export interface SelectionChangeData {
-  range: { index: number; length: number } | null;
-  oldRange: { index: number; length: number } | null;
-  source: string;
-}
-
-export interface TextChangeData {
-  delta: any;
-  oldDelta: any;
-  source: string;
-  html: string;
-}
-
 export interface HtmlChangeData {
   html: string;
 }
@@ -39,9 +26,18 @@ export interface DimensionsChangeData {
   height: number;
 }
 
-export type EditorChangeHandler = (data: EditorChangeData) => void;
-export type TextChangeHandler = (data: TextChangeData) => void;
-export type SelectionChangeHandler = (data: SelectionChangeData) => void;
+export type EditorChangeHandler = (eventName: string,
+  ...args: Array<any>) => void;
+export type TextChangeHandler = (
+  delta: any,
+  oldDelta: any,
+  source: string
+) => void;
+export type SelectionChangeHandler = (
+  range: { index: number; length: number } | null,
+  oldRange: { index: number; length: number } | null,
+  source: string
+) => void;
 export type FormatChangeHandler = (data: FormatChangeData) => void;
 export type HtmlChangeHandler = (data: HtmlChangeData) => void;
 export type DimensionsChangeHandler = (data: DimensionsChangeData) => void;
@@ -53,5 +49,9 @@ export type EditorEventHandler =
   | FormatChangeHandler
   | HtmlChangeHandler
   | DimensionsChangeHandler;
+
+export type EditorCommonHandler =
+  | FormatChangeHandler
+  | HtmlChangeHandler;
 
 export type Range = { index: number; length: number };

@@ -1,6 +1,6 @@
 {
   "name": "react-native-cn-quill",
-  "version": "0.7.15",
+  "version": "1.0.0",
   "description": "react-native quill richtext editor",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
@@ -77,12 +77,6 @@
       "<rootDir>/example/node_modules",
       "<rootDir>/lib/"
     ]
-  },
-  "husky": {
-    "hooks": {
-      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
-      "pre-commit": "yarn lint && yarn typescript"
-    }
   },
   "commitlint": {
     "extends": [

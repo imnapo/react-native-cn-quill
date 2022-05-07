@@ -95,6 +95,8 @@ export interface QuillConfig {
   };
   theme?: 'snow' | 'bubble';
   placeholder: string;
+  disabled?: boolean;
+  initContent?: unknown;
 }
 
 export type StyleFunc = (provided: object) => object;
@@ -142,4 +144,10 @@ export interface CustomStyles {
     };
   };
   // [fieldName: string]: (provided: StyleProp<ViewStyle>) => object;
+}
+
+export enum Source {
+  USER = 'user',
+  API = 'api',
+  SILENT = 'silent'
 }

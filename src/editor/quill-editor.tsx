@@ -13,22 +13,26 @@ import {
   Platform,
 } from 'react-native';
 import { createHtml } from '../utils/editor-utils';
-import type {
+import {
   CustomFont,
   EditorMessage,
   EditorResponse,
   GetLeafResponse,
   QuillConfig,
+  Source,
 } from '../types';
 import type {
   EditorEventHandler,
   EditorEventType,
-  SelectionChangeData,
   EditorChangeData,
-  TextChangeData,
   HtmlChangeData,
   DimensionsChangeData,
   Range,
+  TextChangeHandler,
+  SelectionChangeHandler,
+  DimensionsChangeHandler,
+  EditorCommonHandler,
+  EditorChangeHandler,
 } from '../constants/editor-event';
 import { Loading } from './loading';
 
@@ -50,8 +54,8 @@ export interface EditorProps {
   theme?: { background: string; color: string; placeholder: string };
   loading?: string | React.ReactNode;
   container?: boolean | React.ComponentType;
-  onSelectionChange?: (data: SelectionChangeData) => void;
-  onTextChange?: (data: TextChangeData) => void;
+  onSelectionChange?: SelectionChangeHandler;
+  onTextChange?: TextChangeHandler;
   onHtmlChange?: (data: HtmlChangeData) => void;
   onEditorChange?: (data: EditorChangeData) => void;
   onDimensionsChange?: (data: DimensionsChangeData) => void;
@@ -130,6 +134,8 @@ export default class QuillEditor extends React.Component<
           toolbar: false,
         },
         theme: 'snow',
+        initContent: null,
+        disabled: false,
       },
       customFonts = [],
       customStyles = [],
@@ -155,6 +161,8 @@ export default class QuillEditor extends React.Component<
       placeholderColor: theme.placeholder,
       customStyles,
       customJS,
+      disabled: quill?.disabled,
+      initContent: quill?.initContent,
     });
   };
 
@@ -203,18 +211,51 @@ export default class QuillEditor extends React.Component<
         if (autoSize === true) this.setState({ height: message.data.height });
         this._handlers
           .filter((x) => x.event === message.type)
-          .forEach((item) => item.handler(message.data));
+          .forEach((item) => {
+            const callback = item.handler as DimensionsChangeHandler;
+            callback(message.data);
+          });
         break;
+      case 'text-change': {
+        this._handlers
+          .filter((x) => x.event === message.type)
+          .forEach((item) => {
+            const { delta, oldDelta, source } = message.data;
+            const callback = item.handler as TextChangeHandler;
+            callback(delta, oldDelta, source);
+          });
+        break;
+      }
+      case 'selection-change': {
+        this._handlers
+          .filter((x) => x.event === message.type)
+          .forEach((item) => {
+            const { range, oldRange, source } = message.data;
+            const callback = item.handler as SelectionChangeHandler;
+            callback(range, oldRange, source);
+          });
+        break;
+      }
+      case 'editor-change': {
+        this._handlers
+        .filter((x) => x.event === message.type)
+        .forEach((item) => {
+          const { eventName, args } = message.data as EditorChangeData;
+          const callback = item.handler as EditorChangeHandler;
+          callback(eventName, ...args);
+        });
+        break;
+      }
       case 'format-change':
-      case 'text-change':
-      case 'selection-change':
       case 'html-change':
-      case 'editor-change':
       case 'blur':
       case 'focus':
         this._handlers
           .filter((x) => x.event === message.type)
-          .forEach((item) => item.handler(message.data));
+          .forEach((item) => {
+            const callback = item.handler as EditorCommonHandler;
+            callback(message.data);
+          });
         break;
       case 'has-focus':
       case 'get-contents':
@@ -228,6 +269,7 @@ export default class QuillEditor extends React.Component<
       case 'get-leaf':
       case 'remove-format':
       case 'format-text':
+      case 'format-line':
         if (response) {
           response.resolve(message.data);
           this._promises = this._promises.filter((x) => x.key !== message.key);
@@ -269,16 +311,16 @@ export default class QuillEditor extends React.Component<
     this.post({ command: 'update' });
   };
 
-  format = (name: string, value: any) => {
-    this.post({ command: 'format', name, value });
+  format = (name: string, value: any, source = Source.API) => {
+    this.post({ command: 'format', name, value, source });
   };
 
-  deleteText = (index: number, length: number) => {
-    this.post({ command: 'deleteText', index, length });
+  deleteText = (index: number, length: number, source = Source.API) => {
+    this.post({ command: 'deleteText', index, length, source });
   };
 
-  removeFormat = (index: number, length: number) => {
-    return this.postAwait({ command: 'removeFormat', index, length });
+  removeFormat = (index: number, length: number, source = Source.API) => {
+    return this.postAwait({ command: 'removeFormat', index, length, source });
   };
 
   getDimensions = (): Promise<any> => {
@@ -316,12 +358,12 @@ export default class QuillEditor extends React.Component<
     this.post({ command: 'setSelection', index, length, source });
   };
 
-  insertEmbed = (index: number, type: string, value: any) => {
-    this.post({ command: 'insertEmbed', index, type, value });
+  insertEmbed = (index: number, type: string, value: any, source = Source.API) => {
+    this.post({ command: 'insertEmbed', index, type, value, source });
   };
 
-  insertText = (index: number, text: string, formats?: Record<string, any>) => {
-    this.post({ command: 'insertText', index, text, formats });
+  insertText = (index: number, text: string, formats?: Record<string, any>, source = Source.API) => {
+    this.post({ command: 'insertText', index, text, formats, source });
   };
 
   setContents = (delta: any) => {
@@ -351,10 +393,25 @@ export default class QuillEditor extends React.Component<
     index: number,
     length: number,
     formats: Record<string, unknown>,
-    source: string = 'api'
+    source = Source.API
   ): Promise<any> => {
     return this.postAwait({
       command: 'formatText',
+      index,
+      length,
+      formats,
+      source,
+    });
+  };
+
+  formatLine = (
+    index: number,
+    length: number,
+    formats: Record<string, unknown>,
+    source = Source.API
+  ): Promise<any> => {
+    return this.postAwait({
+      command: 'formatLine',
       index,
       length,
       formats,
