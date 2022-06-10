@@ -116,6 +116,9 @@ export default class App extends React.Component<any, any> {
           value={title}
         />
         <QuillEditor
+          webview={{
+            nestedScrollEnabled: true,
+          }}
           container={CustomContainer} // not required just to show how to pass cusom container
           style={[styles.input, styles.editor]}
           ref={this._editor}
