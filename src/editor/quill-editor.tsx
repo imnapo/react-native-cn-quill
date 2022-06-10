@@ -386,6 +386,7 @@ export default class QuillEditor extends React.Component<
   ) => (
     <WebView
       scrollEnabled={false}
+      nestedScrollEnabled={true}
       hideKeyboardAccessoryView={true}
       keyboardDisplayRequiresUserAction={false}
       originWhitelist={['*']}
