@@ -78,7 +78,7 @@ export const SelectionBar: React.FC<Props> = ({}) => {
       </ScrollView>
       <TouchableOpacity onPress={() => hide()}>
         <View style={closeViewStyle}>
-          <Text style={closeTextStyle}>X</Text>
+          <Text style={closeTextStyle}>×</Text>
         </View>
       </TouchableOpacity>
     </View>
