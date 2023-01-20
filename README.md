@@ -499,6 +499,18 @@ _editor.current.setText('Hello\n');
 
 ---
 
+### `setPlaceholder(text: string)`
+
+Overwrites placeholder with given text.
+
+#### Example:
+
+```
+_editor.current.setPlaceholder('Hello World');
+```
+
+---
+
 ### `updateContents(delta: any)`
 
 Applies Delta to editor contents.
