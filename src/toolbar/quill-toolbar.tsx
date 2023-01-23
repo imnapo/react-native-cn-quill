@@ -22,7 +22,7 @@ import type QuillEditor from '../editor/quill-editor';
 import { ToolbarProvider } from './components/toolbar-context';
 import { SelectionBar } from './components/selection-bar';
 import { ToolSet } from './components/tool-set';
-import { ToolbarSeperator } from './components/toolbar-separator';
+import { ToolbarSeparator } from './components/toolbar-separator';
 import type { FormatChangeData } from '../constants/editor-event';
 
 const WIDTH = Dimensions.get('window').width;
@@ -161,7 +161,7 @@ export class QuillToolbar extends Component<QuillToolbarProps, ToolbarState> {
                   <React.Fragment key={index}>
                     <ToolSet tools={object} />
                     {toolSets.length > index && (
-                      <ToolbarSeperator color={theme.color} />
+                      <ToolbarSeparator color={theme.color} />
                     )}
                   </React.Fragment>
                 )
