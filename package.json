@@ -34,13 +34,13 @@
     "quill",
     "editor"
   ],
-  "repository": "https://github.com/imnapo/react-native-cn-quill",
+  "repository": "https://github.com/Meruem5/react-native-cn-quill",
   "author": "Narbe HS <imnapo@gmail.com> (https://github.com/imnapo)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/imnapo/react-native-cn-quill/issues"
+    "url": "https://github.com/Meruem5/react-native-cn-quill/issues"
   },
-  "homepage": "https://github.com/imnapo/react-native-cn-quill#readme",
+  "homepage": "https://github.com/Meruem5/react-native-cn-quill#readme",
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
   },
