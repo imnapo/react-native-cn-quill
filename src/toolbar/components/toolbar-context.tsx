@@ -136,8 +136,8 @@ export class ToolbarProvider extends Component<ProviderProps, ProviderState> {
     const { open, options, name } = this.state;
     const defaultStyles = makeStyles(theme);
     const rootStyle = styles?.toolbar?.provider
-      ? styles?.toolbar?.provider(defaultStyles.root)
-      : defaultStyles.root;
+      ? styles?.toolbar?.provider(defaultStyles.provider)
+      : defaultStyles.provider;
     return (
       <ToolbarContext.Provider
         value={{
@@ -171,7 +171,7 @@ export class ToolbarProvider extends Component<ProviderProps, ProviderState> {
 
 const makeStyles = (theme: ToolbarTheme) =>
   StyleSheet.create({
-    root: {
+    provider: {
       borderTopWidth: 1,
       borderLeftWidth: 1,
       borderRightWidth: 1,
