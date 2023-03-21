@@ -7,10 +7,16 @@ export const editor_js = `
     return attrArray.reduce((_attr, node) => ({ ..._attr, [node.nodeName]: node.nodeValue}), {});
   }
 
-  var sendMessage = function (message) {
-    if (window.ReactNativeWebView)
-      window.ReactNativeWebView.postMessage(message);
-      else console.log(message)
+  const sendMessage = function (message) {
+    if (window.ReactNativeWebView) {
+      window.ReactNativeWebView.postMessage(message)
+    } else {
+      const parsedMessage = JSON.parse(message)
+      if (parsedMessage.type == "html-change") {
+        const htmlData = parsedMessage.data.html
+        window.localStorage.setItem("richTextHTML", htmlData)
+      }
+    }
   }
 
   // Get the dimensions of the quill content field
