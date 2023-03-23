@@ -383,10 +383,12 @@ export default class QuillEditor extends React.Component<
     content: string,
     style: StyleProp<ViewStyle>,
     props: WebViewProps = {}
-  ) => (
-    <WebView
+  ) => {
+    const { autoSize } = this.props;
+
+    return <WebView
       scrollEnabled={false}
-      nestedScrollEnabled={true}
+      nestedScrollEnabled={!autoSize}
       hideKeyboardAccessoryView={true}
       keyboardDisplayRequiresUserAction={false}
       originWhitelist={['*']}
@@ -400,13 +402,14 @@ export default class QuillEditor extends React.Component<
       automaticallyAdjustContentInsets={true}
       bounces={false}
       dataDetectorTypes="none"
+      showsVerticalScrollIndicator={!autoSize}
       {...props}
       javaScriptEnabled={true}
       source={{ html: content }}
       ref={this._webview}
       onMessage={this.onMessage}
     />
-  );
+  };
 
   render() {
     const { webviewContent, height } = this.state;
