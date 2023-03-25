@@ -332,6 +332,10 @@ export default class QuillEditor extends React.Component<
     this.post({ command: 'setText', text });
   };
 
+  setPlaceholder = (text: string) => {
+    this.post({ command: 'setPlaceholder', text });
+  };
+
   updateContents = (delta: any) => {
     this.post({ command: 'updateContents', delta });
   };

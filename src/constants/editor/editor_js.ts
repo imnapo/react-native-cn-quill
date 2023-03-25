@@ -104,6 +104,10 @@ export const editor_js = `
     quill.setText(text);
   }
 
+  var setPlaceholder = function (text) {
+    quill.root.dataset.placeholder = text;
+  }
+
   var updateContents = function (delta) {
     quill.updateContents(delta);
   }
@@ -245,6 +249,9 @@ export const editor_js = `
         break;
       case 'setText':
         setText(msg.text);
+        break;
+      case 'setPlaceholder':
+        setPlaceholder(msg.text);
         break;
       case 'updateContents':
         updateContents(msg.delta);
