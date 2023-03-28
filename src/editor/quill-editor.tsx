@@ -59,6 +59,7 @@ export interface EditorProps {
   onBlur?: () => void;
   onFocus?: () => void;
   customJS?: string;
+  webViewTestID: string;
 }
 
 export default class QuillEditor extends React.Component<
@@ -384,31 +385,34 @@ export default class QuillEditor extends React.Component<
     style: StyleProp<ViewStyle>,
     props: WebViewProps = {}
   ) => {
-    const { autoSize } = this.props;
+    const { autoSize, webViewTestID } = this.props;
 
-    return <WebView
-      scrollEnabled={false}
-      nestedScrollEnabled={!autoSize}
-      hideKeyboardAccessoryView={true}
-      keyboardDisplayRequiresUserAction={false}
-      originWhitelist={['*']}
-      style={style}
-      onError={(syntheticEvent) => {
-        const { nativeEvent } = syntheticEvent;
-        console.warn('WebView error: ', nativeEvent);
-      }}
-      allowFileAccess={true}
-      domStorageEnabled={false}
-      automaticallyAdjustContentInsets={true}
-      bounces={false}
-      dataDetectorTypes="none"
-      showsVerticalScrollIndicator={!autoSize}
-      {...props}
-      javaScriptEnabled={true}
-      source={{ html: content }}
-      ref={this._webview}
-      onMessage={this.onMessage}
-    />
+    return (
+      <WebView
+        scrollEnabled={false}
+        nestedScrollEnabled={!autoSize}
+        hideKeyboardAccessoryView={true}
+        keyboardDisplayRequiresUserAction={false}
+        originWhitelist={['*']}
+        style={style}
+        onError={(syntheticEvent) => {
+          const { nativeEvent } = syntheticEvent;
+          console.warn('WebView error: ', nativeEvent);
+        }}
+        allowFileAccess={true}
+        domStorageEnabled={false}
+        automaticallyAdjustContentInsets={true}
+        bounces={false}
+        dataDetectorTypes="none"
+        showsVerticalScrollIndicator={!autoSize}
+        {...props}
+        testID={webViewTestID}
+        javaScriptEnabled={true}
+        source={{ html: content }}
+        ref={this._webview}
+        onMessage={this.onMessage}
+      />
+    );
   };
 
   render() {
