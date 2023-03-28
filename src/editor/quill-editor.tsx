@@ -59,6 +59,7 @@ export interface EditorProps {
   onBlur?: () => void;
   onFocus?: () => void;
   customJS?: string;
+  webViewTestID: string;
 }
 
 export default class QuillEditor extends React.Component<
@@ -383,30 +384,36 @@ export default class QuillEditor extends React.Component<
     content: string,
     style: StyleProp<ViewStyle>,
     props: WebViewProps = {}
-  ) => (
-    <WebView
-      scrollEnabled={false}
-      nestedScrollEnabled={true}
-      hideKeyboardAccessoryView={true}
-      keyboardDisplayRequiresUserAction={false}
-      originWhitelist={['*']}
-      style={style}
-      onError={(syntheticEvent) => {
-        const { nativeEvent } = syntheticEvent;
-        console.warn('WebView error: ', nativeEvent);
-      }}
-      allowFileAccess={true}
-      domStorageEnabled={false}
-      automaticallyAdjustContentInsets={true}
-      bounces={false}
-      dataDetectorTypes="none"
-      {...props}
-      javaScriptEnabled={true}
-      source={{ html: content }}
-      ref={this._webview}
-      onMessage={this.onMessage}
-    />
-  );
+  ) => {
+    const { autoSize, webViewTestID } = this.props;
+
+    return (
+      <WebView
+        scrollEnabled={false}
+        nestedScrollEnabled={!autoSize}
+        hideKeyboardAccessoryView={true}
+        keyboardDisplayRequiresUserAction={false}
+        originWhitelist={['*']}
+        style={style}
+        onError={(syntheticEvent) => {
+          const { nativeEvent } = syntheticEvent;
+          console.warn('WebView error: ', nativeEvent);
+        }}
+        allowFileAccess={true}
+        domStorageEnabled={false}
+        automaticallyAdjustContentInsets={true}
+        bounces={false}
+        dataDetectorTypes="none"
+        showsVerticalScrollIndicator={!autoSize}
+        {...props}
+        testID={webViewTestID}
+        javaScriptEnabled={true}
+        source={{ html: content }}
+        ref={this._webview}
+        onMessage={this.onMessage}
+      />
+    );
+  };
 
   render() {
     const { webviewContent, height } = this.state;
