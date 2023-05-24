@@ -96,8 +96,27 @@ export const editor_js = `
     quill.insertText(index, text, formats);
   }
 
-  var setContents = function (delta) {
-    quill.setContents(delta);
+  var setContents = function (key, delta) {
+    try {
+      var setContentsData = quill.setContents(delta);
+      var setContentsDataJson = JSON.stringify({
+        type: 'set-contents',
+        key: key,
+        data: setContentsData });
+        sendMessage(setContentsDataJson);
+    } catch (error) {
+      var errorJson = JSON.stringify({
+        type: 'set-contents-error',
+        key: key,
+        data: { message: error.message, stack: error.stack } });
+        sendMessage(errorJson);
+
+        var setContentsDataJson = JSON.stringify({
+          type: 'set-contents',
+          key: key,
+          data: {} });
+          sendMessage(setContentsDataJson);
+    }
   }
 
   var setText = function (text) {
@@ -245,7 +264,7 @@ export const editor_js = `
         insertText(msg.index, msg.text, msg.formats);
         break;
       case 'setContents':
-        setContents(msg.delta);
+        setContents(msg.key, msg.delta);
         break;
       case 'setText':
         setText(msg.text);
