@@ -218,6 +218,7 @@ export default class QuillEditor extends React.Component<
         break;
       case 'has-focus':
       case 'get-contents':
+      case 'set-contents':
       case 'get-text':
       case 'get-length':
       case 'get-bounds':
@@ -324,8 +325,8 @@ export default class QuillEditor extends React.Component<
     this.post({ command: 'insertText', index, text, formats });
   };
 
-  setContents = (delta: any) => {
-    this.post({ command: 'setContents', delta });
+  setContents = (delta: any): Promise<any> => {
+    return this.postAwait<any>({ command: 'setContents', delta });
   };
 
   setText = (text: string) => {
