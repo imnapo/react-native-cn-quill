@@ -771,7 +771,7 @@ Reference of `QuillEditor` component.
 
 ### `theme`
 
-You may easily make your toolbar look good with the help of themes. you can pass `dark`, `light` values or custom theme object with `size`,`color`,`background` and `overlay` props. ex. `{ size: 30, color: 'white', background: 'gray', overlay: 'rgba(0,0,0,.5')})`
+You may easily make your toolbar look good with the help of themes. you can pass `dark`, `light` values or custom theme object with `size`,`color`,`background` and `overlay` props. ex. `{ size: 30, color: 'white', background: 'gray', overlay: 'rgba(0,0,0,.5)'}`
 | Type | Required |
 | ----------- | ----------- |
 | `'dark' \| 'light' \| object` | No |
