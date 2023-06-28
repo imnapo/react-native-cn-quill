@@ -59,7 +59,7 @@ export interface EditorProps {
   onBlur?: () => void;
   onFocus?: () => void;
   customJS?: string;
-  webViewTestID: string;
+  webViewTestID?: string;
 }
 
 export default class QuillEditor extends React.Component<
