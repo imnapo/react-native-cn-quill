@@ -1,4 +1,4 @@
-import QuillEditor from './editor/quill-editor';
+import QuillEditor, { EditorProps } from './editor/quill-editor';
 import { QuillToolbar } from './toolbar/quill-toolbar';
 import type {
   EditorEventHandler,
@@ -12,6 +12,7 @@ import type {
 export default QuillEditor;
 export { QuillToolbar };
 export type {
+  EditorProps,
   EditorEventHandler,
   SelectionChangeData,
   EditorChangeData,
