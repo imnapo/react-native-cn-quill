@@ -45,7 +45,7 @@ export const create_quill = ({
   ${customJS}
   var quill = new Quill('#${id}', {
     modules: { ${modules} },
-    placeholder: '${placeholder}',
+    placeholder: "${placeholder}",
     theme: '${theme}'
   });
   </script>
