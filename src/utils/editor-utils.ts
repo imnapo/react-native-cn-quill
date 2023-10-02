@@ -18,6 +18,7 @@ interface CreateHtmlArgs {
   toolbar: string;
   clipboard?: string;
   keyboard?: string;
+  formats?: string[];
   libraries: 'local' | 'cdn';
   theme: 'snow' | 'bubble';
   editorId: string;
@@ -98,6 +99,7 @@ export const createHtml = (args: CreateHtmlArgs = Inital_Args) => {
     clipboard: args.clipboard ? args.clipboard : '',
     keyboard: args.keyboard ? args.keyboard : '',
     placeholder: args.placeholder,
+    formats: args.formats,
     theme: args.theme,
     customFonts: args.fonts.map((f) => getFontName(f.name)),
     customJS: args.customJS ? args.customJS : '',
