@@ -69,7 +69,7 @@
   "peerDependencies": {
     "react": "*",
     "react-native": "*",
-    "react-native-webview": "^11.0.0"
+    "react-native-webview": ">=11.0.0"
   },
   "jest": {
     "preset": "react-native",
