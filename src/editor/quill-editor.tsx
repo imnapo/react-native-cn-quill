@@ -59,6 +59,7 @@ export interface EditorProps {
   onBlur?: () => void;
   onFocus?: () => void;
   customJS?: string;
+  readonly?: boolean;
 }
 
 export default class QuillEditor extends React.Component<
@@ -135,6 +136,7 @@ export default class QuillEditor extends React.Component<
       customStyles = [],
       defaultFontFamily = undefined,
       customJS = '',
+      readonly = false,
     } = this.props;
 
     return createHtml({
@@ -155,6 +157,7 @@ export default class QuillEditor extends React.Component<
       placeholderColor: theme.placeholder,
       customStyles,
       customJS,
+      readonly,
     });
   };
 
