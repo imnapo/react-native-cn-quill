@@ -92,7 +92,7 @@ export class QuillToolbar extends Component<QuillToolbarProps, ToolbarState> {
   private prepareIconset = () => {
     const { options, custom } = this.props;
     let toolbarOptions: Array<Array<string | object> | string | object> = [];
-    if (options === 'full' || options === []) {
+    if (options === 'full' || options.length === 0) {
       toolbarOptions = fullOptions;
     } else if (options === 'basic') {
       toolbarOptions = basicOptions;
