@@ -22,7 +22,6 @@
     "release": "release-it",
     "example": "yarn --cwd example",
     "bootstrap": "yarn example && yarn",
-    "prepublish": "tsc",
     "prepare": "bob build"
   },
   "keywords": [
