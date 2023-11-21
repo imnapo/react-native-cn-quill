@@ -22,6 +22,7 @@
     "release": "release-it",
     "example": "yarn --cwd example",
     "bootstrap": "yarn example && yarn",
+    "prepublish": "tsc",
     "prepare": "bob build"
   },
   "keywords": [
@@ -55,7 +56,7 @@
     "eslint-config-prettier": "^7.0.0",
     "eslint-plugin-prettier": "^3.1.3",
     "husky": "^4.2.5",
-    "jest": "^26.0.1",
+    "jest": "^28.0.1",
     "pod-install": "^0.1.0",
     "prettier": "^2.0.5",
     "react": "16.13.1",
