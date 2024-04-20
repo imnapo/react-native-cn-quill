@@ -1,5 +1,7 @@
-# react-native-cn-quill
+## Important announcement
+To announce that this repository is **no longer being actively maintained** by the original owner and is open for contributions, one could state: "The react-native-cn-quill" is now an open project and I'm no longer actively maintaining it. If you're interested in contributing or taking over its maintenance, please feel free to reach out to me!" This message clearly communicates the change in maintenance status and invites interested contributors to get in touch.
 
+# react-native-cn-quill
 react-native-cn-quill is a rich-text editor for react-native. We've created this library on top of Quill Api.
 
 <img src="./images/quill-editor.jpeg" width="50%">
