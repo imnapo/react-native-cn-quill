@@ -95,6 +95,7 @@ export interface QuillConfig {
   };
   theme?: 'snow' | 'bubble';
   placeholder: string;
+  readOnly?: boolean;
 }
 
 export type StyleFunc = (provided: object) => object;
