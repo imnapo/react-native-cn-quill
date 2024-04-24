@@ -96,7 +96,7 @@ const useStyles = (theme: ToolbarTheme) =>
       padding: 2,
       position: 'absolute',
       top: 0,
-      backgroundColor: theme.overlay, //'=rgba(0,0,0,.1)',
+      backgroundColor: theme.overlay,
       width: '100%',
       flexDirection: 'row',
       justifyContent: 'space-between',

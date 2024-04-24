@@ -32,6 +32,7 @@ interface QuillToolbarProps {
   styles?: CustomStyles;
   editor: React.RefObject<QuillEditor>;
   theme: ToolbarTheme | 'dark' | 'light';
+  separator?: boolean;
   custom?: ToolbarCustom;
   container?: false | 'avoiding-view' | React.ComponentType;
 }
@@ -46,6 +47,7 @@ interface ToolbarState {
 export class QuillToolbar extends Component<QuillToolbarProps, ToolbarState> {
   public static defaultProps = {
     theme: 'dark',
+    separator: false,
   };
 
   constructor(props: QuillToolbarProps) {
@@ -92,7 +94,7 @@ export class QuillToolbar extends Component<QuillToolbarProps, ToolbarState> {
   private prepareIconset = () => {
     const { options, custom } = this.props;
     let toolbarOptions: Array<Array<string | object> | string | object> = [];
-    if (options === 'full' || options === []) {
+    if (options === 'full') {
       toolbarOptions = fullOptions;
     } else if (options === 'basic') {
       toolbarOptions = basicOptions;
@@ -133,7 +135,7 @@ export class QuillToolbar extends Component<QuillToolbarProps, ToolbarState> {
   };
 
   renderToolbar = () => {
-    const { styles, custom } = this.props;
+    const { styles, custom, separator } = this.props;
     const { toolSets, theme, formats } = this.state;
     const defaultStyles = makeStyles(theme);
 
@@ -160,7 +162,7 @@ export class QuillToolbar extends Component<QuillToolbarProps, ToolbarState> {
                 object.length > 0 && (
                   <React.Fragment key={index}>
                     <ToolSet tools={object} />
-                    {toolSets.length > index && (
+                    {separator && toolSets.length > index && (
                       <ToolbarSeparator color={theme.color} />
                     )}
                   </React.Fragment>
