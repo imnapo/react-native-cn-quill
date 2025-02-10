@@ -34,7 +34,10 @@
     "quill",
     "editor"
   ],
-  "repository": "https://github.com/imnapo/react-native-cn-quill",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/imnapo/react-native-cn-quill.git"
+  },
   "author": "Narbe HS <imnapo@gmail.com> (https://github.com/imnapo)",
   "license": "MIT",
   "bugs": {
